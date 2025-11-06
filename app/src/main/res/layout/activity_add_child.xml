@@ -12,7 +12,6 @@
         android:orientation="vertical"
         android:gravity="center_horizontal">
 
-        <!-- Screen Title -->
         <TextView
             android:id="@+id/textViewTitle"
             android:layout_width="wrap_content"
@@ -23,7 +22,6 @@
             android:textStyle="bold"
             android:layout_marginBottom="20dp" />
 
-        <!-- Child Name -->
         <EditText
             android:id="@+id/editTextName"
             android:layout_width="match_parent"
@@ -33,7 +31,6 @@
             android:padding="12dp"
             android:layout_marginBottom="16dp" />
 
-        <!-- Date of Birth -->
         <EditText
             android:id="@+id/editTextDob"
             android:layout_width="match_parent"
@@ -44,7 +41,17 @@
             android:focusable="false"
             android:layout_marginBottom="16dp" />
 
-        <!-- Notes -->
+        <EditText
+            android:id="@+id/editTextAge"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Age"
+            android:background="@drawable/edit_text_background"
+            android:inputType="number"
+            android:padding="12dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp" />
+
         <EditText
             android:id="@+id/editTextNotes"
             android:layout_width="match_parent"
@@ -52,10 +59,10 @@
             android:hint="Additional Notes (optional)"
             android:background="@drawable/edit_text_background"
             android:padding="12dp"
+            android:layout_marginTop="8dp"
             android:gravity="top"
             android:layout_marginBottom="24dp" />
 
-        <!-- Buttons Row -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

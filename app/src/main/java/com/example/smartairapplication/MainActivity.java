@@ -29,7 +29,7 @@ public class MainActivity extends AppCompatActivity {
 
         auth = FirebaseAuth.getInstance();
         button = findViewById(R.id.logout);
-        textView = findViewById(R.id.user_details);
+        textView = findViewById(R.id.email);
         user = auth.getCurrentUser();
         if(user == null){
             Intent intent = new Intent(getApplicationContext(), Login.class);
