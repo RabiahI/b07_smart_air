@@ -17,6 +17,9 @@
             android:name=".AddChildActivity"
             android:exported="false" />
         <activity
+            android:name=".ChildManagementActivity"
+            android:exported="false" />
+        <activity
             android:name=".ParentHomeActivity"
             android:exported="false" />
         <activity
@@ -41,7 +44,7 @@
         </activity>
         <activity
             android:name=".MainActivity"
-            android:exported="true"></activity>
+            android:exported="true"/>
     </application>
 
 </manifest>

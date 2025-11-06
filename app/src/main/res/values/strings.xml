@@ -11,6 +11,7 @@
     <string name="provider_home">Provider Home</string>
     <string name="parent_home">Parent Home</string>
     <string name="child_home">Child Home</string>
+    <string name="child">Child</string>
     <string-array name="user_roles">
         <item>Parent</item>
         <item>Provider</item>
