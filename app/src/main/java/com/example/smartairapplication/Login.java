@@ -36,6 +36,53 @@ public class Login extends AppCompatActivity {
     private static final String TAG = "Login";
 
     @Override
+    public void onStart() {
+        super.onStart();
+        FirebaseUser currentUser = mAuth.getCurrentUser();
+        if (currentUser != null) {
+            String uid = currentUser.getUid();
+            DatabaseReference userRef = FirebaseDatabase.getInstance().getReference("Users").child(uid);
+            userRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    User user = snapshot.getValue(User.class);
+                    if (user != null) {
+                        String role = user.getRole();
+                        if (role != null) {
+                            if (role.equals("Parent")) {
+                                Intent intent = new Intent(Login.this, ParentHomeActivity.class);
+                                startActivity(intent);
+                                finish();
+                            } else if (role.equals("Provider")) {
+                                Intent intent = new Intent(Login.this, ProviderHomeActivity.class);
+                                startActivity(intent);
+                                finish();
+                            } else if (role.equals("Child")) {
+                                Intent intent = new Intent(Login.this, ChildHomeActivity.class);
+                                startActivity(intent);
+                                finish();
+                            } else {
+                                Intent intent = new Intent(Login.this, MainActivity.class);
+                                startActivity(intent);
+                                finish();
+                            }
+                        } else {
+                            Intent intent = new Intent(Login.this, MainActivity.class);
+                            startActivity(intent);
+                            finish();
+                        }
+                    }
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+                    Toast.makeText(Login.this, "Failed to get user data.", Toast.LENGTH_SHORT).show();
+                }
+            });
+        }
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
