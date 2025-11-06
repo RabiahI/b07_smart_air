@@ -38,7 +38,6 @@
             android:hint="Date of Birth (DD/MM/YYYY)"
             android:background="@drawable/edit_text_background"
             android:padding="12dp"
-            android:focusable="false"
             android:layout_marginBottom="16dp" />
 
         <EditText
