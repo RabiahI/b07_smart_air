@@ -8,4 +8,9 @@
     <string name="click_to_login">Click to Login</string>
     <string name="click_to_register">Click to Register</string>
     <string name="logout">Logout</string>
+    <string-array name="user_roles">
+        <item>Parent</item>
+        <item>Provider</item>
+        <item>Child</item>
+    </string-array>
 </resources>

@@ -37,13 +37,20 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
     </com.google.android.material.textfield.TextInputLayout>
-    
+
+    <androidx.fragment.app.FragmentContainerView
+        android:id="@+id/spinner_fragment_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:name="com.example.smartairapplication.SpinnerFragment" />
+
     <ProgressBar
         android:id="@+id/progressBar"
         android:visibility="gone"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"/>
-    
+
     <Button
         android:id="@+id/btn_register"
         android:text="@string/register"
