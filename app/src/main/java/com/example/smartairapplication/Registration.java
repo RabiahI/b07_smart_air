@@ -32,9 +32,10 @@ public class Registration extends AppCompatActivity {
     @Override
     public void onStart() {
         super.onStart();
+        mAuth = FirebaseAuth.getInstance();
         FirebaseUser currentUser = mAuth.getCurrentUser();
         if(currentUser != null){
-            Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+            Intent intent = new Intent(Registration.this, MainActivity.class);
             startActivity(intent);
             finish();
         }
@@ -56,7 +57,7 @@ public class Registration extends AppCompatActivity {
         textView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(getApplicationContext(), Login.class);
+                Intent intent = new Intent(Registration.this, Login.class);
                 startActivity(intent);
                 finish();
             }
@@ -78,6 +79,12 @@ public class Registration extends AppCompatActivity {
                 }
                 if (TextUtils.isEmpty(password)) {
                     Toast.makeText(Registration.this, "Enter password", Toast.LENGTH_SHORT).show();
+                    progressBar.setVisibility(View.GONE);
+                    return;
+                }
+
+                if (TextUtils.isEmpty(role)) {
+                    Toast.makeText(Registration.this, "Please select a role", Toast.LENGTH_SHORT).show();
                     progressBar.setVisibility(View.GONE);
                     return;
                 }
@@ -105,7 +112,7 @@ public class Registration extends AppCompatActivity {
                                                         if (task.isSuccessful()) {
                                                             Toast.makeText(Registration.this, "Account Created.",
                                                                     Toast.LENGTH_SHORT).show();
-                                                            Intent intent = new Intent(getApplicationContext(), Login.class);
+                                                            Intent intent = new Intent(Registration.this, Login.class);
                                                             startActivity(intent);
                                                             finish();
                                                         } else {

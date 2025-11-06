@@ -9,14 +9,14 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.firebase.auth.FirebaseAuth;
 
-public class ParentHomeActivity extends AppCompatActivity {
+public class ChildHomeActivity extends AppCompatActivity {
 
     Button button;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_parent_home);
+        setContentView(R.layout.activity_child_home);
 
         button = findViewById(R.id.logout);
 

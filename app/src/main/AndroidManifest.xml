@@ -12,6 +12,15 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Material3.Light">
         <activity
+            android:name=".ParentHomeActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ProviderHomeActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ChildHomeActivity"
+            android:exported="false" />
+        <activity
             android:name=".Registration"
             android:theme="@style/Theme.Material3.Light.NoActionBar"
             android:exported="false" />

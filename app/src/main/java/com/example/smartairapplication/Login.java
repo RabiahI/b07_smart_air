@@ -21,6 +21,11 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
 import com.google.firebase.auth.FirebaseAuthInvalidUserException;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 public class Login extends AppCompatActivity {
     TextInputEditText editTextEmail, editTextPassword;
@@ -31,31 +36,21 @@ public class Login extends AppCompatActivity {
     private static final String TAG = "Login";
 
     @Override
-    public void onStart() {
-        super.onStart();
-        mAuth = FirebaseAuth.getInstance();
-        FirebaseUser currentUser = mAuth.getCurrentUser();
-        if(currentUser != null){
-            Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-            startActivity(intent);
-            finish();
-        }
-    }
-
-    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
+        mAuth = FirebaseAuth.getInstance();
         editTextEmail = findViewById(R.id.email);
         editTextPassword = findViewById(R.id.password);
         buttonLogin = findViewById(R.id.btn_login);
         progressBar = findViewById(R.id.progressBar);
         textView = findViewById(R.id.registerNow);
+
         textView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(getApplicationContext(), Registration.class);
+                Intent intent = new Intent(Login.this, Registration.class);
                 startActivity(intent);
                 finish();
             }
@@ -86,10 +81,55 @@ public class Login extends AppCompatActivity {
                             public void onComplete(@NonNull Task<AuthResult> task) {
                                 progressBar.setVisibility(View.GONE);
                                 if (task.isSuccessful()) {
-                                    Toast.makeText(Login.this, "Login Successful.", Toast.LENGTH_SHORT).show();
-                                    Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-                                    startActivity(intent);
-                                    finish();
+                                    FirebaseUser firebaseUser = mAuth.getCurrentUser();
+                                    if (firebaseUser != null) {
+                                        String uid = firebaseUser.getUid();
+                                        DatabaseReference userRef = FirebaseDatabase.getInstance().getReference("Users").child(uid);
+                                        userRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                                            @Override
+                                            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                                User user = snapshot.getValue(User.class);
+                                                if (user != null) {
+                                                    String role = user.getRole();
+                                                    Toast.makeText(Login.this, "Login Successful.", Toast.LENGTH_SHORT).show();
+                                                    if (role != null) {
+                                                        if (role.equals("Parent")) {
+                                                            Intent intent = new Intent(Login.this, ParentHomeActivity.class);
+                                                            startActivity(intent);
+                                                            finish();
+                                                        } else if (role.equals("Provider")) {
+                                                            Intent intent = new Intent(Login.this, ProviderHomeActivity.class);
+                                                            startActivity(intent);
+                                                            finish();
+                                                        } else if (role.equals("Child")) {
+                                                            Intent intent = new Intent(Login.this, ChildHomeActivity.class);
+                                                            startActivity(intent);
+                                                            finish();
+                                                        } else {
+                                                            Intent intent = new Intent(Login.this, MainActivity.class);
+                                                            startActivity(intent);
+                                                            finish();
+                                                        }
+                                                    } else {
+                                                        // Default redirection if role is null
+                                                        Intent intent = new Intent(Login.this, MainActivity.class);
+                                                        startActivity(intent);
+                                                        finish();
+                                                    }
+                                                } else {
+                                                    Toast.makeText(Login.this, "User data not found. Redirecting to home.", Toast.LENGTH_LONG).show();
+                                                    Intent intent = new Intent(Login.this, MainActivity.class);
+                                                    startActivity(intent);
+                                                    finish();
+                                                }
+                                            }
+
+                                            @Override
+                                            public void onCancelled(@NonNull DatabaseError error) {
+                                                Toast.makeText(Login.this, "Failed to get user data.", Toast.LENGTH_SHORT).show();
+                                            }
+                                        });
+                                    }
                                 } else {
                                     try {
                                         throw task.getException();

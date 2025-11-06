@@ -8,6 +8,9 @@
     <string name="click_to_login">Click to Login</string>
     <string name="click_to_register">Click to Register</string>
     <string name="logout">Logout</string>
+    <string name="provider_home">Provider Home</string>
+    <string name="parent_home">Parent Home</string>
+    <string name="child_home">Child Home</string>
     <string-array name="user_roles">
         <item>Parent</item>
         <item>Provider</item>
