@@ -27,7 +27,7 @@ public class AddChildActivity extends AppCompatActivity {
 
     private EditText editTextName, editTextDob, editTextAge, editTextNotes;
     private Button buttonSaveChild;
-    private DatabaseReference childrenRef;
+    private DatabaseReference parentRef;
     private FirebaseAuth mAuth;
 
 
@@ -39,7 +39,9 @@ public class AddChildActivity extends AppCompatActivity {
 
         mAuth = FirebaseAuth.getInstance();
         FirebaseDatabase database = FirebaseDatabase.getInstance();
-        childrenRef = database.getReference("Children");
+
+        String parentId = mAuth.getCurrentUser().getUid();
+        parentRef = database.getReference("Users").child("Parent").child(parentId).child("Children");
 
         editTextName = findViewById(R.id.editTextName);
         editTextDob = findViewById(R.id.editTextDob);
@@ -74,8 +76,7 @@ public class AddChildActivity extends AppCompatActivity {
             return;
         }
 
-        String parentId = mAuth.getCurrentUser().getUid();
-        String childId = childrenRef.push().getKey();
+        String childId = parentRef.push().getKey();
 
         if (childId==null){
             Toast.makeText(this, "Error generating child ID", Toast.LENGTH_SHORT).show();
@@ -83,7 +84,7 @@ public class AddChildActivity extends AppCompatActivity {
         }
 
         Child child = new Child(childId, name, dob, notes, age);
-        childrenRef.child(parentId).child(childId).setValue(child).addOnCompleteListener(new OnCompleteListener<Void>() {
+        parentRef.child(childId).setValue(child).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
                 if (task.isSuccessful()){

@@ -3,6 +3,7 @@ package com.example.smartairapplication;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -20,13 +21,14 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ChildManagementActivity extends AppCompatActivity {
+public class ChildManagementActivity extends AppCompatActivity implements ChildAdapter.OnItemClickListener {
 
     private RecyclerView recyclerViewChildren;
     private ChildAdapter adapter;
     private List<Child> childList;
     private DatabaseReference childrenRef;
     private FirebaseAuth mAuth;
+    private FloatingActionButton fabAddChild;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,24 +36,15 @@ public class ChildManagementActivity extends AppCompatActivity {
         setContentView(R.layout.activity_child_management);
 
         mAuth = FirebaseAuth.getInstance();
-        childrenRef = FirebaseDatabase.getInstance().getReference("Children");
+        String parentId = mAuth.getCurrentUser().getUid();
+        childrenRef = FirebaseDatabase.getInstance().getReference("Users").child("Parent").child(parentId).child("Children");
         recyclerViewChildren = findViewById(R.id.recyclerViewChildren);
         recyclerViewChildren.setLayoutManager(new LinearLayoutManager(this));
         childList = new ArrayList<>();
-        adapter = new ChildAdapter(this, childList, new ChildAdapter.OnItemClickListener() {
-            @Override
-            public void onEditClick(int position) {
-                // TODO: later open AddChildActivity to edit existing data
-            }
-
-            @Override
-            public void onDeleteClick(int position) {
-                // TODO: delete from Firebase
-            }
-        });
+        adapter = new ChildAdapter(this, childList, this);
         recyclerViewChildren.setAdapter(adapter);
 
-        FloatingActionButton fabAddChild = findViewById(R.id.fabAddChild);
+        fabAddChild = findViewById(R.id.fabAddChild);
         fabAddChild.setOnClickListener(v ->
                 startActivity(new Intent(ChildManagementActivity.this, AddChildActivity.class)));
 
@@ -59,21 +52,34 @@ public class ChildManagementActivity extends AppCompatActivity {
     }
 
     private void loadChildren() {
-        String parentId = mAuth.getCurrentUser().getUid();
-        childrenRef.child(parentId).addValueEventListener(new ValueEventListener() {
+        childrenRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 childList.clear();
                 for (DataSnapshot childSnapshot : snapshot.getChildren()) {
                     Child child = childSnapshot.getValue(Child.class);
-                    if (child != null) childList.add(child);
+                    if (child != null) {
+                        childList.add(child);
+                    }
                 }
                 adapter.notifyDataSetChanged();
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
+                Toast.makeText(ChildManagementActivity.this, "Failed to load children.", Toast.LENGTH_SHORT).show();
             }
         });
     }
+
+    @Override
+    public void onEditClick(int position) {
+        // TODO
+    }
+
+    @Override
+    public void onDeleteClick(int position) {
+        // TODO
+    }
+
 }
