@@ -74,12 +74,37 @@ public class ChildManagementActivity extends AppCompatActivity implements ChildA
 
     @Override
     public void onEditClick(int position) {
-        // TODO
+        Child selectedChild = childList.get(position);
+        Intent intent = new Intent(ChildManagementActivity.this, AddChildActivity.class);
+        intent.putExtra("childID", selectedChild.getChildId());
+        intent.putExtra("name", selectedChild.getName());
+        intent.putExtra("dob", selectedChild.getDob());
+        intent.putExtra("notes", selectedChild.getNotes());
+        startActivity(intent);
     }
 
     @Override
     public void onDeleteClick(int position) {
-        // TODO
+        Child selectedChild = childList.get(position);
+
+        new androidx.appcompat.app.AlertDialog.Builder(this)
+                .setTitle("Delete Child")
+                .setMessage("Are you sure you want to delete " + selectedChild.getName() + "? This action cannot be undone.")
+                .setPositiveButton("Delete", (dialog, which) -> {
+                    childrenRef.child(selectedChild.getChildId()).removeValue()
+                            .addOnCompleteListener(task -> {
+                                if (task.isSuccessful()) {
+                                    Toast.makeText(this, "Child deleted successfully", Toast.LENGTH_SHORT).show();
+                                    childList.remove(position);
+                                    adapter.notifyItemRemoved(position);
+                                } else {
+                                    Toast.makeText(this, "Failed to delete child", Toast.LENGTH_SHORT).show();
+                                }
+                            });
+                })
+                .setNegativeButton("Cancel", (dialog, which) -> dialog.dismiss())
+                .setIcon(android.R.drawable.ic_dialog_alert)
+                .show();
     }
 
 }

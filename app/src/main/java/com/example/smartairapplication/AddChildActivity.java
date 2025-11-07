@@ -37,6 +37,22 @@ public class AddChildActivity extends AppCompatActivity {
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_add_child);
 
+        // Check if we are editing an existing child
+        Intent intent = getIntent();
+        if (intent.hasExtra("childId")) {
+            String childId = intent.getStringExtra("childId");
+            editTextName.setText(intent.getStringExtra("name"));
+            editTextDob.setText(intent.getStringExtra("dob"));
+            editTextAge.setText(String.valueOf(intent.getIntExtra("age", 0)));
+            editTextNotes.setText(intent.getStringExtra("notes"));
+
+            buttonSaveChild.setText("Update Child");
+
+            buttonSaveChild.setOnClickListener(v -> updateChildInFirebase(childId));
+        } else {
+            buttonSaveChild.setOnClickListener(v -> saveChildToFirebase());
+        }
+
         mAuth = FirebaseAuth.getInstance();
         FirebaseDatabase database = FirebaseDatabase.getInstance();
 
@@ -96,4 +112,36 @@ public class AddChildActivity extends AppCompatActivity {
             }
         });
     }
+    private void updateChildInFirebase(String childId) {
+        String name = editTextName.getText().toString().trim();
+        String dob = editTextDob.getText().toString().trim();
+        String ageStr = editTextAge.getText().toString().trim();
+        String notes = editTextNotes.getText().toString().trim();
+
+        if (TextUtils.isEmpty(name) || TextUtils.isEmpty(dob) || TextUtils.isEmpty(ageStr)) {
+            Toast.makeText(this, "Please fill all required fields", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        int age;
+        try {
+            age = Integer.parseInt(ageStr);
+        } catch (NumberFormatException e) {
+            Toast.makeText(this, "Invalid age format", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        Child updatedChild = new Child(childId, name, dob, notes, age);
+
+        parentRef.child(childId).setValue(updatedChild)
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        Toast.makeText(this, "Child updated successfully!", Toast.LENGTH_SHORT).show();
+                        finish();
+                    } else {
+                        Toast.makeText(this, "Failed to update child.", Toast.LENGTH_SHORT).show();
+                    }
+                });
+    }
+
 }
