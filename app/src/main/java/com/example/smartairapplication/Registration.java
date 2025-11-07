@@ -18,6 +18,7 @@ import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 public class Registration extends AppCompatActivity {
@@ -28,6 +29,9 @@ public class Registration extends AppCompatActivity {
     ProgressBar progressBar;
     TextView textView;
     SpinnerFragment spinnerFragment;
+
+    FirebaseDatabase database;
+    DatabaseReference usersRef;
 
     @Override
     public void onStart() {
@@ -47,12 +51,15 @@ public class Registration extends AppCompatActivity {
         setContentView(R.layout.activity_registration);
 
         mAuth = FirebaseAuth.getInstance();
+        database = FirebaseDatabase.getInstance();
+        usersRef = database.getReference("Users");
         editTextEmail = findViewById(R.id.email);
         editTextPassword = findViewById(R.id.password);
         buttonReg = findViewById(R.id.btn_register);
         progressBar = findViewById(R.id.progressBar);
         textView = findViewById(R.id.loginNow);
         spinnerFragment = (SpinnerFragment) getSupportFragmentManager().findFragmentById(R.id.spinner_fragment_container);
+
 
         textView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -105,8 +112,8 @@ public class Registration extends AppCompatActivity {
                                     if (firebaseUser != null) {
                                         String uid = firebaseUser.getUid();
                                         User user = new User(email, role);
-                                        FirebaseDatabase.getInstance().getReference("Users").child(uid)
-                                                .setValue(user).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                        DatabaseReference roleRef = usersRef.child(role).child(uid);
+                                        roleRef.setValue(user).addOnCompleteListener(new OnCompleteListener<Void>() {
                                                     @Override
                                                     public void onComplete(@NonNull Task<Void> task) {
                                                         if (task.isSuccessful()) {
