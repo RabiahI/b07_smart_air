@@ -76,9 +76,10 @@ public class ChildManagementActivity extends AppCompatActivity implements ChildA
     public void onEditClick(int position) {
         Child selectedChild = childList.get(position);
         Intent intent = new Intent(ChildManagementActivity.this, AddChildActivity.class);
-        intent.putExtra("childID", selectedChild.getChildId());
+        intent.putExtra("childId", selectedChild.getChildId());
         intent.putExtra("name", selectedChild.getName());
         intent.putExtra("dob", selectedChild.getDob());
+        intent.putExtra("age", selectedChild.getAge());
         intent.putExtra("notes", selectedChild.getNotes());
         startActivity(intent);
     }
@@ -95,15 +96,13 @@ public class ChildManagementActivity extends AppCompatActivity implements ChildA
                             .addOnCompleteListener(task -> {
                                 if (task.isSuccessful()) {
                                     Toast.makeText(this, "Child deleted successfully", Toast.LENGTH_SHORT).show();
-                                    childList.remove(position);
-                                    adapter.notifyItemRemoved(position);
                                 } else {
                                     Toast.makeText(this, "Failed to delete child", Toast.LENGTH_SHORT).show();
                                 }
                             });
                 })
                 .setNegativeButton("Cancel", (dialog, which) -> dialog.dismiss())
-                .setIcon(android.R.drawable.ic_dialog_alert)
+                .setIcon(R.drawable.ic_dialog_alert)
                 .show();
     }
 

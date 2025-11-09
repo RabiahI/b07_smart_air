@@ -2,6 +2,7 @@ package com.example.smartairapplication;
 
 import android.os.Bundle;
 import androidx.activity.EdgeToEdge;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
@@ -12,6 +13,7 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -26,7 +28,8 @@ import com.google.firebase.database.FirebaseDatabase;
 public class AddChildActivity extends AppCompatActivity {
 
     private EditText editTextName, editTextDob, editTextAge, editTextNotes;
-    private Button buttonSaveChild;
+    private TextView textViewTitle;
+    private Button buttonSaveChild, buttonCancel;
     private DatabaseReference parentRef;
     private FirebaseAuth mAuth;
 
@@ -36,22 +39,6 @@ public class AddChildActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_add_child);
-
-        // Check if we are editing an existing child
-        Intent intent = getIntent();
-        if (intent.hasExtra("childId")) {
-            String childId = intent.getStringExtra("childId");
-            editTextName.setText(intent.getStringExtra("name"));
-            editTextDob.setText(intent.getStringExtra("dob"));
-            editTextAge.setText(String.valueOf(intent.getIntExtra("age", 0)));
-            editTextNotes.setText(intent.getStringExtra("notes"));
-
-            buttonSaveChild.setText("Update Child");
-
-            buttonSaveChild.setOnClickListener(v -> updateChildInFirebase(childId));
-        } else {
-            buttonSaveChild.setOnClickListener(v -> saveChildToFirebase());
-        }
 
         mAuth = FirebaseAuth.getInstance();
         FirebaseDatabase database = FirebaseDatabase.getInstance();
@@ -64,12 +51,32 @@ public class AddChildActivity extends AppCompatActivity {
         editTextAge = findViewById(R.id.editTextAge);
         editTextNotes = findViewById(R.id.editTextNotes);
         buttonSaveChild = findViewById(R.id.buttonSave);
+        textViewTitle = findViewById(R.id.textViewTitle);
 
-        buttonSaveChild.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v){
-                saveChildToFirebase();
-            }
+        // Check if we are editing an existing child
+        Intent intent = getIntent();
+        if (intent.hasExtra("childId")) {
+            textViewTitle.setText("Edit Child");
+            String childId = intent.getStringExtra("childId");
+            editTextName.setText(intent.getStringExtra("name"));
+            editTextDob.setText(intent.getStringExtra("dob"));
+            editTextAge.setText(String.valueOf(intent.getIntExtra("age", 0)));
+            editTextNotes.setText(intent.getStringExtra("notes"));
+
+            buttonSaveChild.setText("Update Child");
+
+            buttonSaveChild.setOnClickListener(v -> updateChildInFirebase(childId));
+        } else {
+            textViewTitle.setText("Add Child");
+            buttonSaveChild.setOnClickListener(v -> saveChildToFirebase());
+        }
+        buttonCancel = findViewById(R.id.buttonCancel);
+        buttonCancel.setOnClickListener( v ->{
+            new AlertDialog.Builder(this).setTitle("Discard Changes?")
+                    .setMessage("Are you sure you want to cancel? Unsaved changes will be lost.")
+                    .setPositiveButton("Yes", (dialog, which) -> finish())
+                    .setNegativeButton("No", (dialog, which) -> dialog.dismiss())
+                    .show();
         });
     }
 
@@ -143,5 +150,4 @@ public class AddChildActivity extends AppCompatActivity {
                     }
                 });
     }
-
 }
