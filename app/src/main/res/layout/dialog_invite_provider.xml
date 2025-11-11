@@ -51,20 +51,23 @@
         android:gravity="center_vertical"
         android:layout_marginBottom="16dp">
 
-        <EditText
-            android:id="@+id/editTextInviteCode"
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/textInputInviteCode"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:drawableEnd="@drawable/ic_visibility"
-            android:gravity="center_vertical"
-            android:importantForAutofill="no"
-            android:inputType="textPassword"
-            android:text="1234"
-            android:textColor="@color/black"
-            android:textSize="18sp"
-            android:textStyle="bold"
-            />
+            android:hint="Invite code"
+            app:endIconMode="password_toggle"
+            app:endIconTint="@color/black">
+
+            <com.google.android.material.textfield.TextInputEditText
+
+                android:id="@+id/editTextInviteCode"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:importantForAccessibility="no"
+                android:inputType="textPassword" />
+        </com.google.android.material.textfield.TextInputLayout>
 
         <Button
             android:id="@+id/buttonCopyCode"

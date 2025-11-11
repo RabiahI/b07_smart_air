@@ -11,15 +11,21 @@
         android:text="@string/parent_home" />
 
     <Button
-        android:text="@string/logout"
         android:id="@+id/logout"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        android:text="@string/logout" />
 
     <Button
         android:id="@+id/btn_child"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/child" />
+
+    <Button
+        android:id="@+id/buttonManageProvider"
+        android:layout_width="201dp"
+        android:layout_height="wrap_content"
+        android:text="Manage Providers" />
 
 </LinearLayout>
