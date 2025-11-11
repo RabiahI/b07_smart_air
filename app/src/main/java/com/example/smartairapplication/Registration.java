@@ -23,7 +23,7 @@ import com.google.firebase.database.FirebaseDatabase;
 
 public class Registration extends AppCompatActivity {
 
-    TextInputEditText editTextEmail, editTextPassword;
+    TextInputEditText editTextEmail, editTextPassword, editTextConfirmPassword;
     Button buttonReg;
     FirebaseAuth mAuth;
     ProgressBar progressBar;
@@ -55,6 +55,7 @@ public class Registration extends AppCompatActivity {
         usersRef = database.getReference("Users");
         editTextEmail = findViewById(R.id.email);
         editTextPassword = findViewById(R.id.password);
+        editTextConfirmPassword = findViewById(R.id.confirmPassword);
         buttonReg = findViewById(R.id.btn_register);
         progressBar = findViewById(R.id.progressBar);
         textView = findViewById(R.id.loginNow);
@@ -69,9 +70,10 @@ public class Registration extends AppCompatActivity {
 
         buttonReg.setOnClickListener(view -> {
             progressBar.setVisibility(View.VISIBLE);
-            String email, password, role;
+            String email, password, confirmPassword, role;
             email = String.valueOf(editTextEmail.getText());
             password = String.valueOf(editTextPassword.getText());
+            confirmPassword = String.valueOf(editTextConfirmPassword.getText());
             role = spinnerFragment.getSelectedRole();
 
             if (TextUtils.isEmpty(email)) {
@@ -81,6 +83,18 @@ public class Registration extends AppCompatActivity {
             }
             if (TextUtils.isEmpty(password)) {
                 Toast.makeText(Registration.this, "Enter password", Toast.LENGTH_SHORT).show();
+                progressBar.setVisibility(View.GONE);
+                return;
+            }
+
+            if (TextUtils.isEmpty(confirmPassword)) {
+                Toast.makeText(Registration.this, "Confirm your password", Toast.LENGTH_SHORT).show();
+                progressBar.setVisibility(View.GONE);
+                return;
+            }
+
+            if (!password.equals(confirmPassword)) {
+                Toast.makeText(Registration.this, "Passwords do not match", Toast.LENGTH_SHORT).show();
                 progressBar.setVisibility(View.GONE);
                 return;
             }
