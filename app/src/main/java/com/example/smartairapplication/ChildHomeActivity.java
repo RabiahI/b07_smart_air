@@ -42,7 +42,7 @@ public class ChildHomeActivity extends AppCompatActivity implements PasswordDial
         Intent intent = getIntent();
         String childId = intent.getStringExtra("childId");
 
-        DatabaseReference childRef;
+        DatabaseReference childRef = null;
 
         if (childId != null) {
             buttonBackToParent.setVisibility(View.VISIBLE);
@@ -74,27 +74,29 @@ public class ChildHomeActivity extends AppCompatActivity implements PasswordDial
             });
         }
 
-        childRef.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if (snapshot.exists()) {
-                    Child child = snapshot.getValue(Child.class);
-                    if (child != null) {
-                        textViewName.setText(child.getName());
-                        textViewDob.setText("DOB: " + child.getDob());
-                        textViewAge.setText("Age: " + child.getAge());
-                        textViewNotes.setText("Notes: " + child.getNotes());
+        if (childRef != null) {
+            childRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    if (snapshot.exists()) {
+                        Child child = snapshot.getValue(Child.class);
+                        if (child != null) {
+                            textViewName.setText(child.getName());
+                            textViewDob.setText("DOB: " + child.getDob());
+                            textViewAge.setText("Age: " + child.getAge());
+                            textViewNotes.setText("Notes: " + child.getNotes());
+                        }
+                    } else {
+                        Toast.makeText(ChildHomeActivity.this, "Child data not found.", Toast.LENGTH_SHORT).show();
                     }
-                } else {
-                    Toast.makeText(ChildHomeActivity.this, "Child data not found.", Toast.LENGTH_SHORT).show();
                 }
-            }
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-                Toast.makeText(ChildHomeActivity.this, "Failed to load child data.", Toast.LENGTH_SHORT).show();
-            }
-        });
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+                    Toast.makeText(ChildHomeActivity.this, "Failed to load child data.", Toast.LENGTH_SHORT).show();
+                }
+            });
+        }
     }
 
     @Override
