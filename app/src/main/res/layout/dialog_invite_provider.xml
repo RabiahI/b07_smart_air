@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="24dp"
+    android:background="@drawable/rounded_dialog_bg"
+    android:gravity="center_horizontal">
+
+    <!-- Top Icon -->
+    <ImageView
+        android:id="@+id/iconInvite"
+        android:layout_width="72dp"
+        android:layout_height="72dp"
+        android:layout_marginBottom="16dp"
+        android:contentDescription="Invite Provider"
+        android:src="@drawable/ic_invite_provider"
+        app:tint="#607D8B" />
+
+    <!-- Title -->
+    <TextView
+        android:id="@+id/textTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Invite a Provider"
+        android:textSize="22sp"
+        android:textStyle="bold"
+        android:textColor="#2C3E50"
+        android:layout_marginBottom="8dp" />
+
+    <!-- Subtitle -->
+    <TextView
+        android:id="@+id/textSubtitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Generate a one-time access code so a healthcare provider can securely connect to your account. The code will expire in 7 days, but access remains active until you revoke it."
+        android:textSize="14sp"
+        android:textColor="#607D8B"
+        android:gravity="center"
+        android:layout_marginBottom="20dp" />
+
+    <!-- Generated Code Box -->
+    <LinearLayout
+        android:id="@+id/codeContainer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:background="@drawable/rounded_code_box"
+        android:padding="12dp"
+        android:gravity="center_vertical"
+        android:layout_marginBottom="16dp">
+
+        <EditText
+            android:id="@+id/editTextInviteCode"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:drawableEnd="@drawable/ic_visibility"
+            android:gravity="center_vertical"
+            android:importantForAutofill="no"
+            android:inputType="textPassword"
+            android:text="1234"
+            android:textColor="@color/black"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            />
+
+        <Button
+            android:id="@+id/buttonCopyCode"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Copy"
+            android:textSize="14sp"
+            android:paddingHorizontal="14dp"
+            android:backgroundTint="#4CAF50"
+            android:textColor="@android:color/white" />
+    </LinearLayout>
+
+    <!-- Generate Code Button -->
+    <Button
+        android:id="@+id/buttonGenerateCode"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Generate Invite Code"
+        android:textAllCaps="false"
+        android:textSize="16sp"
+        android:backgroundTint="#43A047"
+        android:textColor="@android:color/white"
+        android:layout_marginBottom="12dp"
+        android:paddingVertical="8dp" />
+
+    <!-- Cancel Button -->
+    <Button
+        android:id="@+id/buttonCancel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Cancel"
+        android:textAllCaps="false"
+        android:textSize="16sp"
+        android:backgroundTint="#ECEFF1"
+        android:textColor="#37474F"
+        android:paddingVertical="8dp" />
+
+</LinearLayout>

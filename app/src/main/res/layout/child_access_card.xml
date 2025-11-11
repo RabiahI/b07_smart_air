@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="8dp"
+    card_view:cardCornerRadius="16dp"
+    card_view:cardElevation="6dp"
+    android:clickable="true"
+    android:focusable="true"
+    android:foreground="?attr/selectableItemBackground">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp">
+
+        <TextView
+            android:id="@+id/textViewChildName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Child Name"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:textColor="#333"/>
+
+        <TextView
+            android:id="@+id/textViewInviteStatus"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Access: Not Shared"
+            android:textSize="14sp"
+            android:textColor="#666"
+            android:layout_marginTop="4dp"/>
+
+    </LinearLayout>
+</androidx.cardview.widget.CardView>
+
