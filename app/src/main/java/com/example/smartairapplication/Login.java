@@ -49,16 +49,23 @@ public class Login extends AppCompatActivity {
                    @Override
                    public void onDataChange(@NonNull DataSnapshot snapshot) {
                        if (snapshot.exists()) {
-                           User user = snapshot.getValue(User.class);
+                           User user = null;
+                           if ("Parent".equals(role)) {
+                               user = snapshot.getValue(Parent.class);
+                           } else if ("Provider".equals(role)) {
+                               user = snapshot.getValue(Provider.class);
+                           } else if ("Child".equals(role)) {
+                               user = snapshot.getValue(Child.class);
+                           }
 
                            if (user != null) {
                                Toast.makeText(Login.this, "Login Successful!", Toast.LENGTH_SHORT).show();
                                Intent intent;
-                               if (role.equals("Parent")) {
+                               if (user instanceof Parent) {
                                    intent = new Intent(Login.this, ParentHomeActivity.class);
-                               } else if (role.equals("Provider")) {
+                               } else if (user instanceof Provider) {
                                    intent = new Intent(Login.this, ProviderHomeActivity.class);
-                               } else if (role.equals("Child")) {
+                               } else if (user instanceof Child) {
                                    intent = new Intent(Login.this, ChildHomeActivity.class);
                                } else {
                                    intent = new Intent(Login.this, MainActivity.class);
@@ -135,19 +142,29 @@ public class Login extends AppCompatActivity {
                                                 @Override
                                                 public void onDataChange(@NonNull DataSnapshot snapshot) {
                                                     if (snapshot.exists()) {
-                                                        User user = snapshot.getValue(User.class);
-                                                        Toast.makeText(Login.this, "Login Successful.", Toast.LENGTH_SHORT).show();
-                                                        Intent intent;
-                                                        if (role.equals("Parent")){
-                                                            intent = new Intent(Login.this, ParentHomeActivity.class);
-                                                        } else if (role.equals("Provider")){
-                                                            intent = new Intent(Login.this, ProviderHomeActivity.class);
-                                                        } else {
-                                                            intent = new Intent(Login.this, ChildHomeActivity.class);
-                                                        }
+                                                        User user = null;
+                                                       if ("Parent".equals(role)) {
+                                                           user = snapshot.getValue(Parent.class);
+                                                       } else if ("Provider".equals(role)) {
+                                                           user = snapshot.getValue(Provider.class);
+                                                       } else if ("Child".equals(role)) {
+                                                           user = snapshot.getValue(Child.class);
+                                                       }
 
-                                                        startActivity(intent);
-                                                        finish();
+                                                       if (user != null) {
+                                                            Toast.makeText(Login.this, "Login Successful.", Toast.LENGTH_SHORT).show();
+                                                            Intent intent;
+                                                            if (user instanceof Parent){
+                                                                intent = new Intent(Login.this, ParentHomeActivity.class);
+                                                            } else if (user instanceof Provider){
+                                                                intent = new Intent(Login.this, ProviderHomeActivity.class);
+                                                            } else {
+                                                                intent = new Intent(Login.this, ChildHomeActivity.class);
+                                                            }
+    
+                                                            startActivity(intent);
+                                                            finish();
+                                                       }
                                                     }
                                                 }
 

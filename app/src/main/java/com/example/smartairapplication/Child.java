@@ -1,6 +1,6 @@
 package com.example.smartairapplication;
 
-public class Child {
+public class Child extends User {
     private String childId;
     private String name;
     private String dob;
@@ -9,7 +9,8 @@ public class Child {
 
     public Child(){}
 
-    public Child(String childId, String name, String dob, String notes, int age){
+    public Child(String email, String childId, String name, String dob, String notes, int age){
+        super(email);
         this.childId = childId;
         this.name = name;
         this.dob = dob;

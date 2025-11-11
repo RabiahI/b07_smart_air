@@ -111,7 +111,17 @@ public class Registration extends AppCompatActivity {
                                     FirebaseUser firebaseUser = mAuth.getCurrentUser();
                                     if (firebaseUser != null) {
                                         String uid = firebaseUser.getUid();
-                                        User user = new User(email, role);
+                                        User user;
+                                        if ("Parent".equals(role)) {
+                                            user = new Parent(email);
+                                        } else if ("Provider".equals(role)) {
+                                            user = new Provider(email);
+                                        } else if ("Child".equals(role)) {
+                                            user = new Child(email, uid, null, null, null, 0);
+                                        } else {
+                                            Toast.makeText(Registration.this, "Invalid role selected.", Toast.LENGTH_SHORT).show();
+                                            return;
+                                        }
                                         DatabaseReference roleRef = usersRef.child(role).child(uid);
                                         roleRef.setValue(user).addOnCompleteListener(new OnCompleteListener<Void>() {
                                                     @Override
