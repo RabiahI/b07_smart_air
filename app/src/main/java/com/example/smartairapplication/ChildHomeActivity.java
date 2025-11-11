@@ -18,7 +18,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-public class ChildHomeActivity extends AppCompatActivity {
+public class ChildHomeActivity extends AppCompatActivity implements PasswordDialogFragment.PasswordDialogListener {
 
     private TextView textViewName, textViewDob, textViewAge, textViewNotes;
     private Button buttonLogout, buttonBackToParent;
@@ -45,35 +45,32 @@ public class ChildHomeActivity extends AppCompatActivity {
         DatabaseReference childRef;
 
         if (childId != null) {
-            // Launched from Parent's account
             buttonBackToParent.setVisibility(View.VISIBLE);
             buttonLogout.setVisibility(View.GONE);
 
-            String parentId = mAuth.getCurrentUser().getUid();
-            childRef = database.getReference("Users").child("Parent").child(parentId).child("Children").child(childId);
+            String parentId = null;
+            if (mAuth.getCurrentUser() != null) {
+                parentId = mAuth.getCurrentUser().getUid();
+            }
+            if (parentId != null) {
+                childRef = database.getReference("Users").child("Parent").child(parentId).child("Children").child(childId);
+            }
 
-            buttonBackToParent.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    finish();
-                }
-            });
+            buttonBackToParent.setOnClickListener(v -> new PasswordDialogFragment().show(getSupportFragmentManager(), "PasswordDialogFragment"));
         } else {
-            // Child logged in directly
             buttonBackToParent.setVisibility(View.GONE);
             buttonLogout.setVisibility(View.VISIBLE);
 
             FirebaseUser currentUser = mAuth.getCurrentUser();
-            childRef = database.getReference("Users").child("Child").child(currentUser.getUid());
+            if (currentUser != null) {
+                childRef = database.getReference("Users").child("Child").child(currentUser.getUid());
+            }
 
-            buttonLogout.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    FirebaseAuth.getInstance().signOut();
-                    Intent intent = new Intent(getApplicationContext(), Login.class);
-                    startActivity(intent);
-                    finish();
-                }
+            buttonLogout.setOnClickListener(v -> {
+                FirebaseAuth.getInstance().signOut();
+                Intent intent1 = new Intent(getApplicationContext(), Login.class);
+                startActivity(intent1);
+                finish();
             });
         }
 
@@ -98,5 +95,10 @@ public class ChildHomeActivity extends AppCompatActivity {
                 Toast.makeText(ChildHomeActivity.this, "Failed to load child data.", Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    @Override
+    public void onPasswordVerified() {
+        finish();
     }
 }

@@ -27,10 +27,7 @@ import com.google.firebase.database.FirebaseDatabase;
 public class AddChildActivity extends AppCompatActivity {
 
     private EditText editTextName, editTextDob, editTextAge, editTextNotes;
-    private TextView textViewTitle;
-    private Button buttonSaveChild, buttonCancel;
     private DatabaseReference parentRef;
-    private FirebaseAuth mAuth;
 
 
     @Override
@@ -39,18 +36,23 @@ public class AddChildActivity extends AppCompatActivity {
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_add_child);
 
-        mAuth = FirebaseAuth.getInstance();
+        FirebaseAuth mAuth = FirebaseAuth.getInstance();
         FirebaseDatabase database = FirebaseDatabase.getInstance();
 
-        String parentId = mAuth.getCurrentUser().getUid();
-        parentRef = database.getReference("Users").child("Parent").child(parentId).child("Children");
+        String parentId = null;
+        if (mAuth.getCurrentUser() != null) {
+            parentId = mAuth.getCurrentUser().getUid();
+        }
+        if (parentId != null) {
+            parentRef = database.getReference("Users").child("Parent").child(parentId).child("Children");
+        }
 
         editTextName = findViewById(R.id.editTextName);
         editTextDob = findViewById(R.id.editTextDob);
         editTextAge = findViewById(R.id.editTextAge);
         editTextNotes = findViewById(R.id.editTextNotes);
-        buttonSaveChild = findViewById(R.id.buttonSave);
-        textViewTitle = findViewById(R.id.textViewTitle);
+        Button buttonSaveChild = findViewById(R.id.buttonSave);
+        TextView textViewTitle = findViewById(R.id.textViewTitle);
 
         // Check if we are editing an existing child
         Intent intent = getIntent();
@@ -69,14 +71,12 @@ public class AddChildActivity extends AppCompatActivity {
             textViewTitle.setText("Add Child");
             buttonSaveChild.setOnClickListener(v -> saveChildToFirebase());
         }
-        buttonCancel = findViewById(R.id.buttonCancel);
-        buttonCancel.setOnClickListener( v ->{
-            new AlertDialog.Builder(this).setTitle("Discard Changes?")
-                    .setMessage("Are you sure you want to cancel? Unsaved changes will be lost.")
-                    .setPositiveButton("Yes", (dialog, which) -> finish())
-                    .setNegativeButton("No", (dialog, which) -> dialog.dismiss())
-                    .show();
-        });
+        Button buttonCancel = findViewById(R.id.buttonCancel);
+        buttonCancel.setOnClickListener(v -> new AlertDialog.Builder(this).setTitle("Discard Changes?")
+                .setMessage("Are you sure you want to cancel? Unsaved changes will be lost.")
+                .setPositiveButton("Yes", (dialog, which) -> finish())
+                .setNegativeButton("No", (dialog, which) -> dialog.dismiss())
+                .show());
     }
 
     private void saveChildToFirebase(){
@@ -106,15 +106,12 @@ public class AddChildActivity extends AppCompatActivity {
         }
 
         Child child = new Child(null, childId, name, dob, notes, age);
-        parentRef.child(childId).setValue(child).addOnCompleteListener(new OnCompleteListener<Void>() {
-            @Override
-            public void onComplete(@NonNull Task<Void> task) {
-                if (task.isSuccessful()){
-                    Toast.makeText(AddChildActivity.this, "Child added successfully!", Toast.LENGTH_SHORT).show();
-                    finish();
-                } else{
-                    Toast.makeText(AddChildActivity.this, "Failed to add child.", Toast.LENGTH_SHORT).show();
-                }
+        parentRef.child(childId).setValue(child).addOnCompleteListener(task -> {
+            if (task.isSuccessful()){
+                Toast.makeText(AddChildActivity.this, "Child added successfully!", Toast.LENGTH_SHORT).show();
+                finish();
+            } else{
+                Toast.makeText(AddChildActivity.this, "Failed to add child.", Toast.LENGTH_SHORT).show();
             }
         });
     }
