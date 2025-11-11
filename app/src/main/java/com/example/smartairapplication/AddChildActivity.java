@@ -16,7 +16,6 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -106,7 +105,7 @@ public class AddChildActivity extends AppCompatActivity {
             return;
         }
 
-        Child child = new Child(childId, name, dob, notes, age);
+        Child child = new Child(null, childId, name, dob, notes, age);
         parentRef.child(childId).setValue(child).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
@@ -138,7 +137,7 @@ public class AddChildActivity extends AppCompatActivity {
             return;
         }
 
-        Child updatedChild = new Child(childId, name, dob, notes, age);
+        Child updatedChild = new Child(null, childId, name, dob, notes, age);
 
         parentRef.child(childId).setValue(updatedChild)
                 .addOnCompleteListener(task -> {
