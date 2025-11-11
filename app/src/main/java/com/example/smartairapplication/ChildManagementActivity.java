@@ -106,4 +106,11 @@ public class ChildManagementActivity extends AppCompatActivity implements ChildA
                 .show();
     }
 
+    @Override
+    public void onLoginClick(int position) {
+        Child selectedChild = childList.get(position);
+        Intent intent = new Intent(ChildManagementActivity.this, ChildHomeActivity.class);
+        intent.putExtra("childId", selectedChild.getChildId());
+        startActivity(intent);
+    }
 }
