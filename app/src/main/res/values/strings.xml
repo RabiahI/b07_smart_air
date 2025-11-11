@@ -17,4 +17,35 @@
         <item>Provider</item>
         <item>Child</item>
     </string-array>
+
+    <string name="provider_welcome">
+        Welcome, Provider! \n
+        As a provider, you can view the summary reports for children, but only when a parent shares their data with you. \n
+        Please wait for a parent to share more information about the child with you. \n
+
+        # info about how to view summaries + reports
+    </string>
+    <string name="child_welcome">
+        Welcome Child! \n
+        As a child you can n this app, you can log your medicines and symptoms, practice inhaler techniques, and track your asthma in a fun, safe way. \n\n
+
+        Rescue inhaler = quick relief for symptoms. \n\n
+        Controller medicine = daily prevention to keep airways healthy. \n\n
+
+        # add more info about functionality once theyre implemented cuz idk \n\n
+
+        Your data is private. Only your parent can share your information with your healthcare provider. \n
+    </string>
+    <string name="parent_welcome">
+        Welcome Parent! \n
+        You can link your children, view their health data, get alerts, and share a controlled summary with your healthcare provider. \n
+        To link a child, you must... \n
+
+        You may also receive notifications by... \n
+
+        You can log incidents for your child by... \n
+
+        # add more info later \n
+    </string>
+
 </resources>

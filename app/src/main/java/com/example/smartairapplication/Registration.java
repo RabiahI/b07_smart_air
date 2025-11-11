@@ -114,20 +114,25 @@ public class Registration extends AppCompatActivity {
                                         User user = new User(email, role);
                                         DatabaseReference roleRef = usersRef.child(role).child(uid);
                                         roleRef.setValue(user).addOnCompleteListener(new OnCompleteListener<Void>() {
-                                                    @Override
-                                                    public void onComplete(@NonNull Task<Void> task) {
-                                                        if (task.isSuccessful()) {
-                                                            Toast.makeText(Registration.this, "Account Created.",
-                                                                    Toast.LENGTH_SHORT).show();
-                                                            Intent intent = new Intent(Registration.this, Login.class);
-                                                            startActivity(intent);
-                                                            finish();
-                                                        } else {
-                                                            Toast.makeText(Registration.this, "Failed to save user data.",
-                                                                    Toast.LENGTH_SHORT).show();
-                                                        }
-                                                    }
-                                                });
+                                            @Override
+                                            public void onComplete(@NonNull Task<Void> task) {
+                                                if (task.isSuccessful()) {
+                                                    Toast.makeText(Registration.this, "Account Created.",
+                                                            Toast.LENGTH_SHORT).show();
+
+                                                    Intent intent = new Intent(Registration.this, OnboardingActivity.class);
+                                                    intent.putExtra("role", role);
+                                                    intent.putExtra("uid", firebaseUser.getUid());
+                                                    startActivity(intent);
+                                                    finish();
+
+//
+                                                } else {
+                                                    Toast.makeText(Registration.this, "Failed to save user data.",
+                                                            Toast.LENGTH_SHORT).show();
+                                                }
+                                            }
+                                        });
                                     }
                                 } else {
                                     // If sign in fails, display a message to the user.
@@ -135,6 +140,7 @@ public class Registration extends AppCompatActivity {
                                             Toast.LENGTH_SHORT).show();
                                 }
                             }
+
                         });
 
             }
