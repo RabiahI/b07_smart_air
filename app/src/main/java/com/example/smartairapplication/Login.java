@@ -10,22 +10,13 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.android.material.textfield.TextInputEditText;
-import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
 import com.google.firebase.auth.FirebaseAuthInvalidUserException;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 
 import java.util.Objects;
 
@@ -42,50 +33,7 @@ public class Login extends AppCompatActivity {
         super.onStart();
         FirebaseUser currentUser = mAuth.getCurrentUser();
         if (currentUser != null) {
-            String uid = currentUser.getUid();
-            DatabaseReference userRef = FirebaseDatabase.getInstance().getReference("Users");
-            String[] roles = {"Parent", "Provider", "Child"};
-            for (String role: roles) {
-                DatabaseReference roleRef  = userRef.child(role).child(uid);
-                roleRef.addListenerForSingleValueEvent(new ValueEventListener() {
-                   @Override
-                   public void onDataChange(@NonNull DataSnapshot snapshot) {
-                       if (snapshot.exists()) {
-                           User user = null;
-                           switch (role) {
-                               case "Parent":
-                                   user = snapshot.getValue(Parent.class);
-                                   break;
-                               case "Provider":
-                                   user = snapshot.getValue(Provider.class);
-                                   break;
-                               case "Child":
-                                   user = snapshot.getValue(Child.class);
-                                   break;
-                           }
-
-                           if (user != null) {
-                               Toast.makeText(Login.this, "Login Successful!", Toast.LENGTH_SHORT).show();
-                               Intent intent;
-                               if (user instanceof Parent) {
-                                   intent = new Intent(Login.this, ParentHomeActivity.class);
-                               } else if (user instanceof Provider) {
-                                   intent = new Intent(Login.this, ProviderHomeActivity.class);
-                               } else {
-                                   intent = new Intent(Login.this, ChildHomeActivity.class);
-                               }
-                               startActivity(intent);
-                               finish();
-
-                           }
-                       }
-                   }
-                @Override
-                public void onCancelled(@NonNull DatabaseError error) {
-                    Toast.makeText(Login.this, "Failed to get user data.", Toast.LENGTH_SHORT).show();
-                }
-                });
-            }
+            UserRoleManager.redirectUserBasedOnRole(this, currentUser.getUid());
         }
     }
 
@@ -130,51 +78,7 @@ public class Login extends AppCompatActivity {
                         if (task.isSuccessful()) {
                             FirebaseUser firebaseUser = mAuth.getCurrentUser();
                             if (firebaseUser != null) {
-                                String uid = firebaseUser.getUid();
-                                DatabaseReference userRef = FirebaseDatabase.getInstance().getReference("Users");
-                                String [] roles = {"Parent", "Provider", "Child"};
-                                for (String role: roles) {
-                                    DatabaseReference roleRef = userRef.child(role).child(uid);
-                                    roleRef.addListenerForSingleValueEvent(new ValueEventListener() {
-                                        @Override
-                                        public void onDataChange(@NonNull DataSnapshot snapshot) {
-                                            if (snapshot.exists()) {
-                                                User user = null;
-                                                switch (role) {
-                                                    case "Parent":
-                                                        user = snapshot.getValue(Parent.class);
-                                                        break;
-                                                    case "Provider":
-                                                        user = snapshot.getValue(Provider.class);
-                                                        break;
-                                                    case "Child":
-                                                        user = snapshot.getValue(Child.class);
-                                                        break;
-                                                }
-
-                                               if (user != null) {
-                                                    Toast.makeText(Login.this, "Login Successful.", Toast.LENGTH_SHORT).show();
-                                                    Intent intent;
-                                                    if (user instanceof Parent){
-                                                        intent = new Intent(Login.this, ParentHomeActivity.class);
-                                                    } else if (user instanceof Provider){
-                                                        intent = new Intent(Login.this, ProviderHomeActivity.class);
-                                                    } else {
-                                                        intent = new Intent(Login.this, ChildHomeActivity.class);
-                                                    }
-
-                                                    startActivity(intent);
-                                                    finish();
-                                               }
-                                            }
-                                        }
-
-                                        @Override
-                                        public void onCancelled(@NonNull DatabaseError error) {
-                                            Toast.makeText(Login.this, "Failed to get user data.", Toast.LENGTH_SHORT).show();
-                                        }
-                                    });
-                                }
+                                UserRoleManager.redirectUserBasedOnRole(this, firebaseUser.getUid());
                             }
                         } else {
                             try {

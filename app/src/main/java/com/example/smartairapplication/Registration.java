@@ -39,9 +39,7 @@ public class Registration extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
         FirebaseUser currentUser = mAuth.getCurrentUser();
         if(currentUser != null){
-            Intent intent = new Intent(Registration.this, MainActivity.class);
-            startActivity(intent);
-            finish();
+            UserRoleManager.redirectUserBasedOnRole(this, currentUser.getUid());
         }
     }
 
