@@ -9,9 +9,13 @@
     <string name="click_to_register">Click to Register</string>
     <string name="logout">Logout</string>
     <string name="provider_home">Provider Home</string>
-    <string name="parent_home">Parent Home</string>
+    <string name="parent_home"><b>Parent Home</b></string>
     <string name="child_home">Child Home</string>
     <string name="child">Child</string>
+    <string name="manage_children">Manage Children</string>
+    <string name="login_as_child"> Login as Child</string>
+    <string name="notifications"><b>Notifications</b></string>
+    <string name="new_notification">New Notification!</string>
     <string-array name="user_roles">
         <item>Parent</item>
         <item>Provider</item>

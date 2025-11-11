@@ -57,35 +57,35 @@
                 android:id="@+id/textViewDob"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
                 android:text="12/02/2016"
                 android:textColor="#555555"
-                android:textSize="14sp"
-                android:layout_marginTop="2dp"/>
+                android:textSize="14sp" />
 
             <TextView
                 android:id="@+id/textViewNotes"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
                 android:text="Notes: Allergic to peanuts"
                 android:textColor="#666666"
-                android:textSize="14sp"
-                android:layout_marginTop="4dp"/>
+                android:textSize="14sp" />
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
                 android:gravity="end"
-                android:orientation="horizontal"
-                android:layout_marginTop="8dp">
+                android:orientation="horizontal">
 
                 <Button
                     android:id="@+id/editButton"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginEnd="8dp"
                     android:drawableLeft="@drawable/ic_edit"
                     android:text="Edit"
-                    android:textAllCaps="false"
-                    android:layout_marginEnd="8dp"/>
+                    android:textAllCaps="false" />
 
                 <Button
                     android:id="@+id/deleteButton"
@@ -93,7 +93,7 @@
                     android:layout_height="wrap_content"
                     android:drawableLeft="@drawable/ic_delete"
                     android:text="Delete"
-                    android:textAllCaps="false"/>
+                    android:textAllCaps="false" />
             </LinearLayout>
 
         </LinearLayout>
