@@ -51,23 +51,24 @@
         android:gravity="center_vertical"
         android:layout_marginBottom="16dp">
 
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/textInputInviteCode"
+        <TextView
+            android:id="@+id/textViewInviteCode"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:hint="Invite code"
-            app:endIconMode="password_toggle"
-            app:endIconTint="@color/black">
+            android:inputType="textPassword"
+            android:padding="8dp"
+            android:textColor="@color/black"
+            android:textSize="18sp" />
 
-            <com.google.android.material.textfield.TextInputEditText
-
-                android:id="@+id/editTextInviteCode"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:importantForAccessibility="no"
-                android:inputType="textPassword" />
-        </com.google.android.material.textfield.TextInputLayout>
+        <ImageButton
+            android:id="@+id/buttonToggleVisibility"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:src="@drawable/ic_visibility_off"
+            android:contentDescription="Toggle visibility" />
 
         <Button
             android:id="@+id/buttonCopyCode"

@@ -4,23 +4,23 @@ import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.os.Bundle;
+import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ImageButton;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.android.material.textfield.TextInputEditText;
-import com.google.android.material.textfield.TextInputLayout;
+
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -88,11 +88,13 @@ public class ManageAccessActivity extends AppCompatActivity implements AccessAda
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         View view = LayoutInflater.from(this).inflate(R.layout.dialog_invite_provider, null);
 
-        TextInputLayout inputLayout = view.findViewById(R.id.textInputInviteCode);
-        TextInputEditText editTextInviteCode = view.findViewById(R.id.editTextInviteCode);
+
+        TextView textViewInviteCode = view.findViewById(R.id.textViewInviteCode);
         Button buttonGenerate = view.findViewById(R.id.buttonGenerateCode);
         Button buttonCopy = view.findViewById(R.id.buttonCopyCode);
         Button buttonCancel = view.findViewById(R.id.buttonCancel);
+        ImageButton buttonToggleVisibility = view.findViewById(R.id.buttonToggleVisibility);
+        final boolean[] isHidden = {true};
 
         builder.setView(view);
         AlertDialog dialog = builder.create();
@@ -108,8 +110,10 @@ public class ManageAccessActivity extends AppCompatActivity implements AccessAda
 
         buttonGenerate.setOnClickListener(v -> {
             String code = generateInviteCode();
-            editTextInviteCode.setText(code);
-
+            textViewInviteCode.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+            textViewInviteCode.setText(code);
+            buttonToggleVisibility.setImageResource(R.drawable.ic_visibility_off);
+            isHidden[0] = true;
             Invite invite = new Invite(code, System.currentTimeMillis(), System.currentTimeMillis() + 7 * 24 * 60 * 60 * 1000);
             inviteRef.setValue(invite)
                     .addOnCompleteListener(task -> {
@@ -121,8 +125,22 @@ public class ManageAccessActivity extends AppCompatActivity implements AccessAda
                     });
         });
 
+        buttonToggleVisibility.setOnClickListener(v -> {
+            if (isHidden[0]){
+                //show code
+                textViewInviteCode.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
+                buttonToggleVisibility.setImageResource(R.drawable.ic_visibility_on);
+
+            } else{
+                //hide code
+                textViewInviteCode.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+                buttonToggleVisibility.setImageResource(R.drawable.ic_visibility_off);
+            }
+            isHidden[0] = !isHidden[0];
+        });
+
         buttonCopy.setOnClickListener(v -> {
-            String code = editTextInviteCode.getText().toString();
+            String code = textViewInviteCode.getText().toString();
             if (!code.isEmpty()) {
                 ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
                 ClipData clip = ClipData.newPlainText("Invite Code", code);
