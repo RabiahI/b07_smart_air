@@ -1,10 +1,14 @@
 package com.example.smartairapplication;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -37,7 +41,42 @@ public class AccessAdapter extends RecyclerView.Adapter<AccessAdapter.ViewHolder
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Child child = childList.get(position);
         holder.textViewChildName.setText(child.getName());
-        holder.textViewInviteStatus.setText("Access: Not Shared");
+
+        String status = child.getAccessStatus();
+
+        if (status == null || status.equals("not_shared")){
+            holder.textViewAccessStatus.setText("Access: Not Shared");
+            holder.textViewAccessStatus.setTextColor(Color.parseColor("#757575"));
+            holder.iconAccessStatus.setImageResource(R.drawable.ic_lock_outline);
+            holder.iconAccessStatus.setColorFilter(Color.parseColor("#757575"));
+            holder.layoutInviteCode.setVisibility(View.GONE);
+        } else if (status.equals("generated")){
+            holder.textViewAccessStatus.setText("Access: Code Generated");
+            holder.textViewAccessStatus.setTextColor(Color.parseColor("#FFC107"));
+            holder.iconAccessStatus.setImageResource(R.drawable.ic_hourglass_empty);
+            holder.iconAccessStatus.setColorFilter(Color.parseColor("#FFC107"));
+            holder.layoutInviteCode.setVisibility(View.VISIBLE);
+
+            //mask code by default
+            holder.textViewInviteCode.setText("••••••");
+
+            holder.buttonToggleCodeVisibility.setOnClickListener(v-> {
+                if (holder.textViewInviteCode.getText().toString().equals("••••••")){
+                    holder.textViewInviteCode.setText(child.getInviteCode());
+                    holder.buttonToggleCodeVisibility.setImageResource(R.drawable.ic_visibility_on);
+                } else{
+                    holder.textViewInviteCode.setText("••••••");
+                    holder.buttonToggleCodeVisibility.setImageResource(R.drawable.ic_visibility_off);
+                }
+            });
+        } else if(status.equals("accepted")){
+            holder.textViewAccessStatus.setText("Access: Shared with Provider");
+            holder.textViewAccessStatus.setTextColor(Color.parseColor("#43A047"));
+            holder.iconAccessStatus.setImageResource(R.drawable.ic_check_circle);
+            holder.iconAccessStatus.setColorFilter(Color.parseColor("#43A047"));
+            holder.layoutInviteCode.setVisibility(View.GONE);
+        }
+
 
         holder.buttonInviteProvider.setOnClickListener(v -> listener.onInviteClick(position));
     }
@@ -48,14 +87,22 @@ public class AccessAdapter extends RecyclerView.Adapter<AccessAdapter.ViewHolder
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        TextView textViewChildName, textViewInviteStatus;
+        TextView textViewChildName, textViewAccessStatus, textViewInviteCode;
+        ImageView iconAccessStatus;
+        ImageButton buttonToggleCodeVisibility;
+        LinearLayout layoutInviteCode;
         Button buttonInviteProvider;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             textViewChildName = itemView.findViewById(R.id.textViewChildName);
-            textViewInviteStatus = itemView.findViewById(R.id.textViewInviteStatus);
+            textViewAccessStatus = itemView.findViewById(R.id.textViewAccessStatus);
+            iconAccessStatus = itemView.findViewById(R.id.iconAccessStatus);
+            layoutInviteCode = itemView.findViewById(R.id.layoutInviteCode);
+            textViewInviteCode = itemView.findViewById(R.id.textViewInviteCode);
+            buttonToggleCodeVisibility = itemView.findViewById(R.id.buttonToggleCodeVisibility);
             buttonInviteProvider = itemView.findViewById(R.id.buttonInviteProvider);
+
         }
     }
 

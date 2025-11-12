@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:card_view="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
@@ -5,59 +6,104 @@
     android:layout_margin="8dp"
     card_view:cardCornerRadius="16dp"
     card_view:cardElevation="6dp"
-    android:clickable="true"
-    android:focusable="true"
     android:foreground="?attr/selectableItemBackground">
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="horizontal">
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp">
 
-        <LinearLayout
-            android:layout_width="200dp"
+        <!-- Child Name -->
+        <TextView
+            android:id="@+id/textViewChildName"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:padding="16dp">
+            android:text="Child Name"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:textColor="#2C3E50" />
 
-            <TextView
-                android:id="@+id/textViewChildName"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Child Name"
-                android:textColor="#333"
-                android:textSize="18sp"
-                android:textStyle="bold" />
 
-            <TextView
-                android:id="@+id/textViewInviteStatus"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
-                android:text="Access: Not Shared"
-                android:textColor="#666"
-                android:textSize="14sp" />
-
-        </LinearLayout>
-
+        <!-- Access Status Row -->
         <LinearLayout
-            android:layout_width="173dp"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_marginTop="2dp">
+            <!-- Icon to Represent Status -->
+            <ImageView
+                android:id="@+id/iconAccessStatus"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:src="@drawable/ic_lock_outline"
+                android:layout_marginStart="2dp" />
+
+            <TextView
+                android:id="@+id/textViewAccessStatus"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_weight="1"
+                android:text="Access: Not Shared"
+                android:textColor="#757575"
+                android:textSize="14sp" />
 
             <Button
                 android:id="@+id/buttonInviteProvider"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:backgroundTint="#2196F3"
-                android:paddingHorizontal="20dp"
-                android:paddingVertical="6dp"
                 android:text="Invite Provider"
                 android:textAllCaps="false"
-                android:textColor="@android:color/white" />
+                android:textSize="14sp"
+                android:backgroundTint="#43A047"
+                android:textColor="@android:color/white"
+                android:paddingHorizontal="16dp" />
+
+        </LinearLayout>
+
+        <!-- Invite Code Row (visible only when code exists) -->
+        <LinearLayout
+            android:id="@+id/layoutInviteCode"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_marginTop="6dp"
+            android:visibility="gone">
+
+            <TextView
+                android:id="@+id/textViewInviteCodeLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Code:"
+                android:textColor="#607D8B"
+                android:textSize="14sp"
+                android:layout_marginEnd="6dp"/>
+
+            <TextView
+                android:id="@+id/textViewInviteCode"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="••••••"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:textColor="#000"
+                android:layout_marginEnd="6dp"/>
+
+            <ImageButton
+                android:id="@+id/buttonToggleCodeVisibility"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:src="@drawable/ic_visibility_off"
+                android:contentDescription="Toggle Code Visibility"
+                android:tint="#607D8B"/>
+
         </LinearLayout>
 
     </LinearLayout>
 
 </androidx.cardview.widget.CardView>
+

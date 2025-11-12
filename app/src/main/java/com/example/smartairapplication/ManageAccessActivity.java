@@ -66,7 +66,49 @@ public class ManageAccessActivity extends AppCompatActivity implements AccessAda
                 childList.clear();
                 for (DataSnapshot childSnap : snapshot.getChildren()){
                     Child child = childSnap.getValue(Child.class);
-                    if (child!= null) {childList.add(child);}
+                    if (child!= null) {
+                        DatabaseReference inviteRef = childSnap.getRef().child("Invite");
+
+                        inviteRef.addValueEventListener(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot inviteSnap) {
+                                if (inviteSnap.exists()) {
+                                    Boolean accepted = inviteSnap.child("accepted").getValue(Boolean.class);
+                                    String code = inviteSnap.child("code").getValue(String.class);
+                                    Long expiresAt = inviteSnap.child("expiresAt").getValue(Long.class);
+                                    long currentTime = System.currentTimeMillis();
+
+                                    if (expiresAt != null && currentTime > expiresAt) {
+                                        // Code expired — reset
+                                        inviteSnap.getRef().removeValue();
+                                        child.setAccessStatus("not_shared");
+                                        child.setInviteCode(null);
+                                        childrenRef.child(child.getChildId()).setValue(child);
+                                        Toast.makeText(ManageAccessActivity.this,
+                                                "Invite code for " + child.getName() + " has expired.",
+                                                Toast.LENGTH_SHORT).show();
+                                    } else if (accepted != null && accepted) {
+                                        child.setAccessStatus("accepted");
+                                    } else if (code != null) {
+                                        child.setAccessStatus("generated");
+                                        child.setInviteCode(code);
+                                    } else {
+                                        child.setAccessStatus("not_shared");
+                                    }
+                                } else {
+                                    child.setAccessStatus("not_shared");
+                                }
+                                adapter.notifyDataSetChanged();
+                            }
+
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError error) {
+                                Toast.makeText(ManageAccessActivity.this, "Error loading invites", Toast.LENGTH_SHORT).show();
+                            }
+                        });
+
+                        childList.add(child);
+                    }
                 }
                 adapter.notifyDataSetChanged();
             }
@@ -76,6 +118,8 @@ public class ManageAccessActivity extends AppCompatActivity implements AccessAda
                 Toast.makeText(ManageAccessActivity.this, "Failed to load children.", Toast.LENGTH_SHORT).show();
             }
         });
+
+
     }
 
     @Override
