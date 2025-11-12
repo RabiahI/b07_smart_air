@@ -22,6 +22,7 @@ public class AccessAdapter extends RecyclerView.Adapter<AccessAdapter.ViewHolder
 
     public interface OnInviteClickListener {
         void onInviteClick(int position);
+        void onRevokeClick(int position);
 
     }
     public AccessAdapter(Context context, List<Child> childList, OnInviteClickListener listener) {
@@ -46,13 +47,11 @@ public class AccessAdapter extends RecyclerView.Adapter<AccessAdapter.ViewHolder
 
         if (status == null || status.equals("not_shared")){
             holder.textViewAccessStatus.setText("Access: Not Shared");
-            holder.textViewAccessStatus.setTextColor(Color.parseColor("#757575"));
             holder.iconAccessStatus.setImageResource(R.drawable.ic_lock_outline);
             holder.iconAccessStatus.setColorFilter(Color.parseColor("#757575"));
             holder.layoutInviteCode.setVisibility(View.GONE);
         } else if (status.equals("generated")){
             holder.textViewAccessStatus.setText("Access: Code Generated");
-            holder.textViewAccessStatus.setTextColor(Color.parseColor("#FFC107"));
             holder.iconAccessStatus.setImageResource(R.drawable.ic_hourglass_empty);
             holder.iconAccessStatus.setColorFilter(Color.parseColor("#FFC107"));
             holder.layoutInviteCode.setVisibility(View.VISIBLE);
@@ -69,9 +68,9 @@ public class AccessAdapter extends RecyclerView.Adapter<AccessAdapter.ViewHolder
                     holder.buttonToggleCodeVisibility.setImageResource(R.drawable.ic_visibility_off);
                 }
             });
+
         } else if(status.equals("accepted")){
             holder.textViewAccessStatus.setText("Access: Shared with Provider");
-            holder.textViewAccessStatus.setTextColor(Color.parseColor("#43A047"));
             holder.iconAccessStatus.setImageResource(R.drawable.ic_check_circle);
             holder.iconAccessStatus.setColorFilter(Color.parseColor("#43A047"));
             holder.layoutInviteCode.setVisibility(View.GONE);
@@ -79,6 +78,7 @@ public class AccessAdapter extends RecyclerView.Adapter<AccessAdapter.ViewHolder
 
 
         holder.buttonInviteProvider.setOnClickListener(v -> listener.onInviteClick(position));
+        holder.buttonRevokeAccess.setOnClickListener(v -> listener.onRevokeClick(position));
     }
 
     @Override
@@ -91,7 +91,7 @@ public class AccessAdapter extends RecyclerView.Adapter<AccessAdapter.ViewHolder
         ImageView iconAccessStatus;
         ImageButton buttonToggleCodeVisibility;
         LinearLayout layoutInviteCode;
-        Button buttonInviteProvider;
+        Button buttonInviteProvider, buttonRevokeAccess;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -102,6 +102,7 @@ public class AccessAdapter extends RecyclerView.Adapter<AccessAdapter.ViewHolder
             textViewInviteCode = itemView.findViewById(R.id.textViewInviteCode);
             buttonToggleCodeVisibility = itemView.findViewById(R.id.buttonToggleCodeVisibility);
             buttonInviteProvider = itemView.findViewById(R.id.buttonInviteProvider);
+            buttonRevokeAccess = itemView.findViewById(R.id.buttonRevokeAccess);
 
         }
     }

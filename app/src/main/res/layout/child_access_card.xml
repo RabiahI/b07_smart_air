@@ -66,40 +66,52 @@
         <!-- Invite Code Row (visible only when code exists) -->
         <LinearLayout
             android:id="@+id/layoutInviteCode"
-            android:layout_width="match_parent"
+            android:layout_width="306dp"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:gravity="center_vertical"
             android:layout_marginTop="6dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+
             android:visibility="gone">
 
             <TextView
                 android:id="@+id/textViewInviteCodeLabel"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginEnd="6dp"
                 android:text="Code:"
                 android:textColor="#607D8B"
-                android:textSize="14sp"
-                android:layout_marginEnd="6dp"/>
+                android:textSize="14sp" />
 
             <TextView
                 android:id="@+id/textViewInviteCode"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginEnd="6dp"
                 android:text="••••••"
-                android:textSize="16sp"
-                android:textStyle="bold"
                 android:textColor="#000"
-                android:layout_marginEnd="6dp"/>
+                android:textSize="16sp" />
 
             <ImageButton
                 android:id="@+id/buttonToggleCodeVisibility"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:background="?attr/selectableItemBackgroundBorderless"
-                android:src="@drawable/ic_visibility_off"
                 android:contentDescription="Toggle Code Visibility"
-                android:tint="#607D8B"/>
+                android:src="@drawable/ic_visibility_off" />
+
+            <Button
+                android:id="@+id/buttonRevokeAccess"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:backgroundTint="#FFFF"
+                android:paddingHorizontal="12dp"
+                android:paddingVertical="4dp"
+                android:text="Revoke Access"
+                android:textAllCaps="false"
+                android:textColor="#A00303"
+                android:textSize="14sp" />
 
         </LinearLayout>
 

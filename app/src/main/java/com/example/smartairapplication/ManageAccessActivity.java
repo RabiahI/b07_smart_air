@@ -128,6 +128,34 @@ public class ManageAccessActivity extends AppCompatActivity implements AccessAda
         showInviteProviderDialog(selectedChild);
     }
 
+    @Override
+    public void onRevokeClick(int position){
+        Child selectedChild = childList.get(position);
+        DatabaseReference inviteRef = FirebaseDatabase.getInstance().getReference("Users")
+                .child("Parent")
+                .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
+                .child("Children")
+                .child(selectedChild.getChildId())
+                .child("Invite");
+
+        new AlertDialog.Builder(this)
+                .setTitle("Revoke Access")
+                .setMessage("Are you sure you want to revoke access for " + selectedChild.getName() + "? The provider will no longer have access to your child's data.")
+                .setPositiveButton("Revoke", (dialog, which) -> {
+                   inviteRef.removeValue().addOnCompleteListener(task -> {
+                       if (task.isSuccessful()) {
+                           selectedChild.setAccessStatus("not_shared");
+                           selectedChild.setInviteCode(null);
+                           adapter.notifyItemChanged(position);
+                           Toast.makeText(this, "Access revoked", Toast.LENGTH_SHORT).show();
+                       } else {
+                           Toast.makeText(this, "Failed to revoke access.", Toast.LENGTH_SHORT).show();
+                       }
+                   });
+                })
+                .setNegativeButton("Cancel", null).show();
+    }
+
     private void showInviteProviderDialog(Child child){
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         View view = LayoutInflater.from(this).inflate(R.layout.dialog_invite_provider, null);
