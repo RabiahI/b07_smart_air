@@ -29,10 +29,8 @@ public class OnboardingDialogFragment extends AppCompatDialogFragment {
         Button getStartedButton = view.findViewById(R.id.button_get_started);
 
         String role = "User";
-        String uid = "";
         if (getArguments() != null) {
             role = getArguments().getString("role", "User");
-            uid = getArguments().getString("uid", "");
         }
 
         // set message based on role
@@ -50,30 +48,7 @@ public class OnboardingDialogFragment extends AppCompatDialogFragment {
                 textNotice.setText("Welcome! Let’s get started.");
         }
 
-        final String roleFinal = role;
-
         getStartedButton.setOnClickListener(v -> {
-            if (getActivity() != null) {
-
-                Log.d("OnboardingDialog", "roleFinal='" + roleFinal + "'");
-
-                Intent intent;
-                switch (roleFinal) {
-                    case "Parent":
-                        intent = new Intent(getActivity(), ParentHomeActivity.class);
-                        break;
-                    case "Provider":
-                        intent = new Intent(getActivity(), ProviderHomeActivity.class);
-                        break;
-                    case "Child":
-                        intent = new Intent(getActivity(), ChildHomeActivity.class);
-                        break;
-                    default:
-                        intent = new Intent(getActivity(), MainActivity.class);
-                }
-                getActivity().startActivity(intent);
-                getActivity().finish();
-            }
             dismiss();
         });
 

@@ -20,6 +20,16 @@ public class ParentHomeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_parent_home);
 
+        if (OnboardingActivity.isFirstLogin()) {
+            OnboardingDialogFragment dialog = new OnboardingDialogFragment();
+
+            Bundle args = new Bundle();
+            args.putString("role", getIntent().getStringExtra("role"));
+            args.putString("uid", getIntent().getStringExtra("uid"));
+            dialog.setArguments(args);
+            dialog.show(getSupportFragmentManager(), "onboarding_dialog");
+        }
+
         logoutButton = findViewById(R.id.logout);
         childButton = findViewById(R.id.btn_child);
 
@@ -31,7 +41,6 @@ public class ParentHomeActivity extends AppCompatActivity {
                 startActivity(intent);
                 finish();
             }
-
         });
 
         childButton.setOnClickListener(new View.OnClickListener() {

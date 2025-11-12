@@ -120,12 +120,32 @@ public class Registration extends AppCompatActivity {
                                                     Toast.makeText(Registration.this, "Account Created.",
                                                             Toast.LENGTH_SHORT).show();
 
-                                                    Intent intent = new Intent(Registration.this, OnboardingActivity.class);
-                                                    intent.putExtra("role", role);
-                                                    intent.putExtra("uid", firebaseUser.getUid());
-                                                    startActivity(intent);
-                                                    finish();
+                                                            // watch out for extremely inefficient code below
+                                                    switch (role) {
+                                                        case "Child":
+                                                            Intent childIntent = new Intent(Registration.this, ChildHomeActivity.class);
+                                                            childIntent.putExtra("role", role);
+                                                            childIntent.putExtra("uid", firebaseUser.getUid());
+                                                            startActivity(childIntent);
+                                                            finish();
+                                                            break;
 
+                                                        case "Provider":
+                                                            Intent providerIntent = new Intent(Registration.this, ProviderHomeActivity.class);
+                                                            providerIntent.putExtra("role", role);
+                                                            providerIntent.putExtra("uid", firebaseUser.getUid());
+                                                            startActivity(providerIntent);
+                                                            finish();
+                                                            break;
+
+                                                        default:
+                                                            Intent intent = new Intent(Registration.this, ParentHomeActivity.class);
+                                                            intent.putExtra("role", role);
+                                                            intent.putExtra("uid", firebaseUser.getUid());
+                                                            startActivity(intent);
+                                                            finish();
+                                                            break;
+                                                    }
 //
                                                 } else {
                                                     Toast.makeText(Registration.this, "Failed to save user data.",
