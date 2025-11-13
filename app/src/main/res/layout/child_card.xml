@@ -53,14 +53,6 @@
                 android:textSize="20sp"
                 android:textStyle="bold" />
 
-            <Button
-                android:id="@+id/loginButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="8dp"
-                android:text="Login"
-                android:textAllCaps="false" />
-
             <TextView
                 android:id="@+id/textViewDob"
                 android:layout_width="wrap_content"
