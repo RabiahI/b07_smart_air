@@ -18,4 +18,32 @@
         <item>Provider</item>
         <item>Child</item>
     </string-array>
+
+    <string name="provider_welcome">
+        Welcome, Provider! \n\n
+
+        As a provider, you can view the summary reports for children, but only when a parent shares their data with you. \n\n
+        Please wait for a parent to share more information about the child with you. \n\n
+
+        # info about how to view summaries + reports
+    </string>
+    <string name="child_welcome">
+        Welcome Child! \n\n
+        As a child you can log your medicines and symptoms, practice inhaler techniques, and track your asthma in a fun, safe way! \n\n
+
+         Your data is private. Only your parent can share your information with your healthcare provider. \n\n
+
+        # add more info about functionality once theyre implemented cuz idk \n\n
+
+    </string>
+    <string name="parent_welcome">
+        Welcome Parent! \n\n
+        You can link your children, view their health data, get alerts, and share a controlled summary with your healthcare provider. \n\n
+        You may link a child and provide general information or notes about them in the homepage.\n\n
+
+        You can log incidents for your child by... \n\n
+
+        # add more info later \n
+    </string>
+
 </resources>

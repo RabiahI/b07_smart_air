@@ -6,6 +6,8 @@ public class Child extends User {
     private String dob;
     private String notes;
     private int age;
+    private String accessStatus; //"not_shared", "generated", "accepted"
+    private String inviteCode; //provider's invite code
 
     public Child(){}
 
@@ -23,6 +25,8 @@ public class Child extends User {
     public String getDob(){ return dob; }
     public String getNotes(){ return notes; }
     public int getAge(){ return age; }
+    public String getAccessStatus(){return accessStatus;}
+    public String getInviteCode(){return inviteCode;}
     public void setChildId(String childId){
         this.childId = childId;
     }
@@ -38,4 +42,7 @@ public class Child extends User {
     public void setAge(int age){
         this.age = age;
     }
+
+    public void setAccessStatus(String accessStatus){this.accessStatus = accessStatus;  }
+    public void setInviteCode(String inviteCode){this.inviteCode = inviteCode;  }
 }

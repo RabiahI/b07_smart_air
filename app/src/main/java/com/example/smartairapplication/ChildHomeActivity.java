@@ -32,6 +32,7 @@ public class ChildHomeActivity extends AppCompatActivity implements PasswordDial
         mAuth = FirebaseAuth.getInstance();
         FirebaseDatabase database = FirebaseDatabase.getInstance();
 
+        // Views
         textViewName = findViewById(R.id.textViewName);
         textViewDob = findViewById(R.id.textViewDob);
         textViewAge = findViewById(R.id.textViewAge);
@@ -39,12 +40,24 @@ public class ChildHomeActivity extends AppCompatActivity implements PasswordDial
         buttonLogout = findViewById(R.id.logout);
         buttonBackToParent = findViewById(R.id.backToParent);
 
+        // Show onboarding on first login
+        if (OnboardingActivity.isFirstLogin()) {
+            OnboardingDialogFragment dialog = new OnboardingDialogFragment();
+
+            Bundle args = new Bundle();
+            args.putString("role", getIntent().getStringExtra("role"));
+            args.putString("uid", getIntent().getStringExtra("uid"));
+            dialog.setArguments(args);
+            dialog.show(getSupportFragmentManager(), "onboarding_dialog");
+        }
+
         Intent intent = getIntent();
         String childId = intent.getStringExtra("childId");
 
         DatabaseReference childRef = null;
 
         if (childId != null) {
+            // Parent viewing a specific child
             buttonBackToParent.setVisibility(View.VISIBLE);
             buttonLogout.setVisibility(View.GONE);
 
@@ -53,17 +66,26 @@ public class ChildHomeActivity extends AppCompatActivity implements PasswordDial
                 parentId = mAuth.getCurrentUser().getUid();
             }
             if (parentId != null) {
-                childRef = database.getReference("Users").child("Parent").child(parentId).child("Children").child(childId);
+                childRef = database.getReference("Users")
+                        .child("Parent")
+                        .child(parentId)
+                        .child("Children")
+                        .child(childId);
             }
 
-            buttonBackToParent.setOnClickListener(v -> new PasswordDialogFragment().show(getSupportFragmentManager(), "PasswordDialogFragment"));
+            buttonBackToParent.setOnClickListener(v ->
+                    new PasswordDialogFragment().show(getSupportFragmentManager(), "PasswordDialogFragment")
+            );
         } else {
+            // Child logged in directly
             buttonBackToParent.setVisibility(View.GONE);
             buttonLogout.setVisibility(View.VISIBLE);
 
             FirebaseUser currentUser = mAuth.getCurrentUser();
             if (currentUser != null) {
-                childRef = database.getReference("Users").child("Child").child(currentUser.getUid());
+                childRef = database.getReference("Users")
+                        .child("Child")
+                        .child(currentUser.getUid());
             }
 
             buttonLogout.setOnClickListener(v -> {
