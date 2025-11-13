@@ -12,6 +12,7 @@
     <string name="parent_home">Parent Home</string>
     <string name="child_home">Child Home</string>
     <string name="child">Child</string>
+    <string name="forgot_password">Forgot Password?</string>
     <string-array name="user_roles">
         <item>Parent</item>
         <item>Provider</item>
