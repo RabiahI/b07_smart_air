@@ -36,8 +36,13 @@ public class ChildManagementActivity extends AppCompatActivity implements ChildA
         setContentView(R.layout.activity_child_management);
 
         mAuth = FirebaseAuth.getInstance();
-        String parentId = mAuth.getCurrentUser().getUid();
-        childrenRef = FirebaseDatabase.getInstance().getReference("Users").child("Parent").child(parentId).child("Children");
+        String parentId = null;
+        if (mAuth.getCurrentUser() != null) {
+            parentId = mAuth.getCurrentUser().getUid();
+        }
+        if (parentId != null) {
+            childrenRef = FirebaseDatabase.getInstance().getReference("Users").child("Parent").child(parentId).child("Children");
+        }
         recyclerViewChildren = findViewById(R.id.recyclerViewChildren);
         recyclerViewChildren.setLayoutManager(new LinearLayoutManager(this));
         childList = new ArrayList<>();
@@ -91,19 +96,24 @@ public class ChildManagementActivity extends AppCompatActivity implements ChildA
         new androidx.appcompat.app.AlertDialog.Builder(this)
                 .setTitle("Delete Child")
                 .setMessage("Are you sure you want to delete " + selectedChild.getName() + "? This action cannot be undone.")
-                .setPositiveButton("Delete", (dialog, which) -> {
-                    childrenRef.child(selectedChild.getChildId()).removeValue()
-                            .addOnCompleteListener(task -> {
-                                if (task.isSuccessful()) {
-                                    Toast.makeText(this, "Child deleted successfully", Toast.LENGTH_SHORT).show();
-                                } else {
-                                    Toast.makeText(this, "Failed to delete child", Toast.LENGTH_SHORT).show();
-                                }
-                            });
-                })
+                .setPositiveButton("Delete", (dialog, which) -> childrenRef.child(selectedChild.getChildId()).removeValue()
+                        .addOnCompleteListener(task -> {
+                            if (task.isSuccessful()) {
+                                Toast.makeText(this, "Child deleted successfully", Toast.LENGTH_SHORT).show();
+                            } else {
+                                Toast.makeText(this, "Failed to delete child", Toast.LENGTH_SHORT).show();
+                            }
+                        }))
                 .setNegativeButton("Cancel", (dialog, which) -> dialog.dismiss())
                 .setIcon(R.drawable.ic_dialog_alert)
                 .show();
     }
 
+    @Override
+    public void onLoginClick(int position) {
+        Child selectedChild = childList.get(position);
+        Intent intent = new Intent(ChildManagementActivity.this, ChildHomeActivity.class);
+        intent.putExtra("childId", selectedChild.getChildId());
+        startActivity(intent);
+    }
 }
