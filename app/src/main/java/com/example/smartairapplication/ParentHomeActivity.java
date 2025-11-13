@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -13,7 +12,7 @@ import com.google.firebase.auth.FirebaseAuth;
 public class ParentHomeActivity extends AppCompatActivity {
 
     Button logoutButton;
-    Button childButton;
+    Button childButton, manageProviderButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,6 +31,7 @@ public class ParentHomeActivity extends AppCompatActivity {
 
         logoutButton = findViewById(R.id.logout);
         childButton = findViewById(R.id.btn_child);
+        manageProviderButton = findViewById(R.id.buttonManageProvider);
 
         logoutButton.setOnClickListener(new View.OnClickListener(){
             @Override
@@ -47,6 +47,15 @@ public class ParentHomeActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(getApplicationContext(), ChildManagementActivity.class);
+                startActivity(intent);
+                finish();
+            }
+        });
+
+        manageProviderButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getApplicationContext(), ManageAccessActivity.class);
                 startActivity(intent);
                 finish();
             }
