@@ -33,17 +33,23 @@ public class ParentHomeActivity extends AppCompatActivity {
         childButton = findViewById(R.id.btn_child);
         manageProviderButton = findViewById(R.id.buttonManageProvider);
 
-        logoutButton.setOnClickListener(view -> {
-            FirebaseAuth.getInstance().signOut();
-            Intent intent = new Intent(getApplicationContext(), Login.class);
-            startActivity(intent);
-            finish();
+        logoutButton.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view) {
+                FirebaseAuth.getInstance().signOut();
+                Intent intent = new Intent(getApplicationContext(), Login.class);
+                startActivity(intent);
+                finish();
+            }
         });
 
-        childButton.setOnClickListener(view -> {
-            Intent intent = new Intent(getApplicationContext(), ChildManagementActivity.class);
-            startActivity(intent);
-            finish();
+        childButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getApplicationContext(), ChildManagementActivity.class);
+                startActivity(intent);
+                finish();
+            }
         });
 
         manageProviderButton.setOnClickListener(new View.OnClickListener() {

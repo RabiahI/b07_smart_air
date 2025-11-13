@@ -22,7 +22,6 @@ public class ChildAdapter extends RecyclerView.Adapter<ChildAdapter.ChildViewHol
     public interface OnItemClickListener{
         void onEditClick(int position);
         void onDeleteClick(int position);
-        void onLoginClick(int position);
     }
 
     public ChildAdapter(Context context, List<Child> childList, OnItemClickListener listener){
@@ -47,7 +46,6 @@ public class ChildAdapter extends RecyclerView.Adapter<ChildAdapter.ChildViewHol
 
         holder.editButton.setOnClickListener(v -> listener.onEditClick(position));
         holder.deleteButton.setOnClickListener(v -> listener.onDeleteClick(position));
-        holder.loginButton.setOnClickListener(v -> listener.onLoginClick(position));
     }
     @Override
     public int getItemCount(){
@@ -56,7 +54,7 @@ public class ChildAdapter extends RecyclerView.Adapter<ChildAdapter.ChildViewHol
 
     public static class ChildViewHolder extends RecyclerView.ViewHolder {
         TextView textViewName, textViewDob, textViewAge, textViewNotes;
-        Button editButton, deleteButton, loginButton;
+        Button editButton, deleteButton;
         public ChildViewHolder(@NonNull View itemView){
             super(itemView);
             textViewName = itemView.findViewById(R.id.textViewName);
@@ -66,7 +64,6 @@ public class ChildAdapter extends RecyclerView.Adapter<ChildAdapter.ChildViewHol
 
             editButton = itemView.findViewById(R.id.editButton);
             deleteButton = itemView.findViewById(R.id.deleteButton);
-            loginButton = itemView.findViewById(R.id.loginButton);
         }
     }
 }
