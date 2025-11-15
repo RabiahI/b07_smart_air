@@ -45,5 +45,6 @@
 
         # add more info later \n
     </string>
+    <string name="confirm_password">Confirm Password</string>
 
 </resources>
