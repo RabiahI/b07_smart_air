@@ -157,6 +157,10 @@ public class ChildHomeActivity extends AppCompatActivity implements PasswordDial
                 int currentPef = Integer.parseInt(pefString);
                 if (childRef != null) {
                     childRef.child("latestPef").setValue(currentPef);
+                    if (currentPef > personalBest) {
+                        childRef.child("personalBest").setValue(currentPef);
+                        Toast.makeText(ChildHomeActivity.this, "New Personal Best!", Toast.LENGTH_SHORT).show();
+                    }
                 }
             } else {
                 Toast.makeText(this, "Please enter a value", Toast.LENGTH_SHORT).show();
