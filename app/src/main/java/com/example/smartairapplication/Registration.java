@@ -125,7 +125,7 @@ public class Registration extends AppCompatActivity {
                                         user = new Provider(email);
                                         break;
                                     case "Child":
-                                        user = new Child(email, uid, null, null, null, 0);
+                                        user = new Child(email, uid, null, null, null, 0, 0, 0);
                                         break;
                                     default:
                                         Toast.makeText(Registration.this, "Invalid role selected.", Toast.LENGTH_SHORT).show();

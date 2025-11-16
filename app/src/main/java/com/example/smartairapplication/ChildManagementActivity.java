@@ -86,6 +86,8 @@ public class ChildManagementActivity extends AppCompatActivity implements ChildA
         intent.putExtra("dob", selectedChild.getDob());
         intent.putExtra("age", selectedChild.getAge());
         intent.putExtra("notes", selectedChild.getNotes());
+        intent.putExtra("personalBest", selectedChild.getPersonalBest());
+        intent.putExtra("latestPef", selectedChild.getLatestPef());
         startActivity(intent);
     }
 
@@ -114,6 +116,8 @@ public class ChildManagementActivity extends AppCompatActivity implements ChildA
         Child selectedChild = childList.get(position);
         Intent intent = new Intent(ChildManagementActivity.this, ChildHomeActivity.class);
         intent.putExtra("childId", selectedChild.getChildId());
+        intent.putExtra("personalBest", selectedChild.getPersonalBest());
+        intent.putExtra("latestPef", selectedChild.getLatestPef());
         startActivity(intent);
     }
 }

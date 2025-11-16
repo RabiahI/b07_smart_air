@@ -28,6 +28,8 @@ public class AddChildActivity extends AppCompatActivity {
 
     private EditText editTextName, editTextDob, editTextAge, editTextNotes;
     private DatabaseReference parentRef;
+    private int personalBest;
+    private int latestPef;
 
 
     @Override
@@ -63,6 +65,8 @@ public class AddChildActivity extends AppCompatActivity {
             editTextDob.setText(intent.getStringExtra("dob"));
             editTextAge.setText(String.valueOf(intent.getIntExtra("age", 0)));
             editTextNotes.setText(intent.getStringExtra("notes"));
+            personalBest = intent.getIntExtra("personalBest", 0);
+            latestPef = intent.getIntExtra("latestPef", 0);
 
             buttonSaveChild.setText("Update Child");
 
@@ -105,7 +109,7 @@ public class AddChildActivity extends AppCompatActivity {
             return;
         }
 
-        Child child = new Child(null, childId, name, dob, notes, age);
+        Child child = new Child(null, childId, name, dob, notes, age, 0, 0);
         parentRef.child(childId).setValue(child).addOnCompleteListener(task -> {
             if (task.isSuccessful()){
                 Toast.makeText(AddChildActivity.this, "Child added successfully!", Toast.LENGTH_SHORT).show();
@@ -134,7 +138,7 @@ public class AddChildActivity extends AppCompatActivity {
             return;
         }
 
-        Child updatedChild = new Child(null, childId, name, dob, notes, age);
+        Child updatedChild = new Child(null, childId, name, dob, notes, age, personalBest, latestPef);
 
         parentRef.child(childId).setValue(updatedChild)
                 .addOnCompleteListener(task -> {
