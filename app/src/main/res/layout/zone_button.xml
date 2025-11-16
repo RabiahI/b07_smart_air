@@ -19,7 +19,7 @@
             android:id="@+id/zone_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Today's Zone: Green!"
+            android:text="@string/today_s_zone_green"
             android:textColor="@android:color/white"
             android:textSize="20sp"
             android:textStyle="bold" />
@@ -29,7 +29,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
-            android:text="Keep up your routine!"
+            android:text="@string/keep_up_your_routine"
             android:textColor="@android:color/white" />
 
         <TextView
@@ -37,7 +37,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
-            android:text="PEF: 280 (PB: 310)"
+            android:text="@string/pef_280_pb_310"
             android:textColor="@android:color/white" />
     </LinearLayout>
 </androidx.cardview.widget.CardView>

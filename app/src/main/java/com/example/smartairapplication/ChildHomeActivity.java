@@ -173,8 +173,8 @@ public class ChildHomeActivity extends AppCompatActivity implements PasswordDial
 
     private void updateZone(int currentPef) {
         if (personalBest == 0) {
-            zoneTitle.setText("Today's Zone: Not Set");
-            zoneMessage.setText("Please set your personal best PEF.");
+            zoneTitle.setText(R.string.today_s_zone_not_set);
+            zoneMessage.setText(R.string.please_set_your_personal_best_pef);
             zoneButton.setCardBackgroundColor(Color.parseColor("#9E9E9E")); // Gray
             updatePefDisplay(currentPef);
             return;
@@ -183,16 +183,16 @@ public class ChildHomeActivity extends AppCompatActivity implements PasswordDial
         double percentage = ((double) currentPef / personalBest) * 100;
 
         if (percentage >= 80) {
-            zoneTitle.setText("Today's Zone: Green!");
-            zoneMessage.setText("Keep up your routine!");
+            zoneTitle.setText(R.string.today_s_zone_green);
+            zoneMessage.setText(R.string.keep_up_your_routine);
             zoneButton.setCardBackgroundColor(Color.parseColor("#90C4A5"));
         } else if (percentage >= 50) {
-            zoneTitle.setText("Today's Zone: Yellow!");
-            zoneMessage.setText("Caution: Use your reliever inhaler.");
+            zoneTitle.setText(R.string.today_s_zone_yellow);
+            zoneMessage.setText(R.string.caution_use_your_reliever_inhaler);
             zoneButton.setCardBackgroundColor(Color.parseColor("#FFC107")); // Yellow
         } else {
-            zoneTitle.setText("Today's Zone: Red!");
-            zoneMessage.setText("Danger: Use your reliever and see a doctor.");
+            zoneTitle.setText(R.string.today_s_zone_red);
+            zoneMessage.setText(R.string.danger_use_your_reliever_and_see_a_doctor);
             zoneButton.setCardBackgroundColor(Color.parseColor("#F44336")); // Red
         }
 
