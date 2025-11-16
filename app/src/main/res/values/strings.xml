@@ -46,5 +46,15 @@
         # add more info later \n
     </string>
     <string name="confirm_password">Confirm Password</string>
+    <string name="back_to_parent">Back to Parent</string>
+    <string name="today_s_zone_green">Today\'s Zone: Green!</string>
+    <string name="keep_up_your_routine">Keep up your routine!</string>
+    <string name="pef_280_pb_310">PEF: 280 (PB: 310)</string>
+    <string name="please_set_your_personal_best_pef">Please set your personal best PEF.</string>
+    <string name="today_s_zone_not_set">Today\'s Zone: Not Set</string>
+    <string name="today_s_zone_yellow">Today\'s Zone: Yellow!</string>
+    <string name="caution_use_your_reliever_inhaler">Caution: Use your reliever inhaler.</string>
+    <string name="today_s_zone_red">Today\'s Zone: Red!</string>
+    <string name="danger_use_your_reliever_and_see_a_doctor">Danger: Use your reliever and see a doctor.</string>
 
 </resources>
