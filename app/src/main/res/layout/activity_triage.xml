@@ -55,6 +55,40 @@
     </LinearLayout>
 
     <LinearLayout
+        android:id="@+id/inputs_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <EditText
+            android:id="@+id/edit_text_pef"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Enter PEF (optional)"
+            android:inputType="number" />
+
+        <EditText
+            android:id="@+id/edit_text_rescue_attempts"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:hint="How many rescue attempts?"
+            android:inputType="number" />
+
+        <Button
+            android:id="@+id/submit_inputs_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="Continue" />
+
+    </LinearLayout>
+
+
+    <LinearLayout
         android:id="@+id/result_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -79,6 +113,15 @@
             android:textAlignment="center"
             android:textSize="20sp"
             tools:text="Action: Call 911 immediately" />
+
+        <TextView
+            android:id="@+id/timer_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:textSize="20sp"
+            android:visibility="gone"
+            tools:text="10:00" />
 
         <Button
             android:id="@+id/start_over_button"

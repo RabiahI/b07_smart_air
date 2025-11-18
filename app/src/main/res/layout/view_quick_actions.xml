@@ -147,7 +147,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 android:fontFamily="@font/poppins_bold"
-                android:text="Triage"
+                android:text="Asthma Help Now"
                 android:textColor="#c60000"
                 android:textSize="15sp"
                 android:textStyle="bold" />

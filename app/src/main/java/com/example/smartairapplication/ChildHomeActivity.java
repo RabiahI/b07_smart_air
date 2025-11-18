@@ -145,6 +145,7 @@ public class ChildHomeActivity extends AppCompatActivity implements PasswordDial
         zoneButton.setOnClickListener(v -> showPefInputDialog());
         triageButton.setOnClickListener(v -> {
             Intent triageIntent = new Intent(ChildHomeActivity.this, TriageActivity.class);
+            triageIntent.putExtra("childId", childId);
             startActivity(triageIntent);
         });
     }
