@@ -128,7 +128,7 @@ public class TriageActivity extends AppCompatActivity {
             @Override
             public void onFinish() {
                 timerText.setText("00:00");
-                Toast.makeText(this, "Symptoms have not improved. Alerting parent.", Toast.LENGTH_SHORT).show();
+                Toast.makeText(TriageActivity.this, "Symptoms have not improved. Alerting parent.", Toast.LENGTH_SHORT).show();
                 alertParent();
             }
         }.start();
