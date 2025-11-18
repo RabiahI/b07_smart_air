@@ -7,37 +7,61 @@
     android:layout_margin="8dp"
     app:cardCornerRadius="12dp"
     app:cardElevation="4dp"
-    app:cardBackgroundColor="#90C4A5">
+    app:cardBackgroundColor="@color/zone_green">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
+        android:orientation="horizontal"
         android:padding="16dp">
 
-        <TextView
-            android:id="@+id/zone_title"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="236dp"
             android:layout_height="wrap_content"
-            android:text="@string/today_s_zone_green"
-            android:textColor="@android:color/white"
-            android:textSize="20sp"
-            android:textStyle="bold" />
+            android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/zone_message"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="4dp"
-            android:text="@string/keep_up_your_routine"
-            android:textColor="@android:color/white" />
+            <TextView
+                android:id="@+id/zone_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/baloo"
+                android:text="@string/today_s_zone_green"
+                android:textColor="@android:color/white"
+                android:textSize="24sp"
+                android:textStyle="bold" />
 
-        <TextView
-            android:id="@+id/pef_value"
-            android:layout_width="wrap_content"
+            <TextView
+                android:id="@+id/zone_message"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:fontFamily="@font/poppins_medium"
+                android:text="@string/keep_up_your_routine"
+                android:textColor="@android:color/white" />
+
+            <TextView
+                android:id="@+id/pef_value"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:fontFamily="@font/poppins_medium"
+                android:text="@string/pef_280_pb_310"
+                android:textColor="@android:color/white" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="4dp"
-            android:text="@string/pef_280_pb_310"
-            android:textColor="@android:color/white" />
+            android:layout_marginTop="15dp"
+            android:layout_marginLeft="20dp">
+
+            <ImageView
+                android:id="@+id/heart"
+                android:layout_width="match_parent"
+                android:layout_height="57dp"
+                android:layout_weight="1"
+                app:srcCompat="@drawable/ic_heart" />
+        </LinearLayout>
+
     </LinearLayout>
 </androidx.cardview.widget.CardView>
