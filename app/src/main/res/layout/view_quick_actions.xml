@@ -10,6 +10,7 @@
 
     <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:card_view="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/logMedicineButton"
         android:layout_width="170dp"
         android:layout_height="130dp"
         android:layout_margin="10dp"
@@ -46,6 +47,7 @@
 
     <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:card_view="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/dailyCheckInButton"
         android:layout_width="170dp"
         android:layout_height="130dp"
         android:layout_margin="10dp"
@@ -82,6 +84,7 @@
 
     <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:card_view="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/techniqueHelperButton"
         android:layout_width="170dp"
         android:layout_height="130dp"
         android:layout_margin="10dp"
@@ -118,6 +121,7 @@
 
     <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:card_view="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/triageButton"
         android:layout_width="170dp"
         android:layout_height="130dp"
         android:layout_margin="10dp"
@@ -152,4 +156,3 @@
 
     </androidx.cardview.widget.CardView>
 </GridLayout>
-

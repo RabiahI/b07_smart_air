@@ -34,7 +34,7 @@ public class ChildHomeActivity extends AppCompatActivity implements PasswordDial
     private int latestPef;
     private DatabaseReference childRef;
 
-    private CardView zoneButton;
+    private CardView zoneButton, triageButton;
     private TextView zoneTitle, zoneMessage, pefValue;
 
     @Override
@@ -58,6 +58,8 @@ public class ChildHomeActivity extends AppCompatActivity implements PasswordDial
         zoneTitle = findViewById(R.id.zone_title);
         zoneMessage = findViewById(R.id.zone_message);
         pefValue = findViewById(R.id.pef_value);
+
+        triageButton = findViewById(R.id.triageButton);
 
         // Show onboarding on first login
         if (OnboardingActivity.isFirstLogin()) {
@@ -141,6 +143,10 @@ public class ChildHomeActivity extends AppCompatActivity implements PasswordDial
         }
 
         zoneButton.setOnClickListener(v -> showPefInputDialog());
+        triageButton.setOnClickListener(v -> {
+            Intent triageIntent = new Intent(ChildHomeActivity.this, TriageActivity.class);
+            startActivity(triageIntent);
+        });
     }
 
     private void showPefInputDialog() {
