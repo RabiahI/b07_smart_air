@@ -121,7 +121,7 @@
 
     <androidx.cardview.widget.CardView
         xmlns:card_view="http://schemas.android.com/apk/res-auto"
-        android:id="@+id/asthmaHelpButton"
+        android:id="@+id/triageButton"
         android:layout_width="170dp"
         android:layout_height="130dp"
         android:layout_margin="10dp"
@@ -147,7 +147,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 android:fontFamily="@font/poppins_bold"
-                android:text="Asthma Help Now"
+                android:text="Triage"
                 android:textColor="#c60000"
                 android:textSize="15sp"
                 android:textStyle="bold" />
