@@ -32,6 +32,7 @@ public class Registration extends AppCompatActivity {
 
     FirebaseDatabase database;
     DatabaseReference usersRef;
+    String parentId;
 
     @Override
     public void onStart() {
@@ -60,43 +61,38 @@ public class Registration extends AppCompatActivity {
         textView = findViewById(R.id.loginNow);
         spinnerFragment = (SpinnerFragment) getSupportFragmentManager().findFragmentById(R.id.spinner_fragment_container);
 
+        Intent intent = getIntent();
+        String role = intent.getStringExtra("role");
+        parentId = intent.getStringExtra("parentId");
+
+        if ("Child".equals(role)) {
+            spinnerFragment.getView().setVisibility(View.GONE);
+        } else {
+            // The spinner will use the user_roles array from strings.xml, which no longer contains "Child".
+        }
+
         textView.setOnClickListener(view -> {
-            Intent intent = new Intent(Registration.this, Login.class);
-            startActivity(intent);
+            Intent loginIntent = new Intent(Registration.this, Login.class);
+            startActivity(loginIntent);
             finish();
         });
 
         buttonReg.setOnClickListener(view -> {
             progressBar.setVisibility(View.VISIBLE);
-            String email, password, confirmPassword, role;
+            String email, password, confirmPassword, selectedRole;
             email = String.valueOf(editTextEmail.getText());
             password = String.valueOf(editTextPassword.getText());
             confirmPassword = String.valueOf(editTextConfirmPassword.getText());
-            role = spinnerFragment != null ? spinnerFragment.getSelectedRole() : "";
+            selectedRole = "Child".equals(role) ? "Child" : spinnerFragment.getSelectedRole();
 
             // Validation
-            if (TextUtils.isEmpty(email)) {
-                Toast.makeText(Registration.this, "Enter email", Toast.LENGTH_SHORT).show();
-                progressBar.setVisibility(View.GONE);
-                return;
-            }
-            if (TextUtils.isEmpty(password)) {
-                Toast.makeText(Registration.this, "Enter password", Toast.LENGTH_SHORT).show();
-                progressBar.setVisibility(View.GONE);
-                return;
-            }
-            if (TextUtils.isEmpty(confirmPassword)) {
-                Toast.makeText(Registration.this, "Confirm your password", Toast.LENGTH_SHORT).show();
+            if (TextUtils.isEmpty(email) || TextUtils.isEmpty(password) || TextUtils.isEmpty(confirmPassword)) {
+                Toast.makeText(Registration.this, "All fields are required", Toast.LENGTH_SHORT).show();
                 progressBar.setVisibility(View.GONE);
                 return;
             }
             if (!password.equals(confirmPassword)) {
                 Toast.makeText(Registration.this, "Passwords do not match", Toast.LENGTH_SHORT).show();
-                progressBar.setVisibility(View.GONE);
-                return;
-            }
-            if (TextUtils.isEmpty(role)) {
-                Toast.makeText(Registration.this, "Please select a role", Toast.LENGTH_SHORT).show();
                 progressBar.setVisibility(View.GONE);
                 return;
             }
@@ -115,55 +111,43 @@ public class Registration extends AppCompatActivity {
                             if (firebaseUser != null) {
                                 String uid = firebaseUser.getUid();
 
-                                // Create role-specific user object
                                 User user;
-                                switch (role) {
-                                    case "Parent":
-                                        user = new Parent(email);
-                                        break;
-                                    case "Provider":
-                                        user = new Provider(email);
-                                        break;
-                                    case "Child":
-                                        user = new Child(email, uid, null, null, null, 0, 0, 0);
-                                        break;
-                                    default:
-                                        Toast.makeText(Registration.this, "Invalid role selected.", Toast.LENGTH_SHORT).show();
-                                        return;
+                                if ("Child".equals(selectedRole)) {
+                                    user = new Child(email, uid, null, null, null, 0, 0, 0);
+                                    if (parentId != null) {
+                                        usersRef.child("Parent").child(parentId).child("Children").child(uid).setValue(user);
+                                        String inviteCode = intent.getStringExtra("inviteCode");
+                                        if (inviteCode != null) {
+                                            FirebaseDatabase.getInstance().getReference("ChildInvitations").child(inviteCode).removeValue();
+                                        }
+                                    }
+                                } else if ("Parent".equals(selectedRole)) {
+                                    user = new Parent(email);
+                                } else {
+                                    user = new Provider(email);
                                 }
 
-                                DatabaseReference roleRef = usersRef.child(role).child(uid);
+                                DatabaseReference roleRef = usersRef.child(selectedRole).child(uid);
                                 roleRef.setValue(user).addOnCompleteListener(task1 -> {
                                     if (task1.isSuccessful()) {
-                                        Toast.makeText(Registration.this, "Account Created.",
-                                                Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(Registration.this, "Account Created.", Toast.LENGTH_SHORT).show();
 
-                                        // Redirect based on role, passing extras for onboarding
-                                        switch (role) {
+                                        Intent homeIntent;
+                                        switch (selectedRole) {
                                             case "Child":
-                                                Intent childIntent = new Intent(Registration.this, ChildHomeActivity.class);
-                                                childIntent.putExtra("role", role);
-                                                childIntent.putExtra("uid", firebaseUser.getUid());
-                                                startActivity(childIntent);
-                                                finish();
+                                                homeIntent = new Intent(Registration.this, ChildHomeActivity.class);
                                                 break;
-
                                             case "Provider":
-                                                Intent providerIntent = new Intent(Registration.this, ProviderHomeActivity.class);
-                                                providerIntent.putExtra("role", role);
-                                                providerIntent.putExtra("uid", firebaseUser.getUid());
-                                                startActivity(providerIntent);
-                                                finish();
+                                                homeIntent = new Intent(Registration.this, ProviderHomeActivity.class);
                                                 break;
-
                                             default: // Parent
-                                                Intent parentIntent = new Intent(Registration.this, ParentHomeActivity.class);
-                                                parentIntent.putExtra("role", role);
-                                                parentIntent.putExtra("uid", firebaseUser.getUid());
-                                                startActivity(parentIntent);
-                                                finish();
+                                                homeIntent = new Intent(Registration.this, ParentHomeActivity.class);
                                                 break;
                                         }
+                                        homeIntent.putExtra("role", selectedRole);
+                                        homeIntent.putExtra("uid", firebaseUser.getUid());
+                                        startActivity(homeIntent);
+                                        finish();
 
                                     } else {
                                         Toast.makeText(Registration.this, "Failed to save user data.",
@@ -172,12 +156,10 @@ public class Registration extends AppCompatActivity {
                                 });
                             }
                         } else {
-                            // If sign up fails, display a message to the user.
                             Toast.makeText(Registration.this, "Authentication failed.",
                                     Toast.LENGTH_SHORT).show();
                         }
                     });
-
         });
     }
 }
