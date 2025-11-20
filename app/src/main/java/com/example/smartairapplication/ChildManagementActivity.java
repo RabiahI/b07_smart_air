@@ -1,11 +1,20 @@
 package com.example.smartairapplication;
 
+import android.content.ClipData;
+import android.content.ClipboardManager;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.InputType;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.Button;
+import android.widget.ImageButton;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -50,10 +59,103 @@ public class ChildManagementActivity extends AppCompatActivity implements ChildA
         recyclerViewChildren.setAdapter(adapter);
 
         fabAddChild = findViewById(R.id.fabAddChild);
-        fabAddChild.setOnClickListener(v ->
-                startActivity(new Intent(ChildManagementActivity.this, AddChildActivity.class)));
+        fabAddChild.setOnClickListener(v -> showAddChildOptions());
 
         loadChildren();
+    }
+
+    private void showAddChildOptions() {
+        new AlertDialog.Builder(this)
+                .setTitle("Add a Child")
+                .setItems(new String[]{"Create manually", "Invite a child"}, (dialog, which) -> {
+                    if (which == 0) {
+                        startActivity(new Intent(ChildManagementActivity.this, AddChildActivity.class));
+                    } else {
+                        showInviteChildDialog();
+                    }
+                })
+                .show();
+    }
+
+    private void showInviteChildDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        View view = LayoutInflater.from(this).inflate(R.layout.dialog_invite_provider, null);
+
+        TextView title = view.findViewById(R.id.textTitle);
+        title.setText("Invite a Child");
+
+        TextView subtitle = view.findViewById(R.id.textSubtitle);
+        subtitle.setText("Generate a one-time code for your child to create an account. The code will expire in 24 hours.");
+
+        TextView textViewInviteCode = view.findViewById(R.id.textViewInviteCode);
+        Button buttonGenerate = view.findViewById(R.id.buttonGenerateCode);
+        Button buttonCopy = view.findViewById(R.id.buttonCopyCode);
+        Button buttonCancel = view.findViewById(R.id.buttonCancel);
+        ImageButton buttonToggleVisibility = view.findViewById(R.id.buttonToggleVisibility);
+        final boolean[] isHidden = {true};
+
+        builder.setView(view);
+        AlertDialog dialog = builder.create();
+        dialog.show();
+
+        DatabaseReference childInvitesRef = FirebaseDatabase.getInstance().getReference("ChildInvitations");
+
+        buttonGenerate.setOnClickListener(v -> {
+            String code = generateInviteCode();
+            textViewInviteCode.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+            textViewInviteCode.setText(code);
+            buttonToggleVisibility.setImageResource(R.drawable.ic_visibility_off);
+            isHidden[0] = true;
+
+            String parentId = mAuth.getCurrentUser().getUid();
+            long expiry = System.currentTimeMillis() + 24 * 60 * 60 * 1000; // 24 hours
+
+            ChildInvitation invitation = new ChildInvitation(code, parentId, expiry);
+
+            childInvitesRef.child(code).setValue(invitation)
+                    .addOnCompleteListener(task -> {
+                        if (task.isSuccessful()) {
+                            Toast.makeText(this, "Invite code generated", Toast.LENGTH_SHORT).show();
+                        } else {
+                            Toast.makeText(this, "Failed to generate invite code", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+        });
+
+        buttonToggleVisibility.setOnClickListener(v -> {
+            if (isHidden[0]) {
+                textViewInviteCode.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
+                buttonToggleVisibility.setImageResource(R.drawable.ic_visibility_on);
+            } else {
+                textViewInviteCode.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+                buttonToggleVisibility.setImageResource(R.drawable.ic_visibility_off);
+            }
+            isHidden[0] = !isHidden[0];
+        });
+
+        buttonCopy.setOnClickListener(v -> {
+            String code = textViewInviteCode.getText().toString();
+            if (!code.isEmpty()) {
+                ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
+                ClipData clip = ClipData.newPlainText("Invite Code", code);
+                clipboard.setPrimaryClip(clip);
+                Toast.makeText(this, "Invite code copied", Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(this, "No code to copy", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        buttonCancel.setOnClickListener(v -> dialog.dismiss());
+    }
+
+    private String generateInviteCode() {
+        String chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+        StringBuilder code = new StringBuilder();
+        for (int i = 0; i < 6; i++) {
+            int index = (int) (Math.random() * chars.length());
+            code.append(chars.charAt(index));
+        }
+        return code.toString();
     }
 
     private void loadChildren() {
