@@ -12,19 +12,19 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/header_sky"
+        app:layout_constraintTop_toTopOf="parent"
         android:padding="16dp">
 
         <LinearLayout
             android:id="@+id/headerRow"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
             android:gravity="center"
             android:orientation="horizontal"
             android:paddingTop="20dp"
-            app:layout_constraintBottom_toTopOf="@+id/instructions"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+            app:layout_constraintTop_toTopOf="parent"
+            tools:layout_editor_absoluteX="16dp">
 
             <ImageView
                 android:id="@+id/btnReturn"
@@ -63,336 +63,284 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/chooseTypeLayout"
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-
-        <TextView
-            android:id="@+id/pickInhalerTypeText"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="40dp"
-            android:layout_marginTop="121dp"
-            android:layout_marginEnd="40dp"
-            android:fontFamily="@font/inter"
-            android:textSize="20sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:text="Pick inhaler type">
-
-        </TextView>
-
-        <Button
-            android:id="@+id/btnRescue"
-            android:layout_width="150dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="50dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginEnd="13dp"
-            android:textColor="#000000"
-            app:backgroundTint="#F59226"
-            app:cornerRadius="15dp"
-            app:layout_constraintEnd_toStartOf="@+id/btnController"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/pickInhalerTypeText"
-            app:rippleColor="#FFB15C"
-            tools:text="Rescue">
-
-        </Button>
-
-        <Button
-            android:id="@+id/btnPreBetter"
-            android:layout_width="100dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="40dp"
-            android:layout_marginTop="13dp"
-            android:layout_marginEnd="8dp"
-            android:fontFamily="@font/inter"
-            android:textColor="#040000"
-            app:backgroundTint="#4de78a"
-            app:cornerRadius="15dp"
-            app:layout_constraintEnd_toStartOf="@+id/btnPreSame"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/txtPreCheck"
-            app:rippleColor="#1c764e"
-            tools:text="Better">
-
-        </Button>
-
-        <Button
-            android:id="@+id/btnPostBetter"
-            android:layout_width="100dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="32dp"
-            android:layout_marginTop="20dp"
-            android:layout_marginEnd="8dp"
-            android:fontFamily="@font/inter"
-            android:textColor="#040000"
-            app:backgroundTint="#4de78a"
-            app:cornerRadius="15dp"
-            app:layout_constraintEnd_toStartOf="@+id/btnPostSame"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/txtPostCheck"
-            app:rippleColor="#1c764e"
-            tools:text="Better">
-
-        </Button>
-
-        <Button
-            android:id="@+id/btnPreSame"
-            android:layout_width="100dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="12dp"
-            android:layout_marginEnd="8dp"
-            android:fontFamily="@font/inter"
-            android:textColor="#000000"
-            app:backgroundTint="#FDD774"
-            app:cornerRadius="15dp"
-            app:layout_constraintEnd_toStartOf="@+id/btnPreWorse"
-            app:layout_constraintStart_toEndOf="@+id/btnPreBetter"
-            app:layout_constraintTop_toBottomOf="@+id/txtPreCheck"
-            app:rippleColor="#ef9645"
-            tools:text="Same">
-
-        </Button>
-
-        <Button
-            android:id="@+id/btnPostSame"
-            android:layout_width="100dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="20dp"
-            android:layout_marginEnd="8dp"
-            android:fontFamily="@font/inter"
-            android:textColor="#000000"
-            app:backgroundTint="#FDD774"
-            app:cornerRadius="15dp"
-            app:layout_constraintEnd_toStartOf="@+id/btnPostWorse"
-            app:layout_constraintStart_toEndOf="@+id/btnPostBetter"
-            app:layout_constraintTop_toBottomOf="@+id/txtPostCheck"
-            app:rippleColor="#ef9645"
-            tools:text="Same">
-
-        </Button>
-
-        <Button
-            android:id="@+id/btnSave"
-            android:layout_width="300dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="24dp"
-            android:fontFamily="@font/inter_bold"
-            android:textColor="#7E7474"
-            app:backgroundTint="#b4b4b4"
-            app:cornerRadius="15dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.494"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/btnPostBetter"
-            app:rippleColor="@color/vivid_blue"
-            tools:text="Save Log">
-
-        </Button>
-
-        <Button
-            android:id="@+id/btnPreWorse"
-            android:layout_width="100dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="12dp"
-            android:layout_marginEnd="37dp"
-            android:fontFamily="@font/inter"
-            android:textColor="#000000"
-            app:backgroundTint="#ff6b6b"
-            app:cornerRadius="15dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/btnPreSame"
-            app:layout_constraintTop_toBottomOf="@+id/txtPreCheck"
-            app:rippleColor="#ff0404"
-            tools:text="Worse">
-
-        </Button>
-
-        <Button
-            android:id="@+id/btnPostWorse"
-            android:layout_width="100dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="20dp"
-            android:layout_marginEnd="29dp"
-            android:fontFamily="@font/inter"
-            android:textColor="#000000"
-            app:backgroundTint="#ff6b6b"
-            app:cornerRadius="15dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/btnPostSame"
-            app:layout_constraintTop_toBottomOf="@+id/txtPostCheck"
-            app:rippleColor="#ff0404"
-            tools:text="Worse">
-
-        </Button>
-
-        <Button
-            android:id="@+id/btnController"
-            android:layout_width="150dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginEnd="50dp"
-            android:text="Controller"
-            android:textColor="#000000"
-            app:backgroundTint="@color/vivid_blue"
-            app:cornerRadius="15dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/btnRescue"
-            app:layout_constraintTop_toBottomOf="@+id/pickInhalerTypeText">
-
-        </Button>
-
-        <TextView
-            android:id="@+id/numOfPuffsText"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:fontFamily="@font/inter"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.209"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/btnRescue"
-            tools:text="How many puffs did you take?">
-
-        </TextView>
-
-        <TextView
-            android:id="@+id/txtPreCheck"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="40dp"
-            android:layout_marginTop="16dp"
-            android:layout_marginEnd="175dp"
-            android:fontFamily="@font/inter"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/imageView"
-            tools:text="How did you feel BEFORE?">
-
-        </TextView>
-
-        <TextView
-            android:id="@+id/txtPostCheck"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="40dp"
-            android:layout_marginTop="116dp"
-            android:layout_marginEnd="175dp"
-            android:fontFamily="@font/inter"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/imageView"
-            tools:text="How did you feel AFTER?">
-
-        </TextView>
-
-        <ImageView
-            android:id="@+id/imageView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_clock"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:layout_editor_absoluteX="36dp">
-
-        </ImageView>
-
-        <TextView
-            android:id="@+id/txtTime"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="40dp"
-            android:layout_marginTop="16dp"
-            android:layout_marginEnd="151dp"
-            android:fontFamily="@font/inter"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.287"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/puffCard"
-            tools:text="Taken at [time]">
-
-        </TextView>
+        android:layout_height="0dp"
+        app:layout_constraintTop_toBottomOf="@+id/childHeader">
 
         <LinearLayout
-            android:id="@+id/puffCard"
-            android:layout_width="320dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@drawable/bg_puff_card"
-            android:gravity="center"
             android:orientation="vertical"
-            android:padding="20dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            tools:layout_editor_absoluteY="257dp">
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="8dp"
-                android:gravity="center"
-                android:orientation="horizontal"
-                android:spacing="20dp">
-
-                <TextView
-                    android:id="@+id/btnMinus"
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
-                    android:background="@drawable/bg_icon_circle_white"
-                    android:gravity="center"
-                    android:text="-"
-                    android:textColor="#9810fa"
-                    android:textSize="30sp" />
-
-                <TextView
-                    android:id="@+id/txtCount"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginHorizontal="24dp"
-                    android:text="1"
-                    android:textColor="#9810fa"
-                    android:textSize="40sp"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:id="@+id/btnPlus"
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
-                    android:background="@drawable/bg_icon_circle_white"
-                    android:gravity="center"
-                    android:text="+"
-                    android:textColor="#9810fa"
-                    android:textSize="24sp" />
-            </LinearLayout>
+            android:padding="24dp">
 
             <TextView
+                android:id="@+id/pickInhalerTypeText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/inter"
-                android:text="puffs"
-                android:textColor="#4A4A4A"
+                android:textColor="#242d3c"
+                android:textSize="20sp"
+                android:text="Pick inhaler type">
+
+            </TextView>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:paddingTop="10dp"
+                android:gravity="center">
+
+                <Button
+                    android:id="@+id/btnRescue"
+                    android:layout_width="150dp"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/inter"
+                    android:textColor="#000000"
+                    app:backgroundTint="#F59226"
+                    app:cornerRadius="15dp"
+                    tools:text="Rescue">
+                </Button>
+
+                <Space
+                    android:layout_width="20dp"
+                    android:layout_height="wrap_content" />
+
+                <Button
+                    android:id="@+id/btnController"
+                    android:layout_width="150dp"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/inter"
+                    android:text="Controller"
+                    android:textColor="#000000"
+                    app:backgroundTint="@color/vivid_blue"
+                    app:cornerRadius="15dp">
+
+                </Button>
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/numOfPuffsText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:fontFamily="@font/inter"
+                tools:text="How many puffs did you take?">
+
+            </TextView>
+
+            <LinearLayout
+                android:id="@+id/puffCard"
+                android:layout_width="320dp"
+                android:layout_height="wrap_content"
+                android:background="@drawable/bg_puff_card"
+                android:layout_marginTop="10dp"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:padding="20dp"
+                tools:layout_editor_absoluteY="257dp">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="8dp"
+                    android:gravity="center"
+                    android:orientation="horizontal"
+                    android:spacing="20dp">
+
+                    <TextView
+                        android:id="@+id/btnMinus"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:background="@drawable/bg_icon_circle_white"
+                        android:gravity="center"
+                        android:text="-"
+                        android:textColor="#9810fa"
+                        android:textSize="30sp" />
+
+                    <TextView
+                        android:id="@+id/txtCount"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="24dp"
+                        android:text="1"
+                        android:textColor="#9810fa"
+                        android:textSize="40sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/btnPlus"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:background="@drawable/bg_icon_circle_white"
+                        android:gravity="center"
+                        android:text="+"
+                        android:textColor="#9810fa"
+                        android:textSize="24sp" />
+                </LinearLayout>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/inter"
+                    android:text="puffs"
+                    android:textColor="#4A4A4A"
+                    android:textSize="14sp" />
+
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/txtBefore"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:text="Before taking medicine:"
+                android:fontFamily="@font/inter_bold"
+                android:textSize="18sp" />
+
+            <TextView
+                android:id="@+id/txtBeforeSOB"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="Shortness of breath rating"
+                android:fontFamily="@font/inter"
                 android:textSize="14sp" />
 
-        </LinearLayout>
+            <LinearLayout
+                android:id="@+id/sobBeforeGroup"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center"
+                android:paddingTop="8dp">
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+                <include layout="@layout/sob_rating_circle" />
+                <include layout="@layout/sob_rating_circle" />
+                <include layout="@layout/sob_rating_circle" />
+                <include layout="@layout/sob_rating_circle" />
+                <include layout="@layout/sob_rating_circle" />
+
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/txtAfter"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:text="After taking medicine:"
+                android:fontFamily="@font/inter_bold"
+                android:textSize="18sp" />
+
+            <TextView
+                android:id="@+id/txtAfterSOB"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="Shortness of breath rating"
+                android:fontFamily="@font/inter"
+                android:textSize="14sp" />
+
+            <LinearLayout
+                android:id="@+id/sobAfterGroup"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center"
+                android:paddingTop="8dp">
+
+                <include layout="@layout/sob_rating_circle" />
+                <include layout="@layout/sob_rating_circle" />
+                <include layout="@layout/sob_rating_circle" />
+                <include layout="@layout/sob_rating_circle" />
+                <include layout="@layout/sob_rating_circle" />
+
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/txtPostCheck"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:fontFamily="@font/inter"
+                tools:text="Did the medicine help?"/>
+
+            <LinearLayout
+                android:id="@+id/afterButtons"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:paddingTop="10dp"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/btnPostBetter"
+                    android:layout_width="100dp"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/inter"
+                    android:textColor="#040000"
+                    app:backgroundTint="#4de78a"
+                    app:cornerRadius="15dp"
+                    tools:text="Better"/>
+
+                <Space android:layout_width="8dp" android:layout_height="wrap_content" />
+
+                <Button
+                    android:id="@+id/btnPostSame"
+                    android:layout_width="100dp"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/inter"
+                    android:textColor="#000000"
+                    app:backgroundTint="#FDD774"
+                    app:cornerRadius="15dp"
+                    tools:text="Same"/>
+
+                <Space android:layout_width="8dp" android:layout_height="wrap_content" />
+
+                <Button
+                    android:id="@+id/btnPostWorse"
+                    android:layout_width="100dp"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/inter"
+                    android:textColor="#000000"
+                    app:backgroundTint="#ff6b6b"
+                    app:cornerRadius="15dp"
+                    app:rippleColor="#ff0404"
+                    tools:text="Worse"/>
+            </LinearLayout>
+
+            <ImageView
+                android:id="@+id/imageView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_clock"
+                tools:layout_editor_absoluteX="40dp"
+                tools:layout_editor_absoluteY="610dp">
+
+            </ImageView>
+
+            <TextView
+                android:id="@+id/txtTime"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="40dp"
+                android:layout_marginEnd="151dp"
+                android:fontFamily="@font/inter"
+                tools:text="Taken at [time]"/>
+
+            <Button
+                android:id="@+id/btnSave"
+                android:layout_width="300dp"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/inter_bold"
+                android:textColor="#7E7474"
+                app:backgroundTint="#b4b4b4"
+                app:cornerRadius="15dp"
+                tools:text="Save Log">
+
+            </Button>
+        </LinearLayout>
+    </ScrollView>
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottomNav"
