@@ -14,6 +14,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Material3.DayNight.NoActionBar">
         <activity
+            android:name=".TriageActivity"
+            android:exported="false" />
+        <activity
             android:name=".ManageAccessActivity"
             android:exported="false" />
         <activity
@@ -46,6 +49,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <activity
+            android:name=".ManageDataSharingActivity"
+            android:exported="false" />
         <activity
             android:name=".MainActivity"
             android:exported="true" />
