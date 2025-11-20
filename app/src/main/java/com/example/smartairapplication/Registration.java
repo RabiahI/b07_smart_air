@@ -28,6 +28,7 @@ public class Registration extends AppCompatActivity {
     FirebaseAuth mAuth;
     ProgressBar progressBar;
     TextView textView;
+    View spinnerFragmentContainer;
     SpinnerFragment spinnerFragment;
 
     FirebaseDatabase database;
@@ -59,6 +60,7 @@ public class Registration extends AppCompatActivity {
         buttonReg = findViewById(R.id.btn_register);
         progressBar = findViewById(R.id.progressBar);
         textView = findViewById(R.id.loginNow);
+        spinnerFragmentContainer = findViewById(R.id.spinner_fragment_container);
         spinnerFragment = (SpinnerFragment) getSupportFragmentManager().findFragmentById(R.id.spinner_fragment_container);
 
         Intent intent = getIntent();
@@ -66,7 +68,9 @@ public class Registration extends AppCompatActivity {
         parentId = intent.getStringExtra("parentId");
 
         if ("Child".equals(role)) {
-            spinnerFragment.getView().setVisibility(View.GONE);
+            if (spinnerFragmentContainer != null) {
+                spinnerFragmentContainer.setVisibility(View.GONE);
+            }
         } else {
             // The spinner will use the user_roles array from strings.xml, which no longer contains "Child".
         }
@@ -88,6 +92,11 @@ public class Registration extends AppCompatActivity {
             // Validation
             if (TextUtils.isEmpty(email) || TextUtils.isEmpty(password) || TextUtils.isEmpty(confirmPassword)) {
                 Toast.makeText(Registration.this, "All fields are required", Toast.LENGTH_SHORT).show();
+                progressBar.setVisibility(View.GONE);
+                return;
+            }
+            if (TextUtils.isEmpty(selectedRole)) {
+                Toast.makeText(Registration.this, "Please select a role", Toast.LENGTH_SHORT).show();
                 progressBar.setVisibility(View.GONE);
                 return;
             }
@@ -156,7 +165,7 @@ public class Registration extends AppCompatActivity {
                                 });
                             }
                         } else {
-                            Toast.makeText(Registration.this, "Authentication failed.",
+                            Toast.makeText(Registration.this, "Authentication failed: " + task.getException().getMessage(),
                                     Toast.LENGTH_SHORT).show();
                         }
                     });
