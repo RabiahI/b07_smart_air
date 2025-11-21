@@ -181,7 +181,7 @@ public class ManageAccessActivity extends AppCompatActivity implements AccessAda
                 .child("Invite");
 
         buttonGenerate.setOnClickListener(v -> {
-            String code = generateInviteCode();
+            String code = CodeGeneratorUtils.generateInviteCode();
             textViewInviteCode.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
             textViewInviteCode.setText(code);
             buttonToggleVisibility.setImageResource(R.drawable.ic_visibility_off);
@@ -225,14 +225,6 @@ public class ManageAccessActivity extends AppCompatActivity implements AccessAda
 
         buttonCancel.setOnClickListener(v -> dialog.dismiss());
     }
-    private String generateInviteCode() {
-        String chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-        StringBuilder code = new StringBuilder();
-        for (int i = 0; i < 6; i++) {
-            int index = (int) (Math.random() * chars.length());
-            code.append(chars.charAt(index));
-        }
-        return code.toString();
-    }
+
 
 }

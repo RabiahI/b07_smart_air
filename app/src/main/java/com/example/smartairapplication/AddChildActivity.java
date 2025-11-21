@@ -23,9 +23,12 @@ import com.google.firebase.Firebase;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.android.material.textfield.TextInputEditText; // Import TextInputEditText
+import com.google.firebase.database.ValueEventListener;
+import com.google.android.material.textfield.TextInputEditText;
 
 public class AddChildActivity extends AppCompatActivity {
 
@@ -49,8 +52,10 @@ public class AddChildActivity extends AppCompatActivity {
         if (mAuth.getCurrentUser() != null) {
             parentId = mAuth.getCurrentUser().getUid();
         }
-        if (parentId != null) {
-            parentRef = database.getReference("Users").child("Parent").child(parentId).child("Children");
+
+        String finalParentId = parentId; 
+        if (finalParentId != null) {
+            parentRef = database.getReference("Users").child("Parent").child(finalParentId).child("Children");
         }
 
         editTextName = findViewById(R.id.editTextName);
@@ -78,10 +83,10 @@ public class AddChildActivity extends AppCompatActivity {
 
             buttonSaveChild.setText("Update Child");
 
-            buttonSaveChild.setOnClickListener(v -> updateChildInFirebase(childId));
+            buttonSaveChild.setOnClickListener(v -> updateChildInFirebase(childId, finalParentId));
         } else {
             textViewTitle.setText("Add Child");
-            buttonSaveChild.setOnClickListener(v -> saveChildToFirebase(mAuth));
+            buttonSaveChild.setOnClickListener(v -> saveChildToFirebase(mAuth, finalParentId));
         }
         Button buttonCancel = findViewById(R.id.buttonCancel);
         buttonCancel.setOnClickListener(v -> new AlertDialog.Builder(this).setTitle("Discard Changes?")
@@ -91,7 +96,7 @@ public class AddChildActivity extends AppCompatActivity {
                 .show());
     }
 
-    private void saveChildToFirebase(FirebaseAuth mAuth){
+    private void saveChildToFirebase(FirebaseAuth mAuth, String parentId){
         String name = editTextName.getText().toString().trim();
         String username = editTextUsername.getText().toString().trim();
         String password = editTextPassword.getText().toString().trim();
@@ -119,14 +124,19 @@ public class AddChildActivity extends AppCompatActivity {
 
         String childEmail = username + "@smartair.ca";
 
+        if (parentId == null) {
+            Toast.makeText(this, "Parent ID is not available. Please re-login.", Toast.LENGTH_SHORT).show();
+            return;
+        }
 
+        String finalParentId = parentId; // For use in lambda
         mAuth.createUserWithEmailAndPassword(childEmail, password)
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
                         FirebaseUser firebaseUser = mAuth.getCurrentUser();
                         if (firebaseUser != null) {
                             String childId = firebaseUser.getUid();
-                            Child child = new Child(childEmail, childId, name, dob, notes, age, 0, 0);
+                            Child child = new Child(childEmail, childId, finalParentId, name, dob, notes, age, 0, 0);
                             parentRef.child(childId).setValue(child).addOnCompleteListener(dbTask -> {
                                 if (dbTask.isSuccessful()){
                                     Toast.makeText(AddChildActivity.this, "Child added successfully!", Toast.LENGTH_SHORT).show();
@@ -144,7 +154,7 @@ public class AddChildActivity extends AppCompatActivity {
                 });
     }
 
-    private void updateChildInFirebase(String childId) {
+    private void updateChildInFirebase(String childId, String parentId) {
         String name = editTextName.getText().toString().trim();
         String dob = editTextDob.getText().toString().trim();
         String ageStr = editTextAge.getText().toString().trim();
@@ -163,15 +173,48 @@ public class AddChildActivity extends AppCompatActivity {
             return;
         }
 
-        Child updatedChild = new Child(null, childId, name, dob, notes, age, personalBest, latestPef);
+        if (parentId == null) {
+            Toast.makeText(this, "Parent ID is not available for update.", Toast.LENGTH_SHORT).show();
+            return;
+        }
 
-        parentRef.child(childId).setValue(updatedChild)
-                .addOnCompleteListener(task -> {
-                    if (task.isSuccessful()) {
-                        Toast.makeText(this, "Child updated successfully!", Toast.LENGTH_SHORT).show();
-                        finish();
-                    } else {
-                        Toast.makeText(this, "Failed to update child.", Toast.LENGTH_SHORT).show();
+
+        FirebaseDatabase.getInstance().getReference("Users")
+                .child("Parent")
+                .child(parentId)
+                .child("Children")
+                .child(childId)
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        if (snapshot.exists()) {
+                            Child existingChild = snapshot.getValue(Child.class);
+                            if (existingChild != null) {
+                                existingChild.setName(name);
+                                existingChild.setDob(dob);
+                                existingChild.setAge(age);
+                                existingChild.setNotes(notes);
+                                existingChild.setPersonalBest(personalBest);
+                                existingChild.setLatestPef(latestPef);
+
+                                parentRef.child(childId).setValue(existingChild)
+                                        .addOnCompleteListener(task -> {
+                                            if (task.isSuccessful()) {
+                                                Toast.makeText(AddChildActivity.this, "Child updated successfully!", Toast.LENGTH_SHORT).show();
+                                                finish();
+                                            } else {
+                                                Toast.makeText(AddChildActivity.this, "Failed to update child.", Toast.LENGTH_SHORT).show();
+                                            }
+                                        });
+                            }
+                        } else {
+                            Toast.makeText(AddChildActivity.this, "Child data not found for update.", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+                        Toast.makeText(AddChildActivity.this, "Database error during child update: " + error.getMessage(), Toast.LENGTH_SHORT).show();
                     }
                 });
     }

@@ -1,7 +1,6 @@
 package com.example.smartairapplication;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
@@ -27,7 +26,6 @@ public class ChildLoginActivity extends AppCompatActivity {
     Button buttonLogin;
     FirebaseAuth mAuth;
     ProgressBar progressBar;
-    private String parentId;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -38,14 +36,6 @@ public class ChildLoginActivity extends AppCompatActivity {
         editTextPassword = findViewById(R.id.password);
         buttonLogin = findViewById(R.id.btn_login);
         progressBar = findViewById(R.id.progressBar);
-
-        parentId = getIntent().getStringExtra("parentId");
-        if (parentId == null) {
-            Toast.makeText(this, "Parent ID is missing. Please use an invitation code.", Toast.LENGTH_LONG).show();
-            finish();
-            return;
-        }
-
         buttonLogin.setOnClickListener(v -> {
             progressBar.setVisibility(View.VISIBLE);
             String username, password;
@@ -70,28 +60,37 @@ public class ChildLoginActivity extends AppCompatActivity {
                         if (task.isSuccessful()) {
                             FirebaseUser firebaseUser = mAuth.getCurrentUser();
                             if (firebaseUser != null) {
+                                final String childUid = firebaseUser.getUid();
+                                DatabaseReference usersRef = FirebaseDatabase.getInstance().getReference("Users");
 
-                                DatabaseReference childRef = FirebaseDatabase.getInstance().getReference("Users")
-                                        .child("Parent").child(parentId).child("Children").child(firebaseUser.getUid());
-
-                                childRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                                usersRef.child("Parent").addListenerForSingleValueEvent(new ValueEventListener() {
                                     @Override
-                                    public void onDataChange(@NonNull DataSnapshot snapshot) {
-                                        progressBar.setVisibility(View.GONE);
-                                        if (snapshot.exists()) {
-                                            SharedPreferences.Editor editor = getSharedPreferences("ChildPrefs", MODE_PRIVATE).edit();
-                                            editor.putString("parentId", parentId);
-                                            editor.apply();
+                                    public void onDataChange(@NonNull DataSnapshot parentsSnapshot) {
+                                        String foundParentId = null;
+                                        Child foundChild = null;
 
+                                        for (DataSnapshot parentSnapshot : parentsSnapshot.getChildren()) {
+                                            String currentParentId = parentSnapshot.getKey();
+                                            DataSnapshot childrenSnapshot = parentSnapshot.child("Children").child(childUid);
+                                            if (childrenSnapshot.exists()) {
+                                                foundParentId = currentParentId;
+                                                foundChild = childrenSnapshot.getValue(Child.class);
+                                                break;
+                                            }
+                                        }
+
+                                        if (foundParentId != null && foundChild != null) {
+                                            // Child found, proceed to ChildHomeActivity
                                             Toast.makeText(ChildLoginActivity.this, "Login Successful.", Toast.LENGTH_SHORT).show();
                                             Intent intent = new Intent(ChildLoginActivity.this, ChildHomeActivity.class);
-                                            intent.putExtra("parentId", parentId);
+                                            intent.putExtra("childId", childUid);
+                                            intent.putExtra("parentId", foundParentId);
                                             startActivity(intent);
                                             finish();
                                         } else {
-
-                                            Toast.makeText(ChildLoginActivity.this, "Login failed: Account not associated with this parent.", Toast.LENGTH_LONG).show();
+                                            Toast.makeText(ChildLoginActivity.this, "Login failed: Child account not found under any parent.", Toast.LENGTH_LONG).show();
                                             mAuth.signOut();
+                                            progressBar.setVisibility(View.GONE);
                                         }
                                     }
 

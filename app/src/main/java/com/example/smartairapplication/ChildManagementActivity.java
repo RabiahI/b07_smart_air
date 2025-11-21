@@ -101,7 +101,7 @@ public class ChildManagementActivity extends AppCompatActivity implements ChildA
         DatabaseReference childInvitesRef = FirebaseDatabase.getInstance().getReference("ChildInvitations");
 
         buttonGenerate.setOnClickListener(v -> {
-            String code = generateInviteCode();
+            String code = CodeGeneratorUtils.generateInviteCode();
             textViewInviteCode.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
             textViewInviteCode.setText(code);
             buttonToggleVisibility.setImageResource(R.drawable.ic_visibility_off);
@@ -148,15 +148,6 @@ public class ChildManagementActivity extends AppCompatActivity implements ChildA
         buttonCancel.setOnClickListener(v -> dialog.dismiss());
     }
 
-    private String generateInviteCode() {
-        String chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-        StringBuilder code = new StringBuilder();
-        for (int i = 0; i < 6; i++) {
-            int index = (int) (Math.random() * chars.length());
-            code.append(chars.charAt(index));
-        }
-        return code.toString();
-    }
 
     private void loadChildren() {
         childrenRef.addValueEventListener(new ValueEventListener() {
@@ -218,8 +209,6 @@ public class ChildManagementActivity extends AppCompatActivity implements ChildA
         Child selectedChild = childList.get(position);
         Intent intent = new Intent(ChildManagementActivity.this, ChildHomeActivity.class);
         intent.putExtra("childId", selectedChild.getChildId());
-        intent.putExtra("personalBest", selectedChild.getPersonalBest());
-        intent.putExtra("latestPef", selectedChild.getLatestPef());
         startActivity(intent);
     }
 }
