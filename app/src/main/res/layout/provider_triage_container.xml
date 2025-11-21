@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="150dp"
+        android:layout_margin="13dp"
+        android:background="@drawable/rounded_box"
+        android:orientation="vertical"
+        android:padding="13dp">
+
+        <TextView
+            android:id="@+id/triageContainerText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Triage Incidents"
+            android:textSize="18sp"
+            android:textColor="#4b629f"
+            android:fontFamily="@font/roca_two_bold"/>
+
+        <TextView
+            android:id="@+id/triageDate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="🚨 (Date)"
+            android:textSize="15.5sp"
+            android:textColor="#c60000"
+            android:paddingBottom="2dp"/>
+
+        <TextView
+            android:id="@+id/triageZone"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Red Zone - 3 rescue uses"
+            android:textSize="15.5sp"
+            android:textColor="@color/black"
+            android:paddingBottom="2dp"/>
+
+        <TextView
+            android:id="@+id/triageSymptoms"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Symptoms: Trouble speaking, chest pulling"
+            android:textSize="15.5sp"
+            android:textColor="@color/black"
+            android:paddingBottom="2dp"/>
+
+        <TextView
+            android:id="@+id/triageResolved"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="✓ Resolved at home"
+            android:textSize="15.5sp"
+            android:textColor="#1c764e"
+            android:paddingBottom="2dp"/>
+
+    </LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
