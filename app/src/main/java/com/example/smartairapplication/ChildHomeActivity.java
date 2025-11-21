@@ -107,7 +107,7 @@ public class ChildHomeActivity extends AppCompatActivity implements PasswordDial
 
             buttonLogout.setOnClickListener(v -> {
                 FirebaseAuth.getInstance().signOut();
-                Intent intent1 = new Intent(getApplicationContext(), Login.class);
+                Intent intent1 = new Intent(getApplicationContext(), ChildLoginActivity.class);
                 startActivity(intent1);
                 finish();
             });

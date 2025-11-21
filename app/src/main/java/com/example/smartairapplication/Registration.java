@@ -33,7 +33,6 @@ public class Registration extends AppCompatActivity {
 
     FirebaseDatabase database;
     DatabaseReference usersRef;
-    String parentId;
 
     @Override
     public void onStart() {
@@ -63,17 +62,7 @@ public class Registration extends AppCompatActivity {
         spinnerFragmentContainer = findViewById(R.id.spinner_fragment_container);
         spinnerFragment = (SpinnerFragment) getSupportFragmentManager().findFragmentById(R.id.spinner_fragment_container);
 
-        Intent intent = getIntent();
-        String role = intent.getStringExtra("role");
-        parentId = intent.getStringExtra("parentId");
-
-        if ("Child".equals(role)) {
-            if (spinnerFragmentContainer != null) {
-                spinnerFragmentContainer.setVisibility(View.GONE);
-            }
-        } else {
-            // The spinner will use the user_roles array from strings.xml, which no longer contains "Child".
-        }
+        // The role selection spinner is always visible here, as this activity is no longer used for child registration
 
         textView.setOnClickListener(view -> {
             Intent loginIntent = new Intent(Registration.this, Login.class);
@@ -87,7 +76,7 @@ public class Registration extends AppCompatActivity {
             email = String.valueOf(editTextEmail.getText());
             password = String.valueOf(editTextPassword.getText());
             confirmPassword = String.valueOf(editTextConfirmPassword.getText());
-            selectedRole = "Child".equals(role) ? "Child" : spinnerFragment.getSelectedRole();
+            selectedRole = spinnerFragment.getSelectedRole();
 
             // Validation
             if (TextUtils.isEmpty(email) || TextUtils.isEmpty(password) || TextUtils.isEmpty(confirmPassword)) {
@@ -121,16 +110,7 @@ public class Registration extends AppCompatActivity {
                                 String uid = firebaseUser.getUid();
 
                                 User user;
-                                if ("Child".equals(selectedRole)) {
-                                    user = new Child(email, uid, null, null, null, 0, 0, 0);
-                                    if (parentId != null) {
-                                        usersRef.child("Parent").child(parentId).child("Children").child(uid).setValue(user);
-                                        String inviteCode = intent.getStringExtra("inviteCode");
-                                        if (inviteCode != null) {
-                                            FirebaseDatabase.getInstance().getReference("ChildInvitations").child(inviteCode).removeValue();
-                                        }
-                                    }
-                                } else if ("Parent".equals(selectedRole)) {
+                                if ("Parent".equals(selectedRole)) {
                                     user = new Parent(email);
                                 } else {
                                     user = new Provider(email);
@@ -143,9 +123,6 @@ public class Registration extends AppCompatActivity {
 
                                         Intent homeIntent;
                                         switch (selectedRole) {
-                                            case "Child":
-                                                homeIntent = new Intent(Registration.this, ChildHomeActivity.class);
-                                                break;
                                             case "Provider":
                                                 homeIntent = new Intent(Registration.this, ProviderHomeActivity.class);
                                                 break;

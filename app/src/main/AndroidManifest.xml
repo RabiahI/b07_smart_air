@@ -15,7 +15,12 @@
         android:theme="@style/Theme.Material3.DayNight.NoActionBar">
         <activity
             android:name=".RoleSelectionActivity"
-            android:exported="false" />
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
         <activity
             android:name=".ManageAccessActivity"
             android:exported="false" />
@@ -42,13 +47,10 @@
             android:exported="false" />
         <activity
             android:name=".Login"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
+            android:exported="false" />
+        <activity
+            android:name=".ChildLoginActivity"
+            android:exported="false" />
         <activity
             android:name=".MainActivity"
             android:exported="true" />

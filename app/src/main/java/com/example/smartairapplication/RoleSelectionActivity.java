@@ -12,6 +12,8 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -20,20 +22,33 @@ import com.google.firebase.database.ValueEventListener;
 
 public class RoleSelectionActivity extends AppCompatActivity {
 
+    private FirebaseAuth mAuth;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_role_selection);
 
+        mAuth = FirebaseAuth.getInstance();
+
         Button buttonAdult = findViewById(R.id.buttonAdult);
         Button buttonChild = findViewById(R.id.buttonChild);
 
         buttonAdult.setOnClickListener(v -> {
-            Intent intent = new Intent(RoleSelectionActivity.this, Registration.class);
+            Intent intent = new Intent(RoleSelectionActivity.this, Login.class);
             startActivity(intent);
         });
 
         buttonChild.setOnClickListener(v -> showChildInvitationDialog());
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        FirebaseUser currentUser = mAuth.getCurrentUser();
+        if (currentUser != null) {
+            UserRoleManager.redirectUserBasedOnRole(this, currentUser.getUid());
+        }
     }
 
     private void showChildInvitationDialog() {
@@ -70,9 +85,7 @@ public class RoleSelectionActivity extends AppCompatActivity {
                     ChildInvitation invitation = snapshot.getValue(ChildInvitation.class);
                     if (invitation != null && invitation.getExpiry() > System.currentTimeMillis()) {
                         dialog.dismiss();
-                        Intent intent = new Intent(RoleSelectionActivity.this, Registration.class);
-                        intent.putExtra("role", "Child");
-                        intent.putExtra("inviteCode", code);
+                        Intent intent = new Intent(RoleSelectionActivity.this, ChildLoginActivity.class);
                         intent.putExtra("parentId", invitation.getParentId());
                         startActivity(intent);
                     } else {

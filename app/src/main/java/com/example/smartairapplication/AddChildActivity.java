@@ -20,13 +20,17 @@ import androidx.annotation.NonNull;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.Firebase;
+import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.android.material.textfield.TextInputEditText; // Import TextInputEditText
 
 public class AddChildActivity extends AppCompatActivity {
 
     private EditText editTextName, editTextDob, editTextAge, editTextNotes;
+    private TextInputEditText editTextUsername, editTextPassword;
     private DatabaseReference parentRef;
     private int personalBest;
     private int latestPef;
@@ -50,6 +54,8 @@ public class AddChildActivity extends AppCompatActivity {
         }
 
         editTextName = findViewById(R.id.editTextName);
+        editTextUsername = findViewById(R.id.editTextUsername);
+        editTextPassword = findViewById(R.id.editTextPassword);
         editTextDob = findViewById(R.id.editTextDob);
         editTextAge = findViewById(R.id.editTextAge);
         editTextNotes = findViewById(R.id.editTextNotes);
@@ -62,6 +68,8 @@ public class AddChildActivity extends AppCompatActivity {
             textViewTitle.setText("Edit Child");
             String childId = intent.getStringExtra("childId");
             editTextName.setText(intent.getStringExtra("name"));
+            editTextUsername.setVisibility(View.GONE);
+            editTextPassword.setVisibility(View.GONE);
             editTextDob.setText(intent.getStringExtra("dob"));
             editTextAge.setText(String.valueOf(intent.getIntExtra("age", 0)));
             editTextNotes.setText(intent.getStringExtra("notes"));
@@ -73,7 +81,7 @@ public class AddChildActivity extends AppCompatActivity {
             buttonSaveChild.setOnClickListener(v -> updateChildInFirebase(childId));
         } else {
             textViewTitle.setText("Add Child");
-            buttonSaveChild.setOnClickListener(v -> saveChildToFirebase());
+            buttonSaveChild.setOnClickListener(v -> saveChildToFirebase(mAuth));
         }
         Button buttonCancel = findViewById(R.id.buttonCancel);
         buttonCancel.setOnClickListener(v -> new AlertDialog.Builder(this).setTitle("Discard Changes?")
@@ -83,18 +91,25 @@ public class AddChildActivity extends AppCompatActivity {
                 .show());
     }
 
-    private void saveChildToFirebase(){
+    private void saveChildToFirebase(FirebaseAuth mAuth){
         String name = editTextName.getText().toString().trim();
+        String username = editTextUsername.getText().toString().trim();
+        String password = editTextPassword.getText().toString().trim();
         String dob = editTextDob.getText().toString().trim();
         String ageStr = editTextAge.getText().toString().trim();
         String notes = editTextNotes.getText().toString().trim();
 
-        if (TextUtils.isEmpty(name) || TextUtils.isEmpty(dob) || TextUtils.isEmpty(ageStr)){
+        if (TextUtils.isEmpty(name) || TextUtils.isEmpty(username) || TextUtils.isEmpty(password) || TextUtils.isEmpty(dob) || TextUtils.isEmpty(ageStr)){
             Toast.makeText(this, "Please fill all required fields", Toast.LENGTH_SHORT).show();
             return;
         }
-        int age;
 
+        if (password.length() < 6) {
+            Toast.makeText(this, "Password must be at least 6 characters long.", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        int age;
         try {
             age = Integer.parseInt(ageStr);
         } catch(NumberFormatException e){
@@ -102,23 +117,33 @@ public class AddChildActivity extends AppCompatActivity {
             return;
         }
 
-        String childId = parentRef.push().getKey();
+        String childEmail = username + "@smartair.ca";
 
-        if (childId==null){
-            Toast.makeText(this, "Error generating child ID", Toast.LENGTH_SHORT).show();
-            return;
-        }
 
-        Child child = new Child(null, childId, name, dob, notes, age, 0, 0);
-        parentRef.child(childId).setValue(child).addOnCompleteListener(task -> {
-            if (task.isSuccessful()){
-                Toast.makeText(AddChildActivity.this, "Child added successfully!", Toast.LENGTH_SHORT).show();
-                finish();
-            } else{
-                Toast.makeText(AddChildActivity.this, "Failed to add child.", Toast.LENGTH_SHORT).show();
-            }
-        });
+        mAuth.createUserWithEmailAndPassword(childEmail, password)
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        FirebaseUser firebaseUser = mAuth.getCurrentUser();
+                        if (firebaseUser != null) {
+                            String childId = firebaseUser.getUid();
+                            Child child = new Child(childEmail, childId, name, dob, notes, age, 0, 0);
+                            parentRef.child(childId).setValue(child).addOnCompleteListener(dbTask -> {
+                                if (dbTask.isSuccessful()){
+                                    Toast.makeText(AddChildActivity.this, "Child added successfully!", Toast.LENGTH_SHORT).show();
+                                    finish();
+                                } else{
+                                    firebaseUser.delete();
+                                    Toast.makeText(AddChildActivity.this, "Failed to add child to database.", Toast.LENGTH_SHORT).show();
+                                }
+                            });
+                        }
+                    } else {
+                        String errorMessage = task.getException() != null ? task.getException().getMessage() : "Authentication failed.";
+                        Toast.makeText(AddChildActivity.this, "Failed to create child account: " + errorMessage, Toast.LENGTH_LONG).show();
+                    }
+                });
     }
+
     private void updateChildInFirebase(String childId) {
         String name = editTextName.getText().toString().trim();
         String dob = editTextDob.getText().toString().trim();

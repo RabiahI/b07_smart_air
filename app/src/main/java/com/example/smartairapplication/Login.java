@@ -55,7 +55,7 @@ public class Login extends AppCompatActivity {
 
 
         textView.setOnClickListener(view -> {
-            Intent intent = new Intent(Login.this, RoleSelectionActivity.class);
+            Intent intent = new Intent(Login.this, Registration.class);
             startActivity(intent);
             finish();
         });
