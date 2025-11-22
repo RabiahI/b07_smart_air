@@ -1,0 +1,18 @@
+Index: app/build.gradle.kts
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>plugins {\r\n    alias(libs.plugins.android.application)\r\n    alias(libs.plugins.google.gms.google.services)\r\n}\r\n\r\nandroid {\r\n    namespace = \"com.example.smartairapplication\"\r\n    compileSdk = 36\r\n\r\n    defaultConfig {\r\n        applicationId = \"com.example.smartairapplication\"\r\n        minSdk = 27\r\n        targetSdk = 36\r\n        versionCode = 1\r\n        versionName = \"1.0\"\r\n\r\n        testInstrumentationRunner = \"androidx.test.runner.AndroidJUnitRunner\"\r\n    }\r\n\r\n    buildTypes {\r\n        release {\r\n            isMinifyEnabled = false\r\n            proguardFiles(\r\n                getDefaultProguardFile(\"proguard-android-optimize.txt\"),\r\n                \"proguard-rules.pro\"\r\n            )\r\n        }\r\n    }\r\n    compileOptions {\r\n        sourceCompatibility = JavaVersion.VERSION_11\r\n        targetCompatibility = JavaVersion.VERSION_11\r\n    }\r\n}\r\n\r\ndependencies {\r\n\r\n    implementation(libs.appcompat)\r\n    implementation(libs.material)\r\n    implementation(libs.activity)\r\n    implementation(libs.constraintlayout)\r\n    implementation(platform(\"com.google.firebase:firebase-bom:34.5.0\"))\r\n    implementation(libs.firebase.auth)\r\n    implementation(\"com.google.firebase:firebase-analytics\")\r\n    implementation(\"com.google.android.material:material:1.12.0\")\r\n    implementation(libs.firebase.database)\r\n    testImplementation(libs.junit)\r\n    androidTestImplementation(libs.ext.junit)\r\n    androidTestImplementation(libs.espresso.core)\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/build.gradle.kts b/app/build.gradle.kts
+--- a/app/build.gradle.kts	(revision 5e5c7e946f2b12fb76f858c0d75b6e00f24160f5)
++++ b/app/build.gradle.kts	(date 1762879663146)
+@@ -41,7 +41,6 @@
+     implementation(platform("com.google.firebase:firebase-bom:34.5.0"))
+     implementation(libs.firebase.auth)
+     implementation("com.google.firebase:firebase-analytics")
+-    implementation("com.google.android.material:material:1.12.0")
+     implementation(libs.firebase.database)
+     testImplementation(libs.junit)
+     androidTestImplementation(libs.ext.junit)

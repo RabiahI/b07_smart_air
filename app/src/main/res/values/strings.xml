@@ -1,0 +1,60 @@
+<resources>
+    <string name="app_name">Smart Air Application</string>
+    <string name="login">Login</string>
+    <string name="email">Email</string>
+    <string name="password">Password</string>
+    <string name="registration">Registration</string>
+    <string name="register">Register</string>
+    <string name="click_to_login">Click to Login</string>
+    <string name="click_to_register">Click to Register</string>
+    <string name="logout">Logout</string>
+    <string name="provider_home">Provider Home</string>
+    <string name="parent_home">Parent Home</string>
+    <string name="child_home">Child Home</string>
+    <string name="child">Child</string>
+    <string name="forgot_password">Forgot Password?</string>
+    <string-array name="user_roles">
+        <item>Parent</item>
+        <item>Provider</item>
+        <item>Child</item>
+    </string-array>
+
+    <string name="provider_welcome">
+        Welcome, Provider! \n\n
+
+        As a provider, you can view the summary reports for children, but only when a parent shares their data with you. \n\n
+        Please wait for a parent to share more information about the child with you. \n\n
+
+        # info about how to view summaries + reports
+    </string>
+    <string name="child_welcome">
+        Welcome Child! \n\n
+        As a child you can log your medicines and symptoms, practice inhaler techniques, and track your asthma in a fun, safe way! \n\n
+
+         Your data is private. Only your parent can share your information with your healthcare provider. \n\n
+
+        # add more info about functionality once theyre implemented cuz idk \n\n
+
+    </string>
+    <string name="parent_welcome">
+        Welcome Parent! \n\n
+        You can link your children, view their health data, get alerts, and share a controlled summary with your healthcare provider. \n\n
+        You may link a child and provide general information or notes about them in the homepage.\n\n
+
+        You can log incidents for your child by... \n\n
+
+        # add more info later \n
+    </string>
+    <string name="confirm_password">Confirm Password</string>
+    <string name="back_to_parent">Back to Parent</string>
+    <string name="today_s_zone_green">Today\'s Zone: Green!</string>
+    <string name="keep_up_your_routine">Keep up your routine!</string>
+    <string name="pef_280_pb_310">PEF: 280 (PB: 310)</string>
+    <string name="please_set_your_personal_best_pef">Please set your personal best PEF.</string>
+    <string name="today_s_zone_not_set">Today\'s Zone: Not Set</string>
+    <string name="today_s_zone_yellow">Today\'s Zone: Yellow!</string>
+    <string name="caution_use_your_reliever_inhaler">Caution: Use your reliever inhaler.</string>
+    <string name="today_s_zone_red">Today\'s Zone: Red!</string>
+    <string name="danger_use_your_reliever_and_see_a_doctor">Danger: Use your reliever and see a doctor.</string>
+
+</resources>
