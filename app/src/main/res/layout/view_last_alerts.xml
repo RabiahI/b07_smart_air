@@ -3,6 +3,7 @@
     xmlns:card_view="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/tools"
     android:layout_margin="16dp"
     card_view:cardBackgroundColor="#96C9FF"
     card_view:cardCornerRadius="20dp"
@@ -14,129 +15,14 @@
         android:orientation="vertical"
         android:padding="18dp">
 
-
-        <ScrollView
-            android:layout_width="match_parent"
-            android:layout_height="175dp"
-            android:backgroundTint="@color/white">
-            
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical">
-
-                <!-- Notification 1-->
-                <LinearLayout
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/recyclerViewParent"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/notif_background"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="0dp"
-                        android:layout_weight="1"
-                        android:layout_marginLeft="10dp"
-                        android:text="Notification 1"
-                        android:textColor="#000"
-                        android:textSize="14dp"
-                        android:layout_gravity="center_vertical"/>
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="0dp"
-                        android:layout_weight="1"
-                        android:layout_marginStart="10sp"
-                        android:text="Information about the alert"
-                        android:textColor="#000"
-                        android:textSize="14sp"
-                        android:layout_gravity="center_vertical"/>
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="10dp"
-                        android:text="30 minutes ago"
-                        android:textColor="#4DA3FF"/>
-                </LinearLayout>
-
-                <!-- Notification 2-->
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    android:background="@drawable/notif_background"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="0dp"
-                        android:layout_weight="1"
-                        android:layout_marginLeft="10dp"
-                        android:text="Notification 2"
-                        android:textColor="#000"
-                        android:textSize="14dp"
-                        android:layout_gravity="center_vertical"/>
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="0dp"
-                        android:layout_weight="1"
-                        android:layout_marginLeft="10dp"
-                        android:text="Information about the alert"
-                        android:textColor="#000"
-                        android:textSize="14dp"
-                        android:layout_gravity="center_vertical"/>
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="30 minutes ago"
-                        android:layout_marginStart="10dp"
-                        android:textColor="#4DA3FF"/>
-                </LinearLayout>
-
-                <!-- Notification 3-->
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    android:background="@drawable/notif_background"
-                    android:orientation="vertical">
-
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="0dp"
-                        android:layout_weight="1"
-                        android:layout_marginLeft="10dp"
-                        android:text="Notification 3"
-                        android:textColor="#000"
-                        android:textSize="14dp"
-                        android:layout_gravity="center_vertical"/>
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="0dp"
-                        android:layout_weight="1"
-                        android:layout_marginLeft="10dp"
-                        android:text="Information about the alert"
-                        android:textColor="#000"
-                        android:textSize="14dp"
-                        android:layout_gravity="center_vertical"/>
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="30 minutes ago"
-                        android:layout_marginStart="10dp"
-                        android:textColor="#4DA3FF"/>
-                </LinearLayout>
-
-            </LinearLayout>
-
-        </ScrollView>
-
+                    android:paddingTop="8dp"
+                    android:clipToPadding="false"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                    android:paddingBottom="15dp" />
 
         <TextView
             android:id="@+id/viewStreaks"
