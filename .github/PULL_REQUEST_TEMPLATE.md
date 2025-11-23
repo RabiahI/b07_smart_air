@@ -16,27 +16,27 @@
 
 \## Type of Change
 
-\- \[ ] New feature
+- [ ] New feature
 
-\- \[ ] Bug fix
+- [ ] Bug fix
 
-\- \[ ] Refactor
+- [ ] Refactor
 
-\- \[ ] Documentation
+- [ ] Documentation
 
 
 
 \## Checklist
 
-\- \[ ] Code compiles
+- [ ] Code compiles
 
-\- \[ ] Tested locally
+- [ ] Tested locally
 
-\- \[ ] PR linked to Jira story
+- [ ] PR linked to Jira story
 
-\- \[ ] Proper commit messages
+- [ ] Proper commit messages
 
-\- \[ ] No merge conflicts
+- [ ] No merge conflicts
 
 
 
