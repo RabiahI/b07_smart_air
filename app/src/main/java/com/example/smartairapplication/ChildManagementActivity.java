@@ -5,10 +5,6 @@ import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.text.InputType;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -38,6 +34,9 @@ public class ChildManagementActivity extends AppCompatActivity implements ChildA
     private DatabaseReference childrenRef;
     private FirebaseAuth mAuth;
     private FloatingActionButton fabAddChild;
+    private TextView textViewParentInviteCode;
+    private DatabaseReference parentRef;
+    private String currentParentId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,8 +48,11 @@ public class ChildManagementActivity extends AppCompatActivity implements ChildA
         if (mAuth.getCurrentUser() != null) {
             parentId = mAuth.getCurrentUser().getUid();
         }
+        currentParentId = parentId;
+
         if (parentId != null) {
             childrenRef = FirebaseDatabase.getInstance().getReference("Users").child("Parent").child(parentId).child("Children");
+            parentRef = FirebaseDatabase.getInstance().getReference("Users").child("Parent").child(parentId);
         }
         recyclerViewChildren = findViewById(R.id.recyclerViewChildren);
         recyclerViewChildren.setLayoutManager(new LinearLayoutManager(this));
@@ -59,95 +61,79 @@ public class ChildManagementActivity extends AppCompatActivity implements ChildA
         recyclerViewChildren.setAdapter(adapter);
 
         fabAddChild = findViewById(R.id.fabAddChild);
-        fabAddChild.setOnClickListener(v -> showAddChildOptions());
+        fabAddChild.setOnClickListener(v -> startActivity(new Intent(ChildManagementActivity.this, AddChildActivity.class)));
+
+        textViewParentInviteCode = findViewById(R.id.textViewParentInviteCode);
+        ImageButton buttonCopyCode = findViewById(R.id.buttonCopyCode);
+        ImageButton buttonRegenerateCode = findViewById(R.id.buttonRegenerateCode);
+
+        buttonCopyCode.setOnClickListener(v -> copyInviteCode());
+        buttonRegenerateCode.setOnClickListener(v -> regenerateInviteCode());
+
 
         loadChildren();
+        if (parentRef != null) {
+            setupParentInviteCode();
+        }
     }
 
-    private void showAddChildOptions() {
+    private void setupParentInviteCode() {
+        parentRef.child("childInvitationCode").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (snapshot.exists() && snapshot.getValue() != null) {
+                    textViewParentInviteCode.setText(snapshot.getValue(String.class));
+                } else {
+                    generateAndSaveNewCode(null);
+                }
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Toast.makeText(ChildManagementActivity.this, "Failed to load invitation code.", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void copyInviteCode() {
+        String code = textViewParentInviteCode.getText().toString();
+        if (!code.isEmpty() && !code.equals("Loading...")) {
+            ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
+            ClipData clip = ClipData.newPlainText("Parent Invite Code", code);
+            clipboard.setPrimaryClip(clip);
+            Toast.makeText(this, "Invite code copied", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private void regenerateInviteCode() {
         new AlertDialog.Builder(this)
-                .setTitle("Add a Child")
-                .setItems(new String[]{"Create manually", "Invite a child"}, (dialog, which) -> {
-                    if (which == 0) {
-                        startActivity(new Intent(ChildManagementActivity.this, AddChildActivity.class));
-                    } else {
-                        showInviteChildDialog();
+                .setTitle("Regenerate Code")
+                .setMessage("Are you sure? Your old code will stop working.")
+                .setPositiveButton("Regenerate", (dialog, which) -> {
+                    String oldCode = textViewParentInviteCode.getText().toString();
+                    if (!oldCode.equals("Loading...")) {
+                        generateAndSaveNewCode(oldCode);
                     }
                 })
+                .setNegativeButton("Cancel", null)
                 .show();
     }
 
-    private void showInviteChildDialog() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        View view = LayoutInflater.from(this).inflate(R.layout.dialog_invite_provider, null);
+    private void generateAndSaveNewCode(final String oldCode) {
+        String newCode = CodeGeneratorUtils.generateInviteCode();
+        DatabaseReference invitesRef = FirebaseDatabase.getInstance().getReference("invitationCodes");
 
-        TextView title = view.findViewById(R.id.textTitle);
-        title.setText("Invite a Child");
-
-        TextView subtitle = view.findViewById(R.id.textSubtitle);
-        subtitle.setText("Generate a one-time code for your child to create an account. The code will expire in 24 hours.");
-
-        TextView textViewInviteCode = view.findViewById(R.id.textViewInviteCode);
-        Button buttonGenerate = view.findViewById(R.id.buttonGenerateCode);
-        Button buttonCopy = view.findViewById(R.id.buttonCopyCode);
-        Button buttonCancel = view.findViewById(R.id.buttonCancel);
-        ImageButton buttonToggleVisibility = view.findViewById(R.id.buttonToggleVisibility);
-        final boolean[] isHidden = {true};
-
-        builder.setView(view);
-        AlertDialog dialog = builder.create();
-        dialog.show();
-
-        DatabaseReference childInvitesRef = FirebaseDatabase.getInstance().getReference("ChildInvitations");
-
-        buttonGenerate.setOnClickListener(v -> {
-            String code = CodeGeneratorUtils.generateInviteCode();
-            textViewInviteCode.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
-            textViewInviteCode.setText(code);
-            buttonToggleVisibility.setImageResource(R.drawable.ic_visibility_off);
-            isHidden[0] = true;
-
-            String parentId = mAuth.getCurrentUser().getUid();
-            long expiry = System.currentTimeMillis() + 24 * 60 * 60 * 1000; // 24 hours
-
-            ChildInvitation invitation = new ChildInvitation(code, parentId, expiry);
-
-            childInvitesRef.child(code).setValue(invitation)
-                    .addOnCompleteListener(task -> {
-                        if (task.isSuccessful()) {
-                            Toast.makeText(this, "Invite code generated", Toast.LENGTH_SHORT).show();
-                        } else {
-                            Toast.makeText(this, "Failed to generate invite code", Toast.LENGTH_SHORT).show();
-                        }
-                    });
-        });
-
-        buttonToggleVisibility.setOnClickListener(v -> {
-            if (isHidden[0]) {
-                textViewInviteCode.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
-                buttonToggleVisibility.setImageResource(R.drawable.ic_visibility_on);
+        parentRef.child("childInvitationCode").setValue(newCode).addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                invitesRef.child(newCode).setValue(new InvitationLookup(currentParentId));
+                if (oldCode != null && !oldCode.isEmpty()) {
+                    invitesRef.child(oldCode).removeValue();
+                }
+                Toast.makeText(ChildManagementActivity.this, "Invite code updated.", Toast.LENGTH_SHORT).show();
             } else {
-                textViewInviteCode.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
-                buttonToggleVisibility.setImageResource(R.drawable.ic_visibility_off);
-            }
-            isHidden[0] = !isHidden[0];
-        });
-
-        buttonCopy.setOnClickListener(v -> {
-            String code = textViewInviteCode.getText().toString();
-            if (!code.isEmpty()) {
-                ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
-                ClipData clip = ClipData.newPlainText("Invite Code", code);
-                clipboard.setPrimaryClip(clip);
-                Toast.makeText(this, "Invite code copied", Toast.LENGTH_SHORT).show();
-            } else {
-                Toast.makeText(this, "No code to copy", Toast.LENGTH_SHORT).show();
+                Toast.makeText(ChildManagementActivity.this, "Failed to update code.", Toast.LENGTH_SHORT).show();
             }
         });
-
-        buttonCancel.setOnClickListener(v -> dialog.dismiss());
     }
-
 
     private void loadChildren() {
         childrenRef.addValueEventListener(new ValueEventListener() {

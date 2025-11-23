@@ -77,23 +77,22 @@ public class RoleSelectionActivity extends AppCompatActivity {
     }
 
     private void validateInvitationCode(String code, AlertDialog dialog) {
-        DatabaseReference childInvitesRef = FirebaseDatabase.getInstance().getReference("ChildInvitations");
-        childInvitesRef.child(code).addListenerForSingleValueEvent(new ValueEventListener() {
+        DatabaseReference invitesRef = FirebaseDatabase.getInstance().getReference("invitationCodes");
+        invitesRef.child(code).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if (snapshot.exists()) {
-                    ChildInvitation invitation = snapshot.getValue(ChildInvitation.class);
-                    if (invitation != null && invitation.getExpiry() > System.currentTimeMillis()) {
+                    InvitationLookup lookup = snapshot.getValue(InvitationLookup.class);
+                    if (lookup != null && lookup.getParentId() != null) {
                         dialog.dismiss();
                         Intent intent = new Intent(RoleSelectionActivity.this, ChildLoginActivity.class);
-                        intent.putExtra("parentId", invitation.getParentId());
+                        intent.putExtra("parentId", lookup.getParentId());
                         startActivity(intent);
                     } else {
-                        snapshot.getRef().removeValue(); // Clean up expired or invalid code
-                        Toast.makeText(RoleSelectionActivity.this, "Invitation code has expired", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(RoleSelectionActivity.this, "Invalid invitation code.", Toast.LENGTH_SHORT).show();
                     }
                 } else {
-                    Toast.makeText(RoleSelectionActivity.this, "Invalid invitation code", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(RoleSelectionActivity.this, "Invalid invitation code.", Toast.LENGTH_SHORT).show();
                 }
             }
 
