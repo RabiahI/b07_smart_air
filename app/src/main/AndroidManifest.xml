@@ -14,6 +14,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Material3.DayNight.NoActionBar">
         <activity
+            android:name=".LogMedicine"
+            android:exported="false" />
+        <activity
             android:name=".TriageActivity"
             android:exported="false" />
         <activity
