@@ -1,6 +1,8 @@
 package com.example.smartairapplication;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,31 +25,52 @@ import com.google.firebase.database.ValueEventListener;
 public class RoleSelectionActivity extends AppCompatActivity {
 
     private FirebaseAuth mAuth;
+    private SharedPreferences sharedPreferences;
+    private static final String PREFS_NAME = "ChildLoginPrefs";
+    private static final String PARENT_ID_KEY = "parentId";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_role_selection);
 
         mAuth = FirebaseAuth.getInstance();
+        sharedPreferences = getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
 
-        Button buttonAdult = findViewById(R.id.buttonAdult);
-        Button buttonChild = findViewById(R.id.buttonChild);
 
-        buttonAdult.setOnClickListener(v -> {
-            Intent intent = new Intent(RoleSelectionActivity.this, Login.class);
+        String savedParentId = sharedPreferences.getString(PARENT_ID_KEY, null);
+        if (savedParentId != null && !savedParentId.trim().isEmpty()) {
+            Intent intent = new Intent(RoleSelectionActivity.this, ChildLoginActivity.class);
             startActivity(intent);
-        });
+            finish();
+            return;
+        }
 
-        buttonChild.setOnClickListener(v -> showChildInvitationDialog());
+
+        FirebaseUser currentUser = mAuth.getCurrentUser();
+        if (currentUser != null) {
+        } else {
+            setContentView(R.layout.activity_role_selection);
+
+            Button buttonAdult = findViewById(R.id.buttonAdult);
+            Button buttonChild = findViewById(R.id.buttonChild);
+
+            buttonAdult.setOnClickListener(v -> {
+                Intent intent = new Intent(RoleSelectionActivity.this, Login.class);
+                startActivity(intent);
+            });
+
+            buttonChild.setOnClickListener(v -> showChildInvitationDialog());
+        }
     }
 
     @Override
-    public void onStart() {
+    protected void onStart() {
         super.onStart();
+
         FirebaseUser currentUser = mAuth.getCurrentUser();
         if (currentUser != null) {
             UserRoleManager.redirectUserBasedOnRole(this, currentUser.getUid());
+            finish();
         }
     }
 
@@ -84,10 +107,14 @@ public class RoleSelectionActivity extends AppCompatActivity {
                 if (snapshot.exists()) {
                     InvitationLookup lookup = snapshot.getValue(InvitationLookup.class);
                     if (lookup != null && lookup.getParentId() != null) {
+                        String parentId = lookup.getParentId();
+                        sharedPreferences.edit().putString(PARENT_ID_KEY, parentId).apply();
+
                         dialog.dismiss();
                         Intent intent = new Intent(RoleSelectionActivity.this, ChildLoginActivity.class);
-                        intent.putExtra("parentId", lookup.getParentId());
+                        intent.putExtra("parentId", parentId);
                         startActivity(intent);
+                        finish();
                     } else {
                         Toast.makeText(RoleSelectionActivity.this, "Invalid invitation code.", Toast.LENGTH_SHORT).show();
                     }
