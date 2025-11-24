@@ -1,7 +1,9 @@
 package com.example.smartairapplication;
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.text.InputType;
@@ -142,8 +144,14 @@ public class ChildHomeActivity extends AppCompatActivity implements PasswordDial
             buttonLogout.setVisibility(View.VISIBLE);
 
             buttonLogout.setOnClickListener(v -> {
+                SharedPreferences sharedPreferences = getSharedPreferences("ChildLoginPrefs", Context.MODE_PRIVATE);
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+                editor.remove("parentId");
+                editor.remove("childName");
+                editor.apply();
+
                 FirebaseAuth.getInstance().signOut();
-                Intent intent = new Intent(getApplicationContext(), ChildLoginActivity.class);
+                Intent intent = new Intent(getApplicationContext(), RoleSelectionActivity.class);
                 startActivity(intent);
                 finish();
             });
