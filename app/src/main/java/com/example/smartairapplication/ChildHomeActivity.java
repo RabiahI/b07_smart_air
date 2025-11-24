@@ -34,7 +34,7 @@ public class ChildHomeActivity extends AppCompatActivity implements PasswordDial
     private int latestPef;
     private DatabaseReference childRef;
 
-    private CardView zoneButton;
+    private CardView zoneButton, triageButton, logMedicineButton;
     private TextView zoneTitle, zoneMessage, pefValue;
 
     private String currentParentEmail;
@@ -60,6 +60,9 @@ public class ChildHomeActivity extends AppCompatActivity implements PasswordDial
         zoneTitle = findViewById(R.id.zone_title);
         zoneMessage = findViewById(R.id.zone_message);
         pefValue = findViewById(R.id.pef_value);
+
+        triageButton = findViewById(R.id.triageButton);
+        logMedicineButton = findViewById(R.id.logMedicineButton);
 
         // Show onboarding on first login
         if (OnboardingActivity.isFirstLogin()) {
@@ -172,6 +175,19 @@ public class ChildHomeActivity extends AppCompatActivity implements PasswordDial
         });
 
         zoneButton.setOnClickListener(v -> showPefInputDialog());
+        triageButton.setOnClickListener(v -> {
+            Intent triageIntent = new Intent(ChildHomeActivity.this, TriageActivity.class);
+            triageIntent.putExtra("childId", childId);
+            startActivity(triageIntent);
+        });
+
+        String parentId = mAuth.getCurrentUser().getUid();
+        logMedicineButton.setOnClickListener(v -> {
+            Intent logMedicineIntent = new Intent(ChildHomeActivity.this, LogMedicine.class);
+            logMedicineIntent.putExtra("childId", childId);
+            logMedicineIntent.putExtra("parentId", parentId);
+            startActivity(logMedicineIntent);
+        });
     }
 
     private void showPefInputDialog() {

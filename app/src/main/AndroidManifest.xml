@@ -22,6 +22,12 @@
             </intent-filter>
         </activity>
         <activity
+            android:name=".LogMedicine"
+            android:exported="false" />
+        <activity
+            android:name=".TriageActivity"
+            android:exported="false" />
+        <activity
             android:name=".ManageAccessActivity"
             android:exported="false" />
         <activity
