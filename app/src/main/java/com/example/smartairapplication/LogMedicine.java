@@ -51,9 +51,9 @@ public class LogMedicine extends AppCompatActivity {
     private Button btnSave;
     private ActivityResultLauncher<Intent> techniqueLauncher;
     private LinearLayout sobBeforeRatingCard, sobAfterRatingCard;
-    private LinearLayout puffCard, afterButtons;
+    private LinearLayout puffCard, afterButtons, medicineTypeLayout;
     private TextView txtBeforeSOB, txtAfterSOB, numOfPuffsText, txtPostCheck;
-
+    private ScrollView questions;
 
 
 
@@ -68,12 +68,14 @@ public class LogMedicine extends AppCompatActivity {
 
         //link xml elements
         btnReturn = findViewById(R.id.btnReturn);
+
+        medicineTypeLayout = findViewById(R.id.medicineTypeLayout);
         btnRescue = findViewById(R.id.btnRescue);
         btnController = findViewById(R.id.btnController);
 
         btnStartTechnique = findViewById(R.id.btnStartTechnique);
 
-
+        questions = findViewById(R.id.sectionQuestions);
         numOfPuffsText = findViewById(R.id.numOfPuffsText);
         puffCard = findViewById(R.id.puffCard);
         btnMinus = findViewById(R.id.btnMinus);
@@ -106,8 +108,7 @@ public class LogMedicine extends AppCompatActivity {
 
         //hide everything except rescue/controller at start
         hideAllQuestions();
-        btnRescue.setVisibility(View.VISIBLE);
-        btnController.setVisibility(View.VISIBLE);
+        medicineTypeLayout.setVisibility(View.VISIBLE);
 
         setupSobSelector(Arrays.asList(sobBefore1, sobBefore2, sobBefore3, sobBefore4, sobBefore5), true);
         setupSobSelector(Arrays.asList(sobAfter1, sobAfter2, sobAfter3, sobAfter4, sobAfter5), false);
@@ -132,7 +133,6 @@ public class LogMedicine extends AppCompatActivity {
                     }
                 }
         );
-
 
         btnReturn.setOnClickListener(v -> showExitConfirmation());
 
@@ -212,6 +212,8 @@ public class LogMedicine extends AppCompatActivity {
     }
 
     private void showControllerInitial() {
+        medicineTypeLayout.setVisibility(View.GONE);
+        questions.setVisibility(View.VISIBLE);
         hideAllQuestions();
         showBasicBeforeDose();
         btnStartTechnique.setVisibility(View.VISIBLE);
@@ -226,6 +228,7 @@ public class LogMedicine extends AppCompatActivity {
     }
 
     private void showRescueQuestions() {
+        questions.setVisibility(View.VISIBLE);
         hideAllQuestions();
         showBasicBeforeDose();
         txtAfterSOB.setVisibility(View.VISIBLE);
@@ -237,8 +240,7 @@ public class LogMedicine extends AppCompatActivity {
     }
 
     private void hideAllQuestions(){
-        btnController.setVisibility(View.GONE);
-        btnRescue.setVisibility(View.GONE);
+        medicineTypeLayout.setVisibility(View.GONE);
 
         txtBeforeSOB.setVisibility(View.GONE);
         sobBeforeRatingCard.setVisibility(View.GONE);
@@ -248,7 +250,6 @@ public class LogMedicine extends AppCompatActivity {
 
         btnStartTechnique.setVisibility(View.GONE);
 
-
         txtAfterSOB.setVisibility(View.GONE);
         sobAfterRatingCard.setVisibility(View.GONE);
 
@@ -256,7 +257,6 @@ public class LogMedicine extends AppCompatActivity {
         afterButtons.setVisibility(View.GONE);
 
         btnSave.setVisibility(View.GONE);
-
     }
 
     private void showExitConfirmation(){
