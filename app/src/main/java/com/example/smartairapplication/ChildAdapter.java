@@ -45,6 +45,16 @@ public class ChildAdapter extends RecyclerView.Adapter<ChildAdapter.ChildViewHol
         holder.textViewAge.setText(String.valueOf(child.getAge()));
         holder.textViewNotes.setText("Notes: " + child.getNotes());
 
+
+        if (child.getEmail() != null && child.getEmail().contains("@")) {
+            String username = child.getEmail().substring(0, child.getEmail().indexOf("@"));
+            holder.textViewUsername.setText("@" + username);
+            holder.textViewUsername.setVisibility(View.VISIBLE);
+        } else {
+            holder.textViewUsername.setVisibility(View.GONE);
+        }
+
+
         holder.editButton.setOnClickListener(v -> listener.onEditClick(position));
         holder.deleteButton.setOnClickListener(v -> listener.onDeleteClick(position));
         holder.loginButton.setOnClickListener(v -> listener.onLoginClick(position));
@@ -55,11 +65,12 @@ public class ChildAdapter extends RecyclerView.Adapter<ChildAdapter.ChildViewHol
     }
 
     public static class ChildViewHolder extends RecyclerView.ViewHolder {
-        TextView textViewName, textViewDob, textViewAge, textViewNotes;
+        TextView textViewName, textViewDob, textViewAge, textViewNotes, textViewUsername;
         Button editButton, deleteButton, loginButton;
         public ChildViewHolder(@NonNull View itemView){
             super(itemView);
             textViewName = itemView.findViewById(R.id.textViewName);
+            textViewUsername = itemView.findViewById(R.id.textViewUsername); // Find the new TextView
             textViewDob = itemView.findViewById(R.id.textViewDob);
             textViewAge = itemView.findViewById(R.id.textViewAge);
             textViewNotes = itemView.findViewById(R.id.textViewNotes);

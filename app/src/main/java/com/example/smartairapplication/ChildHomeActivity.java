@@ -37,6 +37,8 @@ public class ChildHomeActivity extends AppCompatActivity implements PasswordDial
     private CardView zoneButton, triageButton, logMedicineButton;
     private TextView zoneTitle, zoneMessage, pefValue;
 
+    private String currentParentEmail;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -65,83 +67,112 @@ public class ChildHomeActivity extends AppCompatActivity implements PasswordDial
         // Show onboarding on first login
         if (OnboardingActivity.isFirstLogin()) {
             OnboardingDialogFragment dialog = new OnboardingDialogFragment();
-
             Bundle args = new Bundle();
             args.putString("role", getIntent().getStringExtra("role"));
             args.putString("uid", getIntent().getStringExtra("uid"));
             dialog.setArguments(args);
             dialog.show(getSupportFragmentManager(), "onboarding_dialog");
         }
+        FirebaseUser currentUser = mAuth.getCurrentUser();
+        if (currentUser == null) {
+            Toast.makeText(this, "User not logged in. Redirecting to login.", Toast.LENGTH_LONG).show();
+            startActivity(new Intent(ChildHomeActivity.this, Login.class));
+            finish();
+            return;
+        }
+        String intentChildId = getIntent().getStringExtra("childId");
+        String intentParentId = getIntent().getStringExtra("parentId");
+        final String finalChildId;
+        final String finalParentId;
+        boolean isParentMode; // true if a parent is viewing a child, false if a child is directly logged in
 
-        Intent intent = getIntent();
-        String childId = intent.getStringExtra("childId");
+        if (intentChildId != null && intentParentId == null) {
+            // Scenario 1: Parent viewing a specific child's profile
+            // childId is from intent, parentId is the current logged-in user (parent)
+            finalChildId = intentChildId;
+            finalParentId = currentUser.getUid();
+            currentParentEmail = currentUser.getEmail();
+            isParentMode = true;
+        } else if (intentChildId == null && intentParentId != null) {
+            // Scenario 2: Child logged in directly
+            // childId is the current logged-in user (child), parentId is from intent
+            finalChildId = currentUser.getUid();
+            finalParentId = intentParentId;
+            isParentMode = false;
+        } else if (intentChildId != null && intentChildId.equals(currentUser.getUid())) {
+            // Scenario 3: Child navigating back to ChildHomeActivity after direct login (both present, childId matches current user)
+            finalChildId = intentChildId;
+            finalParentId = intentParentId;
+            isParentMode = false;
+        }else {
+            // Error or unexpected scenario
+            Toast.makeText(this, "Unable to determine child context. Please re-login.", Toast.LENGTH_LONG).show();
+            FirebaseAuth.getInstance().signOut();
+            startActivity(new Intent(ChildHomeActivity.this, Login.class));
+            finish();
+            return;
+        }
+        childRef = database.getReference("Users")
+                .child("Parent")
+                .child(finalParentId)
+                .child("Children")
+                .child(finalChildId);
 
-        if (childId != null) {
-            // Parent viewing a specific child
+
+        if (isParentMode) {
             buttonBackToParent.setVisibility(View.VISIBLE);
             buttonLogout.setVisibility(View.GONE);
 
-            String parentId = null;
-            if (mAuth.getCurrentUser() != null) {
-                parentId = mAuth.getCurrentUser().getUid();
-            }
-            if (parentId != null) {
-                childRef = database.getReference("Users")
-                        .child("Parent")
-                        .child(parentId)
-                        .child("Children")
-                        .child(childId);
-            }
-
-            buttonBackToParent.setOnClickListener(v ->
-                    new PasswordDialogFragment().show(getSupportFragmentManager(), "PasswordDialogFragment")
-            );
+            buttonBackToParent.setOnClickListener(v -> {
+                if (currentParentEmail != null) {
+                    PasswordDialogFragment dialog = new PasswordDialogFragment();
+                    Bundle args = new Bundle();
+                    args.putString("parentEmail", currentParentEmail);
+                    dialog.setArguments(args);
+                    dialog.show(getSupportFragmentManager(), "PasswordDialogFragment");
+                } else {
+                    Toast.makeText(ChildHomeActivity.this, "Parent email not found. Please re-login.", Toast.LENGTH_SHORT).show();
+                    FirebaseAuth.getInstance().signOut();
+                    startActivity(new Intent(ChildHomeActivity.this, Login.class));
+                    finish();
+                }
+            });
         } else {
-            // Child logged in directly
             buttonBackToParent.setVisibility(View.GONE);
             buttonLogout.setVisibility(View.VISIBLE);
 
-            FirebaseUser currentUser = mAuth.getCurrentUser();
-            if (currentUser != null) {
-                childRef = database.getReference("Users")
-                        .child("Child")
-                        .child(currentUser.getUid());
-            }
-
             buttonLogout.setOnClickListener(v -> {
                 FirebaseAuth.getInstance().signOut();
-                Intent intent1 = new Intent(getApplicationContext(), Login.class);
-                startActivity(intent1);
+                Intent intent = new Intent(getApplicationContext(), ChildLoginActivity.class);
+                startActivity(intent);
                 finish();
             });
         }
 
-        if (childRef != null) {
-            childRef.addValueEventListener(new ValueEventListener() {
-                @Override
-                public void onDataChange(@NonNull DataSnapshot snapshot) {
-                    if (snapshot.exists()) {
-                        Child child = snapshot.getValue(Child.class);
-                        if (child != null) {
-                            textViewName.setText(child.getName());
-                            textViewDob.setText("DOB: " + child.getDob());
-                            textViewAge.setText("Age: " + child.getAge());
-                            textViewNotes.setText("Notes: " + child.getNotes());
-                            personalBest = child.getPersonalBest();
-                            latestPef = child.getLatestPef();
-                            updateZone(latestPef);
-                        }
-                    } else {
-                        Toast.makeText(ChildHomeActivity.this, "Child data not found.", Toast.LENGTH_SHORT).show();
+        childRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (snapshot.exists()) {
+                    Child child = snapshot.getValue(Child.class);
+                    if (child != null) {
+                        textViewName.setText(child.getName());
+                        textViewDob.setText("DOB: " + child.getDob());
+                        textViewAge.setText("Age: " + child.getAge());
+                        textViewNotes.setText("Notes: " + child.getNotes());
+                        personalBest = child.getPersonalBest();
+                        latestPef = child.getLatestPef();
+                        updateZone(latestPef);
                     }
+                } else {
+                    Toast.makeText(ChildHomeActivity.this, "Child data not found.", Toast.LENGTH_SHORT).show();
                 }
+            }
 
-                @Override
-                public void onCancelled(@NonNull DatabaseError error) {
-                    Toast.makeText(ChildHomeActivity.this, "Failed to load child data.", Toast.LENGTH_SHORT).show();
-                }
-            });
-        }
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Toast.makeText(ChildHomeActivity.this, "Failed to load child data.", Toast.LENGTH_SHORT).show();
+            }
+        });
 
         zoneButton.setOnClickListener(v -> showPefInputDialog());
         triageButton.setOnClickListener(v -> {
