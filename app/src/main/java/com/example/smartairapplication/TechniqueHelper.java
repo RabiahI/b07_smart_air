@@ -54,6 +54,7 @@ public class TechniqueHelper extends AppCompatActivity {
                 //last step finished (aka finish button)
                 Intent result = new Intent();
                 result.putExtra("techniqueCompleted", true);
+                result.putExtra("highQualityTechnique", true);
                 setResult(RESULT_OK, result);
                 finish();
             }

@@ -4,29 +4,36 @@ import android.app.AlertDialog;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.activity.OnBackPressedCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
 import androidx.core.content.ContextCompat;
 
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
-import java.text.SimpleDateFormat;
 import java.util.Arrays;
-import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 
 public class LogMedicine extends AppCompatActivity {
     private String childId, parentId;
+
+    private boolean techniqueCompleted = false;
+    private boolean highQualityTechnique = false;
+
     private ImageView btnReturn;
-    private Button btnRescue, btnController;
+    private CardView btnRescue, btnController;
     private String inhalerType = null;
 
     private TextView btnMinus, btnPlus, txtCount;
@@ -40,8 +47,14 @@ public class LogMedicine extends AppCompatActivity {
     private Button btnPostBetter, btnPostSame, btnPostWorse;
     private String postFeeling = null;
 
+    private Button btnStartTechnique;
     private Button btnSave;
-    private TextView txtTime;
+    private ActivityResultLauncher<Intent> techniqueLauncher;
+    private LinearLayout sobBeforeRatingCard, sobAfterRatingCard;
+    private LinearLayout puffCard, afterButtons;
+    private TextView txtBeforeSOB, txtAfterSOB, numOfPuffsText, txtPostCheck;
+
+
 
 
     @Override
@@ -57,46 +70,93 @@ public class LogMedicine extends AppCompatActivity {
         btnReturn = findViewById(R.id.btnReturn);
         btnRescue = findViewById(R.id.btnRescue);
         btnController = findViewById(R.id.btnController);
+
+        btnStartTechnique = findViewById(R.id.btnStartTechnique);
+
+
+        numOfPuffsText = findViewById(R.id.numOfPuffsText);
+        puffCard = findViewById(R.id.puffCard);
         btnMinus = findViewById(R.id.btnMinus);
         btnPlus = findViewById(R.id.btnPlus);
         txtCount = findViewById(R.id.txtCount);
 
+        txtBeforeSOB = findViewById(R.id.txtBeforeSOB);
+        sobBeforeRatingCard = findViewById(R.id.sobBeforeRatingCard);
         sobBefore1 = findViewById(R.id.sobBefore1);
         sobBefore2 = findViewById(R.id.sobBefore2);
         sobBefore3 = findViewById(R.id.sobBefore3);
         sobBefore4 = findViewById(R.id.sobBefore4);
         sobBefore5 = findViewById(R.id.sobBefore5);
 
+        txtAfterSOB = findViewById(R.id.txtAfterSOB);
+        sobAfterRatingCard = findViewById(R.id.sobAfterRatingCard);
         sobAfter1 = findViewById(R.id.sobAfter1);
         sobAfter2 = findViewById(R.id.sobAfter2);
         sobAfter3 = findViewById(R.id.sobAfter3);
         sobAfter4 = findViewById(R.id.sobAfter4);
         sobAfter5 = findViewById(R.id.sobAfter5);
 
+        txtPostCheck = findViewById(R.id.txtPostCheck);
+        afterButtons = findViewById(R.id.afterButtons);
         btnPostBetter = findViewById(R.id.btnPostBetter);
         btnPostSame = findViewById(R.id.btnPostSame);
         btnPostWorse = findViewById(R.id.btnPostWorse);
 
-        txtTime = findViewById(R.id.txtTime);
         btnSave = findViewById(R.id.btnSave);
+
+        //hide everything except rescue/controller at start
+        hideAllQuestions();
+        btnRescue.setVisibility(View.VISIBLE);
+        btnController.setVisibility(View.VISIBLE);
 
         setupSobSelector(Arrays.asList(sobBefore1, sobBefore2, sobBefore3, sobBefore4, sobBefore5), true);
         setupSobSelector(Arrays.asList(sobAfter1, sobAfter2, sobAfter3, sobAfter4, sobAfter5), false);
+
+        techniqueLauncher = registerForActivityResult(
+                new ActivityResultContracts.StartActivityForResult(),
+                result -> {
+                    if (result.getResultCode() == RESULT_OK && result.getData() != null) {
+
+                        boolean techniqueCompleted = result.getData().getBooleanExtra("techniqueCompleted", false);
+
+                        boolean highQualityTechnique = result.getData().getBooleanExtra("highQualityTechnique", false);
+
+                        this.techniqueCompleted = techniqueCompleted;
+                        this.highQualityTechnique = highQualityTechnique;
+
+                        if (techniqueCompleted) {
+                            showControllerAfterTechnique();
+                            Toast.makeText(this, "Technique Completed!", Toast.LENGTH_SHORT).show();
+                        }
+                        updateSaveButton();
+                    }
+                }
+        );
+
 
         btnReturn.setOnClickListener(v -> showExitConfirmation());
 
         btnRescue.setOnClickListener(v->{
             inhalerType = "Rescue";
-            btnRescue.setAlpha(1f);
-            btnController.setAlpha(0.5f);
+            showRescueQuestions();
             updateSaveButton();
         });
 
         btnController.setOnClickListener(v->{
             inhalerType = "Controller";
-            btnController.setAlpha(1f);
-            btnRescue.setAlpha(0.5f);
+            showControllerInitial();
             updateSaveButton();
+        });
+
+        btnStartTechnique.setOnClickListener(v -> {
+            if (puffCount == 0 || sobBefore == -1){
+                Toast.makeText(this, "Please fill puff count and breathing before starting", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            Intent i = new Intent(LogMedicine.this, TechniqueIntro.class);
+            i.putExtra("childId", childId);
+            techniqueLauncher.launch(i);
         });
 
         btnPlus.setOnClickListener(v -> {
@@ -131,9 +191,6 @@ public class LogMedicine extends AppCompatActivity {
             updateSaveButton();
         });
 
-        String time = new SimpleDateFormat("h:mm a", Locale.getDefault()).format(new Date());
-        txtTime.setText("Taken at " + time);
-
         btnSave.setOnClickListener(v -> saveLogToDatabase());
 
         getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
@@ -142,6 +199,63 @@ public class LogMedicine extends AppCompatActivity {
                 showExitConfirmation();
             }
         });
+
+    }
+
+    private void showControllerAfterTechnique() {
+        showBasicBeforeDose();
+        txtAfterSOB.setVisibility(View.VISIBLE);
+        sobAfterRatingCard.setVisibility(View.VISIBLE);
+        txtPostCheck.setVisibility(View.VISIBLE);
+        afterButtons.setVisibility(View.VISIBLE);
+        btnSave.setVisibility(View.VISIBLE);
+    }
+
+    private void showControllerInitial() {
+        hideAllQuestions();
+        showBasicBeforeDose();
+        btnStartTechnique.setVisibility(View.VISIBLE);
+    }
+
+    private void showBasicBeforeDose() {
+        txtBeforeSOB.setVisibility(View.VISIBLE);
+        sobBeforeRatingCard.setVisibility(View.VISIBLE);
+        numOfPuffsText.setVisibility(View.VISIBLE);
+        puffCard.setVisibility(View.VISIBLE);
+        btnStartTechnique.setVisibility(View.GONE);
+    }
+
+    private void showRescueQuestions() {
+        hideAllQuestions();
+        showBasicBeforeDose();
+        txtAfterSOB.setVisibility(View.VISIBLE);
+        sobAfterRatingCard.setVisibility(View.VISIBLE);
+        txtPostCheck.setVisibility(View.VISIBLE);
+        afterButtons.setVisibility(View.VISIBLE);
+        btnSave.setVisibility(View.VISIBLE);
+
+    }
+
+    private void hideAllQuestions(){
+        btnController.setVisibility(View.GONE);
+        btnRescue.setVisibility(View.GONE);
+
+        txtBeforeSOB.setVisibility(View.GONE);
+        sobBeforeRatingCard.setVisibility(View.GONE);
+
+        numOfPuffsText.setVisibility(View.GONE);
+        puffCard.setVisibility(View.GONE);
+
+        btnStartTechnique.setVisibility(View.GONE);
+
+
+        txtAfterSOB.setVisibility(View.GONE);
+        sobAfterRatingCard.setVisibility(View.GONE);
+
+        txtPostCheck.setVisibility(View.GONE);
+        afterButtons.setVisibility(View.GONE);
+
+        btnSave.setVisibility(View.GONE);
 
     }
 

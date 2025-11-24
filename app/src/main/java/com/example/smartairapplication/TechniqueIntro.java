@@ -1,6 +1,7 @@
 package com.example.smartairapplication;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.webkit.WebSettings;
@@ -11,6 +12,8 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 
 import androidx.activity.EdgeToEdge;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 
 public class TechniqueIntro extends AppCompatActivity {
@@ -21,7 +24,9 @@ public class TechniqueIntro extends AppCompatActivity {
     private ImageView imgPlayOverlay;
     private WebView webViewVideo;
     private Button btnStartPractice;
+    private ActivityResultLauncher<Intent> practiceLauncher;
     private static final String YOUTUBE_VIDEO_ID = "G3z1dClBJxI";
+
 
     @SuppressLint("SetJavaScriptEnabled")
     @Override
@@ -36,6 +41,19 @@ public class TechniqueIntro extends AppCompatActivity {
         imgPlayOverlay =findViewById(R.id.imgPlayOverlay);
         webViewVideo = findViewById(R.id.webViewVideo);
         btnStartPractice = findViewById(R.id.btnStartPractice);
+
+        practiceLauncher = registerForActivityResult(
+                new ActivityResultContracts.StartActivityForResult(),
+                result -> {
+                    if (result.getResultCode() == RESULT_OK && result.getData() != null) {
+                        Intent back = new Intent();
+                        back.putExtras(result.getData());
+                        setResult(RESULT_OK, back);
+                        finish();
+                    }
+                }
+        );
+
 
         //back to previous screen
         btnBack.setOnClickListener(v -> finish());
@@ -65,10 +83,7 @@ public class TechniqueIntro extends AppCompatActivity {
 
         // start step-by-step practice
         btnStartPractice.setOnClickListener(v -> {
-            startActivity(new android.content.Intent(
-                    TechniqueIntro.this,
-                    TechniqueHelper.class
-            ));
+            practiceLauncher.launch(new Intent(TechniqueIntro.this, TechniqueHelper.class));
         });
 
     }
