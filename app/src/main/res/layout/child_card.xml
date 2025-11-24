@@ -53,17 +53,6 @@
                 android:textSize="20sp"
                 android:textStyle="bold" />
 
-            <TextView
-                android:id="@+id/textViewUsername"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="jenni2016"
-                android:textColor="#888888"
-                android:textSize="14sp"
-                android:textStyle="italic"
-                android:layout_marginStart="2dp"
-                android:layout_marginBottom="4dp"/>
-
             <Button
                 android:id="@+id/loginButton"
                 android:layout_width="wrap_content"

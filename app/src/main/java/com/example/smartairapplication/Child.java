@@ -2,7 +2,6 @@ package com.example.smartairapplication;
 
 public class Child extends User {
     private String childId;
-    private String parentId; // Added parentId field
     private String name;
     private String dob;
     private String notes;
@@ -25,21 +24,7 @@ public class Child extends User {
         this.latestPef = latestPef;
     }
 
-    // Constructor with parentId
-    public Child(String email, String childId, String parentId, String name, String dob, String notes, int age, int personalBest, int latestPef){
-        super(email);
-        this.childId = childId;
-        this.parentId = parentId;
-        this.name = name;
-        this.dob = dob;
-        this.notes = notes;
-        this.age = age;
-        this.personalBest = personalBest;
-        this.latestPef = latestPef;
-    }
-
     public String getChildId(){ return childId; }
-    public String getParentId(){ return parentId; }
     public String getName(){ return name; }
     public String getDob(){ return dob; }
     public String getNotes(){ return notes; }
@@ -51,8 +36,6 @@ public class Child extends User {
     public void setChildId(String childId){
         this.childId = childId;
     }
-    public void setParentId(String parentId){ this.parentId = parentId; }
-
     public void setName(String name){
         this.name = name;
     }

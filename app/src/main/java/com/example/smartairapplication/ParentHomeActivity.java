@@ -43,6 +43,7 @@ public class ParentHomeActivity extends AppCompatActivity {
         childButton.setOnClickListener(view -> {
             Intent intent = new Intent(getApplicationContext(), ChildManagementActivity.class);
             startActivity(intent);
+            finish();
         });
 
         manageProviderButton.setOnClickListener(new View.OnClickListener() {
@@ -50,6 +51,7 @@ public class ParentHomeActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Intent intent = new Intent(getApplicationContext(), ManageAccessActivity.class);
                 startActivity(intent);
+                finish();
             }
         });
     }
