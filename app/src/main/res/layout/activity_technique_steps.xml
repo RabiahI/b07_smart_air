@@ -8,7 +8,7 @@
     tools:context=".TechniqueHelper">
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/childHeader"
+        android:id="@+id/header"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/header_sky"
@@ -27,7 +27,7 @@
             tools:layout_editor_absoluteX="16dp">
 
             <ImageView
-                android:id="@+id/btnReturn"
+                android:id="@+id/btnBackSteps"
                 android:layout_width="32dp"
                 android:layout_height="32dp"
                 android:background="@drawable/bg_icon_circle_blue"
@@ -40,20 +40,20 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="15dp"
                 android:fontFamily="@font/inter_bold"
-                android:text="Technique Helper"
+                android:text="Inhaler Steps"
                 android:textColor="@color/vivid_blue"
                 android:textSize="20sp"
                 android:textStyle="bold" />
         </LinearLayout>
 
         <TextView
-            android:id="@+id/instructions"
+            android:id="@+id/txtStepCounter"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="6dp"
             android:layout_marginStart="70dp"
             android:fontFamily="@font/inter"
-            android:text="Track your medicine dose"
+            android:text="Step 1 of 7"
             android:textColor="@color/dark_blue_text"
             android:textSize="12sp"
             android:textStyle="bold"
@@ -62,5 +62,61 @@
             app:layout_constraintTop_toBottomOf="@id/headerRow" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <LinearLayout
+        android:id="@+id/contentLayout"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:orientation="vertical"
+        android:padding="24dp"
+        app:layout_constraintTop_toBottomOf="@id/header"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <ImageView
+            android:id="@+id/imgStep"
+            android:layout_width="200dp"
+            android:layout_height="200dp"
+            android:layout_gravity="center"
+            android:scaleType="fitCenter"
+            android:src="@drawable/tech_step1" />
+
+        <TextView
+            android:id="@+id/txtStepTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:fontFamily="@font/inter_bold"
+            android:text="Step title"
+            android:textColor="#242d3c"
+            android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/txtStepDescription"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:fontFamily="@font/inter"
+            android:text="Step description goes here in kid-friendly language."
+            android:textColor="#4A4A4A"
+            android:textSize="14sp" />
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1" />
+
+        <Button
+            android:id="@+id/btnNextStep"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:fontFamily="@font/inter_bold"
+            android:text="I did it!"
+            android:textColor="@color/white"
+            app:backgroundTint="@color/vivid_blue"
+            app:cornerRadius="16dp" />
+    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
