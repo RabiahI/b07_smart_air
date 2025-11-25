@@ -264,10 +264,6 @@ public class LogMedicine extends AppCompatActivity {
                 .setTitle("Return to home?")
                 .setMessage("If you leave now, any unsaved changes will be lost.")
                 .setPositiveButton("Leave", (dialog, which) -> {
-                    String childId = getIntent().getStringExtra("childId");
-                    Intent intent = new Intent(LogMedicine.this, ChildHomeActivity.class);
-                    intent.putExtra("childId", childId);
-                    startActivity(intent);
                     finish();
                 })
                 .setNegativeButton("Stay", (dialog, which) -> {
@@ -337,10 +333,6 @@ public class LogMedicine extends AppCompatActivity {
         ref.child(logId).setValue(log)
                 .addOnSuccessListener(aVoid -> {
                     Toast.makeText(this, "Medicine log saved!", Toast.LENGTH_SHORT).show();
-                    //redirect back to child home (might change to history of logs instead once implemented)
-                    Intent intent = new Intent(LogMedicine.this, ChildHomeActivity.class);
-                    intent.putExtra("childId", childId);
-                    startActivity(intent);
                     finish();
                 })
                 .addOnFailureListener(e ->

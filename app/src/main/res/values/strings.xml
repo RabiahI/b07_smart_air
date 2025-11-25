@@ -16,7 +16,6 @@
     <string-array name="user_roles">
         <item>Parent</item>
         <item>Provider</item>
-        <item>Child</item>
     </string-array>
 
     <string name="provider_welcome">
