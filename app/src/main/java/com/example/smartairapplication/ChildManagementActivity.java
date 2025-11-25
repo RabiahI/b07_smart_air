@@ -1,11 +1,16 @@
 package com.example.smartairapplication;
 
+import android.content.ClipData;
+import android.content.ClipboardManager;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
+import android.widget.ImageButton;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -29,6 +34,9 @@ public class ChildManagementActivity extends AppCompatActivity implements ChildA
     private DatabaseReference childrenRef;
     private FirebaseAuth mAuth;
     private FloatingActionButton fabAddChild;
+    private TextView textViewParentInviteCode;
+    private DatabaseReference parentRef;
+    private String currentParentId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,8 +48,11 @@ public class ChildManagementActivity extends AppCompatActivity implements ChildA
         if (mAuth.getCurrentUser() != null) {
             parentId = mAuth.getCurrentUser().getUid();
         }
+        currentParentId = parentId;
+
         if (parentId != null) {
             childrenRef = FirebaseDatabase.getInstance().getReference("Users").child("Parent").child(parentId).child("Children");
+            parentRef = FirebaseDatabase.getInstance().getReference("Users").child("Parent").child(parentId);
         }
         recyclerViewChildren = findViewById(R.id.recyclerViewChildren);
         recyclerViewChildren.setLayoutManager(new LinearLayoutManager(this));
@@ -50,10 +61,78 @@ public class ChildManagementActivity extends AppCompatActivity implements ChildA
         recyclerViewChildren.setAdapter(adapter);
 
         fabAddChild = findViewById(R.id.fabAddChild);
-        fabAddChild.setOnClickListener(v ->
-                startActivity(new Intent(ChildManagementActivity.this, AddChildActivity.class)));
+        fabAddChild.setOnClickListener(v -> startActivity(new Intent(ChildManagementActivity.this, AddChildActivity.class)));
+
+        textViewParentInviteCode = findViewById(R.id.textViewParentInviteCode);
+        ImageButton buttonCopyCode = findViewById(R.id.buttonCopyCode);
+        ImageButton buttonRegenerateCode = findViewById(R.id.buttonRegenerateCode);
+
+        buttonCopyCode.setOnClickListener(v -> copyInviteCode());
+        buttonRegenerateCode.setOnClickListener(v -> regenerateInviteCode());
+
 
         loadChildren();
+        if (parentRef != null) {
+            setupParentInviteCode();
+        }
+    }
+
+    private void setupParentInviteCode() {
+        parentRef.child("childInvitationCode").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (snapshot.exists() && snapshot.getValue() != null) {
+                    textViewParentInviteCode.setText(snapshot.getValue(String.class));
+                } else {
+                    generateAndSaveNewCode(null);
+                }
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Toast.makeText(ChildManagementActivity.this, "Failed to load invitation code.", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void copyInviteCode() {
+        String code = textViewParentInviteCode.getText().toString();
+        if (!code.isEmpty() && !code.equals("Loading...")) {
+            ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
+            ClipData clip = ClipData.newPlainText("Parent Invite Code", code);
+            clipboard.setPrimaryClip(clip);
+            Toast.makeText(this, "Invite code copied", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private void regenerateInviteCode() {
+        new AlertDialog.Builder(this)
+                .setTitle("Regenerate Code")
+                .setMessage("Are you sure? Your old code will stop working.")
+                .setPositiveButton("Regenerate", (dialog, which) -> {
+                    String oldCode = textViewParentInviteCode.getText().toString();
+                    if (!oldCode.equals("Loading...")) {
+                        generateAndSaveNewCode(oldCode);
+                    }
+                })
+                .setNegativeButton("Cancel", null)
+                .show();
+    }
+
+    private void generateAndSaveNewCode(final String oldCode) {
+        String newCode = CodeGeneratorUtils.generateInviteCode();
+        DatabaseReference invitesRef = FirebaseDatabase.getInstance().getReference("invitationCodes");
+
+        parentRef.child("childInvitationCode").setValue(newCode).addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                invitesRef.child(newCode).setValue(new InvitationLookup(currentParentId));
+                if (oldCode != null && !oldCode.isEmpty()) {
+                    invitesRef.child(oldCode).removeValue();
+                }
+                Toast.makeText(ChildManagementActivity.this, "Invite code updated.", Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(ChildManagementActivity.this, "Failed to update code.", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     private void loadChildren() {
@@ -116,8 +195,6 @@ public class ChildManagementActivity extends AppCompatActivity implements ChildA
         Child selectedChild = childList.get(position);
         Intent intent = new Intent(ChildManagementActivity.this, ChildHomeActivity.class);
         intent.putExtra("childId", selectedChild.getChildId());
-        intent.putExtra("personalBest", selectedChild.getPersonalBest());
-        intent.putExtra("latestPef", selectedChild.getLatestPef());
         startActivity(intent);
     }
 }
