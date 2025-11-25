@@ -6,13 +6,15 @@ import android.view.View;
 import android.widget.Button;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
 
 import com.google.firebase.auth.FirebaseAuth;
 
 public class ParentHomeActivity extends AppCompatActivity {
 
     Button logoutButton;
-    Button childButton, manageProviderButton;
+    CardView childButton, manageProviderButton;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,12 +32,24 @@ public class ParentHomeActivity extends AppCompatActivity {
         }
 
         logoutButton = findViewById(R.id.logout);
+        childButton = findViewById(R.id.manageChildrenButton);
+        manageProviderButton = findViewById(R.id.manageSharingButton);
 
         logoutButton.setOnClickListener(view -> {
             FirebaseAuth.getInstance().signOut();
             Intent intent = new Intent(getApplicationContext(), Login.class);
             startActivity(intent);
             finish();
+        });
+
+        childButton.setOnClickListener(view -> {
+            Intent intent = new Intent(getApplicationContext(), ChildManagementActivity.class);
+            startActivity(intent);
+        });
+
+        manageProviderButton.setOnClickListener(view -> {
+            Intent intent = new Intent(getApplicationContext(), ManageAccessActivity.class);
+            startActivity(intent);
         });
 
     }
