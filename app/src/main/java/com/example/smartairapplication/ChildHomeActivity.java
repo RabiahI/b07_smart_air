@@ -33,8 +33,7 @@ public class ChildHomeActivity extends AppCompatActivity implements PasswordDial
     private int personalBest;
     private int latestPef;
     private DatabaseReference childRef;
-
-    private CardView zoneButton, triageButton;
+    private CardView zoneButton, triageButton, streaksButton;
     private TextView zoneTitle, zoneMessage, pefValue;
 
     @Override
@@ -58,6 +57,7 @@ public class ChildHomeActivity extends AppCompatActivity implements PasswordDial
         zoneTitle = findViewById(R.id.zone_title);
         zoneMessage = findViewById(R.id.zone_message);
         pefValue = findViewById(R.id.pef_value);
+        streaksButton = findViewById(R.id.streaks_button);
 
         triageButton = findViewById(R.id.triageButton);
 
@@ -147,6 +147,15 @@ public class ChildHomeActivity extends AppCompatActivity implements PasswordDial
             Intent triageIntent = new Intent(ChildHomeActivity.this, TriageActivity.class);
             triageIntent.putExtra("childId", childId);
             startActivity(triageIntent);
+        });
+
+        streaksButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent streaksIntent = new Intent(ChildHomeActivity.this, StreaksBadgesActivity.class);
+                streaksIntent.putExtra("childId", childId);
+                startActivity(streaksIntent);
+            }
         });
     }
 

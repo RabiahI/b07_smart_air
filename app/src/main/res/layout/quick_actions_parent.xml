@@ -10,7 +10,7 @@
 
     <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:card_view="http://schemas.android.com/apk/res-auto"
-        android:id="@+id/logMedicineButton"
+        android:id="@+id/manageChildrenButton"
         android:layout_width="170dp"
         android:layout_height="130dp"
         android:layout_margin="10dp"
@@ -47,7 +47,7 @@
 
     <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:card_view="http://schemas.android.com/apk/res-auto"
-        android:id="@+id/dailyCheckInButton"
+        android:id="@+id/providerReportButton"
         android:layout_width="170dp"
         android:layout_height="130dp"
         android:layout_margin="10dp"
@@ -84,7 +84,7 @@
 
     <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:card_view="http://schemas.android.com/apk/res-auto"
-        android:id="@+id/techniqueHelperButton"
+        android:id="@+id/manageSharingButton"
         android:layout_width="170dp"
         android:layout_height="130dp"
         android:layout_margin="10dp"
@@ -121,7 +121,7 @@
 
     <androidx.cardview.widget.CardView
         xmlns:card_view="http://schemas.android.com/apk/res-auto"
-        android:id="@+id/triageButton"
+        android:id="@+id/exportFileButton"
         android:layout_width="170dp"
         android:layout_height="130dp"
         android:layout_margin="10dp"
