@@ -20,6 +20,9 @@
             android:name=".ManageInventoryChild"
             android:exported="false" />
         <activity
+            android:name=".DailyCheckIn"
+            android:exported="false" />
+        <activity
             android:name=".RoleSelectionActivity"
             android:exported="true">
             <intent-filter>
