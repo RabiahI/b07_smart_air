@@ -28,6 +28,7 @@ public class Registration extends AppCompatActivity {
     FirebaseAuth mAuth;
     ProgressBar progressBar;
     TextView textView;
+    View spinnerFragmentContainer;
     SpinnerFragment spinnerFragment;
 
     FirebaseDatabase database;
@@ -58,45 +59,38 @@ public class Registration extends AppCompatActivity {
         buttonReg = findViewById(R.id.btn_register);
         progressBar = findViewById(R.id.progressBar);
         textView = findViewById(R.id.loginNow);
+        spinnerFragmentContainer = findViewById(R.id.spinner_fragment_container);
         spinnerFragment = (SpinnerFragment) getSupportFragmentManager().findFragmentById(R.id.spinner_fragment_container);
 
+        // The role selection spinner is always visible here, as this activity is no longer used for child registration
+
         textView.setOnClickListener(view -> {
-            Intent intent = new Intent(Registration.this, Login.class);
-            startActivity(intent);
+            Intent loginIntent = new Intent(Registration.this, Login.class);
+            startActivity(loginIntent);
             finish();
         });
 
         buttonReg.setOnClickListener(view -> {
             progressBar.setVisibility(View.VISIBLE);
-            String email, password, confirmPassword, role;
+            String email, password, confirmPassword, selectedRole;
             email = String.valueOf(editTextEmail.getText());
             password = String.valueOf(editTextPassword.getText());
             confirmPassword = String.valueOf(editTextConfirmPassword.getText());
-            role = spinnerFragment != null ? spinnerFragment.getSelectedRole() : "";
+            selectedRole = spinnerFragment.getSelectedRole();
 
             // Validation
-            if (TextUtils.isEmpty(email)) {
-                Toast.makeText(Registration.this, "Enter email", Toast.LENGTH_SHORT).show();
+            if (TextUtils.isEmpty(email) || TextUtils.isEmpty(password) || TextUtils.isEmpty(confirmPassword)) {
+                Toast.makeText(Registration.this, "All fields are required", Toast.LENGTH_SHORT).show();
                 progressBar.setVisibility(View.GONE);
                 return;
             }
-            if (TextUtils.isEmpty(password)) {
-                Toast.makeText(Registration.this, "Enter password", Toast.LENGTH_SHORT).show();
-                progressBar.setVisibility(View.GONE);
-                return;
-            }
-            if (TextUtils.isEmpty(confirmPassword)) {
-                Toast.makeText(Registration.this, "Confirm your password", Toast.LENGTH_SHORT).show();
+            if (TextUtils.isEmpty(selectedRole)) {
+                Toast.makeText(Registration.this, "Please select a role", Toast.LENGTH_SHORT).show();
                 progressBar.setVisibility(View.GONE);
                 return;
             }
             if (!password.equals(confirmPassword)) {
                 Toast.makeText(Registration.this, "Passwords do not match", Toast.LENGTH_SHORT).show();
-                progressBar.setVisibility(View.GONE);
-                return;
-            }
-            if (TextUtils.isEmpty(role)) {
-                Toast.makeText(Registration.this, "Please select a role", Toast.LENGTH_SHORT).show();
                 progressBar.setVisibility(View.GONE);
                 return;
             }
@@ -115,55 +109,31 @@ public class Registration extends AppCompatActivity {
                             if (firebaseUser != null) {
                                 String uid = firebaseUser.getUid();
 
-                                // Create role-specific user object
                                 User user;
-                                switch (role) {
-                                    case "Parent":
-                                        user = new Parent(email);
-                                        break;
-                                    case "Provider":
-                                        user = new Provider(email);
-                                        break;
-                                    case "Child":
-                                        user = new Child(email, uid, null, null, null, 0, 0, 0);
-                                        break;
-                                    default:
-                                        Toast.makeText(Registration.this, "Invalid role selected.", Toast.LENGTH_SHORT).show();
-                                        return;
+                                if ("Parent".equals(selectedRole)) {
+                                    user = new Parent(email);
+                                } else {
+                                    user = new Provider(email);
                                 }
 
-                                DatabaseReference roleRef = usersRef.child(role).child(uid);
+                                DatabaseReference roleRef = usersRef.child(selectedRole).child(uid);
                                 roleRef.setValue(user).addOnCompleteListener(task1 -> {
                                     if (task1.isSuccessful()) {
-                                        Toast.makeText(Registration.this, "Account Created.",
-                                                Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(Registration.this, "Account Created.", Toast.LENGTH_SHORT).show();
 
-                                        // Redirect based on role, passing extras for onboarding
-                                        switch (role) {
-                                            case "Child":
-                                                Intent childIntent = new Intent(Registration.this, ChildHomeActivity.class);
-                                                childIntent.putExtra("role", role);
-                                                childIntent.putExtra("uid", firebaseUser.getUid());
-                                                startActivity(childIntent);
-                                                finish();
-                                                break;
-
+                                        Intent homeIntent;
+                                        switch (selectedRole) {
                                             case "Provider":
-                                                Intent providerIntent = new Intent(Registration.this, ProviderHomeActivity.class);
-                                                providerIntent.putExtra("role", role);
-                                                providerIntent.putExtra("uid", firebaseUser.getUid());
-                                                startActivity(providerIntent);
-                                                finish();
+                                                homeIntent = new Intent(Registration.this, ProviderHomeActivity.class);
                                                 break;
-
                                             default: // Parent
-                                                Intent parentIntent = new Intent(Registration.this, ParentHomeActivity.class);
-                                                parentIntent.putExtra("role", role);
-                                                parentIntent.putExtra("uid", firebaseUser.getUid());
-                                                startActivity(parentIntent);
-                                                finish();
+                                                homeIntent = new Intent(Registration.this, ParentHomeActivity.class);
                                                 break;
                                         }
+                                        homeIntent.putExtra("role", selectedRole);
+                                        homeIntent.putExtra("uid", firebaseUser.getUid());
+                                        startActivity(homeIntent);
+                                        finish();
 
                                     } else {
                                         Toast.makeText(Registration.this, "Failed to save user data.",
@@ -172,12 +142,10 @@ public class Registration extends AppCompatActivity {
                                 });
                             }
                         } else {
-                            // If sign up fails, display a message to the user.
-                            Toast.makeText(Registration.this, "Authentication failed.",
+                            Toast.makeText(Registration.this, "Authentication failed: " + task.getException().getMessage(),
                                     Toast.LENGTH_SHORT).show();
                         }
                     });
-
         });
     }
 }
