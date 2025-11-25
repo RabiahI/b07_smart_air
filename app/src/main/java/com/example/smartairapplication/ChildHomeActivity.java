@@ -36,7 +36,7 @@ public class ChildHomeActivity extends AppCompatActivity implements PasswordDial
     private int latestPef;
     private DatabaseReference childRef;
 
-    private CardView zoneButton, triageButton, logMedicineButton;
+    private CardView zoneButton, triageButton, logMedicineButton, dailyCheckInButton;
     private TextView zoneTitle, zoneMessage, pefValue;
 
     private String currentParentEmail;
@@ -65,6 +65,7 @@ public class ChildHomeActivity extends AppCompatActivity implements PasswordDial
 
         triageButton = findViewById(R.id.triageButton);
         logMedicineButton = findViewById(R.id.logMedicineButton);
+        dailyCheckInButton = findViewById(R.id.dailyCheckInButton);
 
         // Show onboarding on first login
         if (OnboardingActivity.isFirstLogin()) {
@@ -194,6 +195,13 @@ public class ChildHomeActivity extends AppCompatActivity implements PasswordDial
             logMedicineIntent.putExtra("childId", finalChildId);
             logMedicineIntent.putExtra("parentId", finalParentId);
             startActivity(logMedicineIntent);
+        });
+
+        dailyCheckInButton.setOnClickListener(v -> {
+            Intent dailyCheckInIntent = new Intent(ChildHomeActivity.this, DailyCheckIn.class);
+            dailyCheckInIntent.putExtra("childId", finalChildId);
+            dailyCheckInIntent.putExtra("parentId", finalParentId);
+            startActivity(dailyCheckInIntent);
         });
     }
 
