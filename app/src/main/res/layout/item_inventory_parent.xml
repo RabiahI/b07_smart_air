@@ -18,14 +18,6 @@
             android:orientation="vertical"
             android:padding="16dp">
 
-            <TextView
-                android:id="@+id/txtMedName"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Rescue Inhaler"
-                android:textSize="18sp"
-                android:textStyle="bold" />
-
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -35,6 +27,15 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/txtMedName"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Rescue Inhaler"
+                        android:textSize="18sp"
+                        android:textStyle="bold" />
+
                     <TextView
                         android:id="@+id/txtPurchaseDate"
                         android:layout_width="wrap_content"
@@ -58,20 +59,32 @@
                         android:textSize="14sp" />
                 </LinearLayout>
                 <Space
-                    android:layout_width="20dp"
+                    android:layout_width="80dp"
                     android:layout_height="match_parent"/>
 
-                <Button
-                    android:id="@+id/btnUpdatePuffs"
+                <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    android:backgroundTint="@color/vivid_blue"
-                    android:text="Update puffs left"
-                    android:textColor="@android:color/white" />
+                    android:orientation="vertical">
+                    <Button
+                        android:id="@+id/btnEdit"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
+                        android:backgroundTint="@color/vivid_blue"
+                        android:text="Edit"
+                        android:textColor="@android:color/white" />
+                    <Button
+                        android:id="@+id/btnDelete"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
+                        android:backgroundTint="@color/vivid_blue"
+                        android:text="Delete"
+                        android:textColor="@android:color/white" />
+                </LinearLayout>
+
             </LinearLayout>
-
-
 
         </LinearLayout>
 

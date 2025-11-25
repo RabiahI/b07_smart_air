@@ -10,9 +10,6 @@ import androidx.activity.EdgeToEdge;
 import androidx.activity.OnBackPressedCallback;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -28,7 +25,7 @@ import java.util.List;
 public class ManageInventoryChild extends AppCompatActivity {
 
     private RecyclerView recyclerInventory;
-    private InventoryAdapter adapter;
+    private ChildInventoryAdapter adapter;
     private List<Medicine> medicineList = new ArrayList<>();
     private String childId, parentId;
     private ImageView btnBack;
@@ -45,7 +42,7 @@ public class ManageInventoryChild extends AppCompatActivity {
         recyclerInventory = findViewById(R.id.recyclerInventory);
         recyclerInventory.setLayoutManager(new LinearLayoutManager(this));
 
-        adapter = new InventoryAdapter(medicineList, this::showUpdateDialog);
+        adapter = new ChildInventoryAdapter(medicineList, this::showUpdateDialog);
         recyclerInventory.setAdapter(adapter);
 
         btnBack = findViewById(R.id.btnBack);

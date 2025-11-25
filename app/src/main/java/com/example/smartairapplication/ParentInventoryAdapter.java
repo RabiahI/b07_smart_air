@@ -11,16 +11,16 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
 
-public class InventoryAdapter extends RecyclerView.Adapter<InventoryAdapter.MedViewHolder> {
-
+public class ParentInventoryAdapter extends RecyclerView.Adapter<ParentInventoryAdapter.MedViewHolder> {
     private List<Medicine> list;
-    private OnUpdateClickListener listener;
+    private OnParentActionListener listener;
 
-    public interface OnUpdateClickListener {
-        void onUpdate(Medicine med);
+    public interface OnParentActionListener {
+        void onEdit(Medicine med);
+        void onDelete(Medicine med);
     }
 
-    public InventoryAdapter(List<Medicine> list, OnUpdateClickListener listener) {
+    public ParentInventoryAdapter(List<Medicine> list, OnParentActionListener listener) {
         this.list = list;
         this.listener = listener;
     }
@@ -29,7 +29,7 @@ public class InventoryAdapter extends RecyclerView.Adapter<InventoryAdapter.MedV
     @Override
     public MedViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.item_inventory_child, parent, false);
+                .inflate(R.layout.item_inventory_parent, parent, false);
         return new MedViewHolder(v);
     }
 
@@ -42,7 +42,8 @@ public class InventoryAdapter extends RecyclerView.Adapter<InventoryAdapter.MedV
         holder.expiry.setText("Expires: " + m.expiryDate);
         holder.amount.setText("Amount left: " + m.amountLeft + " puffs");
 
-        holder.updateBtn.setOnClickListener(v -> listener.onUpdate(m));
+        holder.btnEdit.setOnClickListener(v -> listener.onEdit(m));
+        holder.btnDelete.setOnClickListener(v -> listener.onDelete(m));
     }
 
     @Override
@@ -52,7 +53,7 @@ public class InventoryAdapter extends RecyclerView.Adapter<InventoryAdapter.MedV
 
     static class MedViewHolder extends RecyclerView.ViewHolder {
         TextView name, purchase, expiry, amount;
-        Button updateBtn;
+        Button btnEdit, btnDelete;
 
         MedViewHolder(View itemView) {
             super(itemView);
@@ -60,8 +61,8 @@ public class InventoryAdapter extends RecyclerView.Adapter<InventoryAdapter.MedV
             purchase = itemView.findViewById(R.id.txtPurchaseDate);
             expiry = itemView.findViewById(R.id.txtExpiryDate);
             amount = itemView.findViewById(R.id.txtAmountLeft);
-            updateBtn = itemView.findViewById(R.id.btnUpdatePuffs);
+            btnEdit = itemView.findViewById(R.id.btnEdit);
+            btnDelete = itemView.findViewById(R.id.btnDelete);
         }
     }
 }
-
