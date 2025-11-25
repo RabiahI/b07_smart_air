@@ -3,9 +3,11 @@ package com.example.smartairapplication;
 import android.os.Bundle;
 import android.text.InputType;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
+import androidx.activity.OnBackPressedCallback;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
@@ -29,6 +31,7 @@ public class ManageInventoryChild extends AppCompatActivity {
     private InventoryAdapter adapter;
     private List<Medicine> medicineList = new ArrayList<>();
     private String childId, parentId;
+    private ImageView btnBack;
 
 
     @Override
@@ -45,8 +48,32 @@ public class ManageInventoryChild extends AppCompatActivity {
         adapter = new InventoryAdapter(medicineList, this::showUpdateDialog);
         recyclerInventory.setAdapter(adapter);
 
+        btnBack = findViewById(R.id.btnBack);
+
         loadInventory();
+
+        btnBack.setOnClickListener(v -> showExitConfirmation());
+        getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                showExitConfirmation();
+            }
+        });
     }
+
+    private void showExitConfirmation() {
+        new android.app.AlertDialog.Builder(this)
+                .setTitle("Return to home?")
+                .setMessage("If you leave now, any unsaved changes will be lost.")
+                .setPositiveButton("Leave", (dialog, which) -> {
+                    finish();
+                })
+                .setNegativeButton("Stay", (dialog, which) -> {
+                    dialog.dismiss();
+                })
+                .show();
+    }
+
     private void loadInventory() {
         DatabaseReference ref = FirebaseDatabase.getInstance().getReference("Users")
                 .child("Parent").child(parentId)
