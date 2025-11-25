@@ -14,7 +14,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Material3.DayNight.NoActionBar">
         <activity
-            android:name=".ManageInventory"
+            android:name=".ManageInventoryChild"
             android:exported="false" />
         <activity
             android:name=".RoleSelectionActivity"
