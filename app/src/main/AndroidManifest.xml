@@ -14,6 +14,12 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Material3.DayNight.NoActionBar">
         <activity
+            android:name=".ParentManageInventory"
+            android:exported="false" />
+        <activity
+            android:name=".ManageInventoryChild"
+            android:exported="false" />
+        <activity
             android:name=".DailyCheckIn"
             android:exported="false" />
         <activity
