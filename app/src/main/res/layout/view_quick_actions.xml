@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="utf-8"?>
+<GridLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/quickActionsSection"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:columnCount="2"
+    android:padding="10dp"
+    android:rowCount="2">
+
+
+    <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:card_view="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/logMedicineButton"
+        android:layout_width="170dp"
+        android:layout_height="130dp"
+        android:layout_margin="10dp"
+        card_view:cardCornerRadius="20dp"
+        card_view:cardElevation="6dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#DBB6FD"
+            android:backgroundTint="#DBB6FD"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <ImageView
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:background="@drawable/bg_rounded_icon_white"
+                android:padding="4dp"
+                android:src="@drawable/ic_inhaler" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:fontFamily="@font/poppins_bold"
+                android:text="Log Medicine"
+                android:textColor="#7B00D5"
+                android:textSize="15sp"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+    </androidx.cardview.widget.CardView>
+
+    <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:card_view="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/dailyCheckInButton"
+        android:layout_width="170dp"
+        android:layout_height="130dp"
+        android:layout_margin="10dp"
+        card_view:cardCornerRadius="20dp"
+        card_view:cardElevation="6dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#95C8FD"
+            android:backgroundTint="#95C8FD"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <ImageView
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:background="@drawable/bg_rounded_icon_white"
+                android:padding="10dp"
+                android:src="@drawable/ic_calendar" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:fontFamily="@font/poppins_bold"
+                android:text="Daily Check-In"
+                android:textColor="#2D32B7"
+                android:textSize="15sp"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+    </androidx.cardview.widget.CardView>
+
+    <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:card_view="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/manageInventoryButton"
+        android:layout_width="170dp"
+        android:layout_height="130dp"
+        android:layout_margin="10dp"
+        card_view:cardCornerRadius="20dp"
+        card_view:cardElevation="6dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#FDD5A6"
+            android:backgroundTint="#FDD5A6"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <ImageView
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:background="@drawable/bg_rounded_icon_white"
+                android:padding="10dp"
+                android:src="@drawable/ic_inventory" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:fontFamily="@font/poppins_bold"
+                android:text="Manage Inventory"
+                android:textColor="#a45e00"
+                android:textSize="15sp"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+    </androidx.cardview.widget.CardView>
+
+    <androidx.cardview.widget.CardView
+        xmlns:card_view="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/triageButton"
+        android:layout_width="170dp"
+        android:layout_height="130dp"
+        android:layout_margin="10dp"
+        card_view:cardCornerRadius="20dp"
+        card_view:cardElevation="6dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#FDD2D2"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <ImageView
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:background="@drawable/bg_rounded_icon_white"
+                android:padding="10dp"
+                android:src="@drawable/ic_warning" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:fontFamily="@font/poppins_bold"
+                android:text="Asthma Help Now"
+                android:textColor="#c60000"
+                android:textSize="15sp"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+    </androidx.cardview.widget.CardView>
+</GridLayout>

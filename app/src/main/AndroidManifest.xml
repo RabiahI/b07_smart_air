@@ -2,6 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <uses-permission android:name="android.permission.INTERNET" />
+
     <application
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
@@ -10,9 +12,18 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.SmartAirApplication">
+        android:theme="@style/Theme.Material3.DayNight.NoActionBar">
         <activity
-            android:name=".MainActivity"
+            android:name=".ParentManageInventory"
+            android:exported="false" />
+        <activity
+            android:name=".ManageInventoryChild"
+            android:exported="false" />
+        <activity
+            android:name=".DailyCheckIn"
+            android:exported="false" />
+        <activity
+            android:name=".RoleSelectionActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -20,6 +31,55 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".TechniqueIntro"
+            android:exported="false" />
+        <activity
+            android:name=".TechniqueHelper"
+            android:exported="false" />
+        <activity
+            android:name=".LogMedicine"
+            android:exported="false" />
+        <activity
+            android:name=".TriageActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ManageAccessActivity"
+            android:exported="false" />
+        <activity
+            android:name=".OnboardingActivity"
+            android:exported="false" />
+        <activity
+            android:name=".AddChildActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ChildManagementActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ParentHomeActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ProviderHomeActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ChildHomeActivity"
+            android:exported="false" />
+        <activity
+            android:name=".Registration"
+            android:exported="false" />
+        <activity
+            android:name=".Login"
+            android:exported="false" />
+        <activity
+            android:name=".ChildLoginActivity"
+            android:exported="false" />
+        <activity
+            android:name=".MainActivity"
+            android:exported="true" />
+
+        <meta-data
+            android:name="preloaded_fonts"
+            android:resource="@array/preloaded_fonts" />
     </application>
 
 </manifest>
