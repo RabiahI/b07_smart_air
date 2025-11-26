@@ -14,6 +14,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -36,10 +37,11 @@ public class ChildHomeActivity extends AppCompatActivity implements PasswordDial
     private int latestPef;
     private DatabaseReference childRef;
 
-    private CardView zoneButton, triageButton, logMedicineButton, streaksButton;
+    private CardView zoneButton, triageButton, logMedicineButton, streaksButton, dailyCheckInButton, manageInventoryButton;
     private TextView zoneTitle, zoneMessage, pefValue;
 
     private String currentParentEmail;
+    private boolean isParentMode;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,6 +68,8 @@ public class ChildHomeActivity extends AppCompatActivity implements PasswordDial
         triageButton = findViewById(R.id.triageButton);
         logMedicineButton = findViewById(R.id.logMedicineButton);
         streaksButton = findViewById(R.id.streaks_button);
+        manageInventoryButton = findViewById(R.id.manageInventoryButton);
+        dailyCheckInButton = findViewById(R.id.dailyCheckInButton);
 
         // Show onboarding on first login
         if (OnboardingActivity.isFirstLogin()) {
@@ -87,7 +91,6 @@ public class ChildHomeActivity extends AppCompatActivity implements PasswordDial
         String intentParentId = getIntent().getStringExtra("parentId");
         final String finalChildId;
         final String finalParentId;
-        boolean isParentMode; // true if a parent is viewing a child, false if a child is directly logged in
 
         if (intentChildId != null && intentParentId == null) {
             // Scenario 1: Parent viewing a specific child's profile
@@ -125,21 +128,7 @@ public class ChildHomeActivity extends AppCompatActivity implements PasswordDial
         if (isParentMode) {
             buttonBackToParent.setVisibility(View.VISIBLE);
             buttonLogout.setVisibility(View.GONE);
-
-            buttonBackToParent.setOnClickListener(v -> {
-                if (currentParentEmail != null) {
-                    PasswordDialogFragment dialog = new PasswordDialogFragment();
-                    Bundle args = new Bundle();
-                    args.putString("parentEmail", currentParentEmail);
-                    dialog.setArguments(args);
-                    dialog.show(getSupportFragmentManager(), "PasswordDialogFragment");
-                } else {
-                    Toast.makeText(ChildHomeActivity.this, "Parent email not found. Please re-login.", Toast.LENGTH_SHORT).show();
-                    FirebaseAuth.getInstance().signOut();
-                    startActivity(new Intent(ChildHomeActivity.this, Login.class));
-                    finish();
-                }
-            });
+            buttonBackToParent.setOnClickListener(v -> promptForPasswordAndExit());
         } else {
             buttonBackToParent.setVisibility(View.GONE);
             buttonLogout.setVisibility(View.VISIBLE);
@@ -157,6 +146,17 @@ public class ChildHomeActivity extends AppCompatActivity implements PasswordDial
                 finish();
             });
         }
+        
+        getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                if (isParentMode) {
+                    promptForPasswordAndExit();
+                } else {
+                    finish();
+                }
+            }
+        });
 
         childRef.addValueEventListener(new ValueEventListener() {
             @Override
@@ -205,6 +205,34 @@ public class ChildHomeActivity extends AppCompatActivity implements PasswordDial
                 startActivity(streaksIntent);
             }
         });
+        manageInventoryButton.setOnClickListener(v -> {
+            Intent manageInventoryIntent = new Intent(ChildHomeActivity.this, ManageInventoryChild.class);
+            manageInventoryIntent.putExtra("childId", finalChildId);
+            manageInventoryIntent.putExtra("parentId", finalParentId);
+            startActivity(manageInventoryIntent);
+          });
+        
+      dailyCheckInButton.setOnClickListener(v -> {
+            Intent dailyCheckInIntent = new Intent(ChildHomeActivity.this, DailyCheckIn.class);
+            dailyCheckInIntent.putExtra("childId", finalChildId);
+            dailyCheckInIntent.putExtra("parentId", finalParentId);
+            startActivity(dailyCheckInIntent);
+        });
+    }
+
+    private void promptForPasswordAndExit() {
+        if (currentParentEmail != null) {
+            PasswordDialogFragment dialog = new PasswordDialogFragment();
+            Bundle args = new Bundle();
+            args.putString("parentEmail", currentParentEmail);
+            dialog.setArguments(args);
+            dialog.show(getSupportFragmentManager(), "PasswordDialogFragment");
+        } else {
+            Toast.makeText(ChildHomeActivity.this, "Parent email not found. Please re-login.", Toast.LENGTH_SHORT).show();
+            FirebaseAuth.getInstance().signOut();
+            startActivity(new Intent(ChildHomeActivity.this, Login.class));
+            finish();
+        }
     }
 
     private void showPefInputDialog() {

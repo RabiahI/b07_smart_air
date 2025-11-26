@@ -34,6 +34,8 @@ public class TriageActivity extends AppCompatActivity {
     private String childId;
 
     private CountDownTimer countDownTimer;
+    private long timeStampStarted;
+    private String logEntryId;
 
 
     @Override
@@ -41,6 +43,7 @@ public class TriageActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_triage);
 
+        timeStampStarted = System.currentTimeMillis();
         childId = getIntent().getStringExtra("childId");
 
         questionLayout = findViewById(R.id.question_layout);
@@ -82,6 +85,8 @@ public class TriageActivity extends AppCompatActivity {
             questionLayout.setVisibility(View.VISIBLE);
             timerText.setVisibility(View.GONE);
             displayQuestion();
+            timeStampStarted = System.currentTimeMillis();
+            logEntryId = null;
         });
     }
 
@@ -102,17 +107,77 @@ public class TriageActivity extends AppCompatActivity {
 
     private void evaluateTriage() {
         boolean severe = answers.get(0) || answers.get(1) || answers.get(2);
-
+        String result;
         if (severe) {
             severityLabel.setText("Severity: Severe");
             actionLabel.setText("Action: Call 911 or go to the nearest hospital immediately.");
+            result = "Severe";
+            logTriageData(result, true, false);
+            sendParentAlert(result);
         } else {
             severityLabel.setText("Severity: Mild/Moderate");
             actionLabel.setText("Action: Start home steps and monitor.");
+            result = "Mild/Moderate";
             startTimer();
+            logTriageData(result, false, false);
+            sendParentAlert(result);
         }
 
         resultLayout.setVisibility(View.VISIBLE);
+    }
+
+    private void logTriageData(String result, boolean escalated, boolean parentAlertSent) {
+        if (childId == null) {
+            Toast.makeText(TriageActivity.this, "Cannot save log, child ID is missing.", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        DatabaseReference parentsRef = FirebaseDatabase.getInstance().getReference("Users/Parent");
+        parentsRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                String parentId = null;
+                for (DataSnapshot parentSnapshot : dataSnapshot.getChildren()) {
+                    if (parentSnapshot.child("Children").hasChild(childId)) {
+                        parentId = parentSnapshot.getKey();
+                        break;
+                    }
+                }
+
+                if (parentId == null) {
+                    Toast.makeText(TriageActivity.this, "Could not find parent to save log.", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                DatabaseReference triageLogRef;
+                if (logEntryId == null) {
+                    triageLogRef = FirebaseDatabase.getInstance().getReference("Users")
+                            .child("Parent").child(parentId)
+                            .child("Children").child(childId)
+                            .child("Logs").child("triageLogs").push();
+                    logEntryId = triageLogRef.getKey();
+                } else {
+                    triageLogRef = FirebaseDatabase.getInstance().getReference("Users")
+                            .child("Parent").child(parentId)
+                            .child("Children").child(childId)
+                            .child("Logs").child("triageLogs").child(logEntryId);
+                }
+
+                String pef = editTextPef.getText().toString();
+                String rescueAttempts = editTextRescueAttempts.getText().toString();
+
+                TriageLog.RedFlags redFlags = new TriageLog.RedFlags(answers.get(0), answers.get(1), answers.get(2));
+                TriageLog logData = new TriageLog(rescueAttempts, pef, result, "", timeStampStarted,
+                        escalated, parentAlertSent, redFlags);
+
+                triageLogRef.setValue(logData);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                Toast.makeText(TriageActivity.this, "Database error while saving log: " + databaseError.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     private void startTimer() {
@@ -129,14 +194,14 @@ public class TriageActivity extends AppCompatActivity {
             public void onFinish() {
                 timerText.setText("00:00");
                 Toast.makeText(TriageActivity.this, "Symptoms have not improved. Alerting parent.", Toast.LENGTH_SHORT).show();
-                alertParent();
+                sendParentAlert("Escalation");
             }
         }.start();
     }
 
 
 
-    private void alertParent() {
+    private void sendParentAlert(final String triageResult) {
         if (childId == null) {
             Toast.makeText(TriageActivity.this, "Could not find parent to alert.", Toast.LENGTH_SHORT).show();
             return;
@@ -146,32 +211,55 @@ public class TriageActivity extends AppCompatActivity {
         parentsRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                boolean parentFound = false;
+                String parentId = null;
+                DataSnapshot targetParentSnapshot = null;
                 for (DataSnapshot parentSnapshot : dataSnapshot.getChildren()) {
                     if (parentSnapshot.child("Children").hasChild(childId)) {
-                        String parentId = parentSnapshot.getKey();
-                        DataSnapshot childSnapshot = parentSnapshot.child("Children").child(childId);
-                        String childName = childSnapshot.child("name").getValue(String.class);
-                        String alertMessage;
-                        if (childName != null && !childName.isEmpty()) {
-                            alertMessage = childName + " requires assistance.";
-                        } else {
-                            alertMessage = "Child requires assistance.";
-                        }
-
-                        DatabaseReference parentAlertRef = FirebaseDatabase.getInstance()
-                                .getReference("Users")
-                                .child("Parent")
-                                .child(parentId)
-                                .child("Alerts");
-                        parentAlertRef.push().setValue(alertMessage);
-                        Toast.makeText(TriageActivity.this, "Parent has been alerted.", Toast.LENGTH_SHORT).show();
-                        parentFound = true;
+                        parentId = parentSnapshot.getKey();
+                        targetParentSnapshot = parentSnapshot;
                         break;
                     }
                 }
-                if (!parentFound) {
+
+                if (parentId == null) {
                     Toast.makeText(TriageActivity.this, "Could not find parent to alert.", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                String childName = targetParentSnapshot.child("Children").child(childId).child("name").getValue(String.class);
+                childName = (childName != null && !childName.isEmpty()) ? childName : "Your child";
+
+                String alertMessage;
+                switch (triageResult) {
+                    case "Severe":
+                        alertMessage = childName + " is experiencing a severe asthma event.";
+                        break;
+                    case "Mild/Moderate":
+                        alertMessage = childName + " has started a triage for a mild/moderate asthma event.";
+                        break;
+                    case "Escalation":
+                        alertMessage = childName + "'s symptoms have not improved after 10 minutes.";
+                        break;
+                    default:
+                        alertMessage = childName + " requires assistance.";
+                        break;
+                }
+
+                DatabaseReference parentAlertRef = FirebaseDatabase.getInstance()
+                        .getReference("Users")
+                        .child("Parent")
+                        .child(parentId)
+                        .child("Alerts");
+                parentAlertRef.push().setValue(alertMessage);
+                Toast.makeText(TriageActivity.this, "Parent has been alerted.", Toast.LENGTH_SHORT).show();
+
+                if ("Escalation".equals(triageResult) && logEntryId != null) {
+                    DatabaseReference logRef = FirebaseDatabase.getInstance().getReference("Users")
+                            .child("Parent").child(parentId)
+                            .child("Children").child(childId)
+                            .child("Logs").child("triageLogs").child(logEntryId);
+                    logRef.child("escalated").setValue(true);
+                    logRef.child("parentAlertSent").setValue(true);
                 }
             }
 

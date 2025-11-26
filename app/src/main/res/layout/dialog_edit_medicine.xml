@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="20dp"
+    android:background="@android:color/white">
+
+    <EditText
+        android:id="@+id/inputName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Medicine name"
+        android:inputType="textPersonName"
+        android:padding="12dp"
+        android:background="@drawable/edit_text_background"
+        android:layout_marginBottom="12dp"/>
+
+    <EditText
+        android:id="@+id/inputPurchase"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Purchase date"
+        android:focusable="false"
+        android:clickable="true"
+        android:padding="12dp"
+        android:background="@drawable/edit_text_background"
+        android:layout_marginBottom="12dp"/>
+
+    <EditText
+        android:id="@+id/inputExpiry"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Expiry date"
+        android:focusable="false"
+        android:clickable="true"
+        android:padding="12dp"
+        android:background="@drawable/edit_text_background"
+        android:layout_marginBottom="12dp"/>
+
+    <EditText
+        android:id="@+id/inputAmount"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Amount left (puffs)"
+        android:inputType="number"
+        android:padding="12dp"
+        android:background="@drawable/edit_text_background"/>
+
+</LinearLayout>
