@@ -55,5 +55,12 @@
     <string name="caution_use_your_reliever_inhaler">Caution: Use your reliever inhaler.</string>
     <string name="today_s_zone_red">Today\'s Zone: Red!</string>
     <string name="danger_use_your_reliever_and_see_a_doctor">Danger: Use your reliever and see a doctor.</string>
+    <string name="streaks">Your Streaks</string>
+    <string name="badges">Your Badges</string>
+    <string name="current_streak">Controller Streak:</string>
+    <string name="motivational_msg">Keep it up!</string>
+    <string name="technique_streak">Technique Streak:</string>
+    <string name="badge_desc">filler for description of badge</string>
+    <string name="back_to_homepage">Back To Homepage</string>
 
 </resources>

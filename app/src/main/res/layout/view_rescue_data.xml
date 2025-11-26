@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:card_view="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/streaks_button"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="16dp"
-    card_view:cardBackgroundColor="#FFF9EB"
+    card_view:cardBackgroundColor="#96C9FF"
     card_view:cardCornerRadius="20dp"
     card_view:cardElevation="6dp">
 
@@ -20,8 +19,8 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="12dp"
             android:fontFamily="@font/inter_bold"
-            android:text="Streaks &amp; Badges"
-            android:textColor="#a45e00"
+            android:text="Last Rescue: 2 Hours ago"
+            android:textColor="#FFFF"
             android:textSize="18sp"
             android:textStyle="bold" />
 
@@ -34,39 +33,47 @@
             <ImageView
                 android:layout_width="42dp"
                 android:layout_height="42dp"
-                android:background="@drawable/bg_icon_circle_orange"
+                android:background="@drawable/bg_rounded_icon_white"
                 android:padding="7dp"
-                android:src="@drawable/ic_flame" />
+                android:src="@drawable/ic_dialog_alert" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="12dp"
                 android:fontFamily="@font/inter"
-                android:text="Controller Streak: 3 days"
-                android:textColor="#444444"
+                android:text="Weekly Rescue Count: 5"
+                android:textColor="#FFFF"
                 android:textSize="15sp" />
         </LinearLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="12dp"
+            android:fontFamily="@font/inter_bold"
+            android:text="Data Overview"
+            android:textColor="#FFFF"
+            android:textSize="18sp"
+            android:textStyle="bold" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center_vertical">
-
-            <ImageView
-                android:layout_width="42dp"
-                android:layout_height="42dp"
-                android:padding="5dp"
-                android:src="@drawable/ic_medal" />
+            android:background="@drawable/notif_background"
+            android:orientation="vertical">
 
             <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="12dp"
-                android:fontFamily="@font/inter"
-                android:text="Technique Progress: 4/10 sessions"
-                android:textColor="#444444"
-                android:textSize="15sp" />
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:layout_weight="1"
+                android:layout_marginLeft="10dp"
+                android:text="Fill in data here"
+                android:textColor="#000"
+                android:textSize="14dp"
+                android:layout_gravity="center_vertical"/>
+
+
         </LinearLayout>
 
         <TextView
