@@ -32,6 +32,12 @@
             </intent-filter>
         </activity>
         <activity
+            android:name=".TechniqueIntro"
+            android:exported="false" />
+        <activity
+            android:name=".TechniqueHelper"
+            android:exported="false" />
+        <activity
             android:name=".LogMedicine"
             android:exported="false" />
         <activity
