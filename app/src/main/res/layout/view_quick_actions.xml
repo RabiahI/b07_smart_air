@@ -3,14 +3,13 @@
     android:id="@+id/quickActionsSection"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:rowCount="2"
     android:columnCount="2"
-    android:padding="10dp"
-    android:rowCount="2">
+    android:padding="10dp">
 
 
     <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:card_view="http://schemas.android.com/apk/res-auto"
-        android:id="@+id/logMedicineButton"
         android:layout_width="170dp"
         android:layout_height="130dp"
         android:layout_margin="10dp"
@@ -47,7 +46,6 @@
 
     <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:card_view="http://schemas.android.com/apk/res-auto"
-        android:id="@+id/dailyCheckInButton"
         android:layout_width="170dp"
         android:layout_height="130dp"
         android:layout_margin="10dp"
@@ -84,7 +82,6 @@
 
     <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:card_view="http://schemas.android.com/apk/res-auto"
-        android:id="@+id/techniqueHelperButton"
         android:layout_width="170dp"
         android:layout_height="130dp"
         android:layout_margin="10dp"
@@ -119,9 +116,8 @@
 
     </androidx.cardview.widget.CardView>
 
-    <androidx.cardview.widget.CardView
+    <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:card_view="http://schemas.android.com/apk/res-auto"
-        android:id="@+id/triageButton"
         android:layout_width="170dp"
         android:layout_height="130dp"
         android:layout_margin="10dp"
@@ -132,6 +128,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="#FDD2D2"
+            android:backgroundTint="#FDD2D2"
             android:gravity="center"
             android:orientation="vertical">
 
@@ -147,7 +144,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 android:fontFamily="@font/poppins_bold"
-                android:text="Asthma Help Now"
+                android:text="Triage"
                 android:textColor="#c60000"
                 android:textSize="15sp"
                 android:textStyle="bold" />
@@ -155,3 +152,4 @@
 
     </androidx.cardview.widget.CardView>
 </GridLayout>
+

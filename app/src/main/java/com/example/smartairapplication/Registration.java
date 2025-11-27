@@ -9,13 +9,9 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.android.material.textfield.TextInputEditText;
-import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
@@ -149,7 +145,7 @@ public class Registration extends AppCompatActivity {
                                                 break;
 
                                             case "Provider":
-                                                Intent providerIntent = new Intent(Registration.this, ProviderHomeActivity.class);
+                                                Intent providerIntent = new Intent(Registration.this, ProviderManageChildren.class);
                                                 providerIntent.putExtra("role", role);
                                                 providerIntent.putExtra("uid", firebaseUser.getUid());
                                                 startActivity(providerIntent);

@@ -49,7 +49,7 @@ public class ManageDataSharingActivity extends AppCompatActivity {
 
         // stop sharing all button
         Button stopSharingAllButton = findViewById(R.id.stopSharingAllButton);
-        stopSharingAllButton.setOnClickListener(v-> {
+        stopSharingAllButton.setOnClickListener(v -> {
             switchRescueLogs.setChecked(false);
             switchControllerAdherence.setChecked(false);
             switchSymptoms.setChecked(false);

@@ -9,6 +9,7 @@ import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -169,6 +170,7 @@ public class ManageAccessActivity extends AppCompatActivity implements AccessAda
 
         startActivity(intent);
     }
+
 
     private void showInviteProviderDialog(Child child){
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
