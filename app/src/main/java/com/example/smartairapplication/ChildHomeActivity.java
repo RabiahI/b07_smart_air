@@ -20,6 +20,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -30,8 +31,6 @@ import com.google.firebase.database.ValueEventListener;
 
 public class ChildHomeActivity extends AppCompatActivity implements PasswordDialogFragment.PasswordDialogListener {
 
-    private TextView textViewName, textViewDob, textViewAge, textViewNotes;
-    private Button buttonLogout, buttonBackToParent;
     private FirebaseAuth mAuth;
     private int personalBest;
     private int latestPef;
@@ -39,6 +38,7 @@ public class ChildHomeActivity extends AppCompatActivity implements PasswordDial
 
     private CardView zoneButton, triageButton, logMedicineButton, streaksButton, dailyCheckInButton, manageInventoryButton;
     private TextView zoneTitle, zoneMessage, pefValue;
+    private BottomNavigationView bottomNav;
 
     private String currentParentEmail;
     private boolean isParentMode;
@@ -51,13 +51,7 @@ public class ChildHomeActivity extends AppCompatActivity implements PasswordDial
         mAuth = FirebaseAuth.getInstance();
         FirebaseDatabase database = FirebaseDatabase.getInstance();
 
-        // Views
-        textViewName = findViewById(R.id.textViewName);
-        textViewDob = findViewById(R.id.textViewDob);
-        textViewAge = findViewById(R.id.textViewAge);
-        textViewNotes = findViewById(R.id.textViewNotes);
-        buttonLogout = findViewById(R.id.logout);
-        buttonBackToParent = findViewById(R.id.backToParent);
+        bottomNav = findViewById(R.id.bottomNav);
 
         // Zone button views
         zoneButton = findViewById(R.id.zone_button);
@@ -94,19 +88,17 @@ public class ChildHomeActivity extends AppCompatActivity implements PasswordDial
 
         if (intentChildId != null && intentParentId == null) {
             // Scenario 1: Parent viewing a specific child's profile
-            // childId is from intent, parentId is the current logged-in user (parent)
             finalChildId = intentChildId;
             finalParentId = currentUser.getUid();
             currentParentEmail = currentUser.getEmail();
             isParentMode = true;
         } else if (intentChildId == null && intentParentId != null) {
             // Scenario 2: Child logged in directly
-            // childId is the current logged-in user (child), parentId is from intent
             finalChildId = currentUser.getUid();
             finalParentId = intentParentId;
             isParentMode = false;
         } else if (intentChildId != null && intentChildId.equals(currentUser.getUid())) {
-            // Scenario 3: Child navigating back to ChildHomeActivity after direct login (both present, childId matches current user)
+            // Scenario 3: Child navigating back to ChildHomeActivity after direct login
             finalChildId = intentChildId;
             finalParentId = intentParentId;
             isParentMode = false;
@@ -123,29 +115,6 @@ public class ChildHomeActivity extends AppCompatActivity implements PasswordDial
                 .child(finalParentId)
                 .child("Children")
                 .child(finalChildId);
-
-
-        if (isParentMode) {
-            buttonBackToParent.setVisibility(View.VISIBLE);
-            buttonLogout.setVisibility(View.GONE);
-            buttonBackToParent.setOnClickListener(v -> promptForPasswordAndExit());
-        } else {
-            buttonBackToParent.setVisibility(View.GONE);
-            buttonLogout.setVisibility(View.VISIBLE);
-
-            buttonLogout.setOnClickListener(v -> {
-                SharedPreferences sharedPreferences = getSharedPreferences("ChildLoginPrefs", Context.MODE_PRIVATE);
-                SharedPreferences.Editor editor = sharedPreferences.edit();
-                editor.remove("parentId");
-                editor.remove("childName");
-                editor.apply();
-
-                FirebaseAuth.getInstance().signOut();
-                Intent intent = new Intent(getApplicationContext(), RoleSelectionActivity.class);
-                startActivity(intent);
-                finish();
-            });
-        }
         
         getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
             @Override
@@ -164,10 +133,6 @@ public class ChildHomeActivity extends AppCompatActivity implements PasswordDial
                 if (snapshot.exists()) {
                     Child child = snapshot.getValue(Child.class);
                     if (child != null) {
-                        textViewName.setText(child.getName());
-                        textViewDob.setText("DOB: " + child.getDob());
-                        textViewAge.setText("Age: " + child.getAge());
-                        textViewNotes.setText("Notes: " + child.getNotes());
                         personalBest = child.getPersonalBest();
                         latestPef = child.getLatestPef();
                         updateZone(latestPef);
@@ -217,6 +182,26 @@ public class ChildHomeActivity extends AppCompatActivity implements PasswordDial
             dailyCheckInIntent.putExtra("childId", finalChildId);
             dailyCheckInIntent.putExtra("parentId", finalParentId);
             startActivity(dailyCheckInIntent);
+        });
+        bottomNav.setSelectedItemId(R.id.nav_home);
+        bottomNav.setOnItemSelectedListener(item -> {
+            int itemId = item.getItemId();
+            if (itemId == R.id.nav_log) {
+                Intent logMedicineIntent = new Intent(ChildHomeActivity.this, LogMedicine.class);
+                logMedicineIntent.putExtra("childId", finalChildId);
+                logMedicineIntent.putExtra("parentId", finalParentId);
+                startActivity(logMedicineIntent);
+                return false;
+            } else if (itemId == R.id.nav_settings) {
+                Intent settingsIntent = new Intent(ChildHomeActivity.this, ChildSettingsActivity.class);
+                settingsIntent.putExtra("childId", finalChildId);
+                settingsIntent.putExtra("parentId", finalParentId);
+                startActivity(settingsIntent);
+                return false;
+            } else if (itemId == R.id.nav_home){
+                return true;
+            }
+            return false;
         });
     }
 
