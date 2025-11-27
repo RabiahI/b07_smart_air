@@ -22,6 +22,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.time.Instant;
 import java.time.LocalDate;
+import java.time.Month;
 import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Objects;
@@ -31,13 +32,12 @@ public class StreaksBadgesActivity extends AppCompatActivity {
     FirebaseUser currentUser;
     private DatabaseReference dataRef;
     private Button buttonHomepage;
-    private TextView controllerStreak, techniqueStreak, controllerDesc, techniqueDesc, thresholdDesc;
+    private TextView controllerStreak, techniqueStreak, streaksPreviewController, streaksPreviewTechnique, thresholdDesc;
     private LinearLayout controllerLayout, techniqueLayout, thresholdLayout;
-    private ImageView controllerBadge, techniqueBadge, thresholdBadge;
     private String childId, parentId;
     private ArrayList<Long> controllerTimes;
     private ArrayList<Long> techniqueTimes;
-    private int bestStreakController, totalTechniqueCount;
+    private int bestStreakController;
     private int rescueThreshold;
 
 
@@ -50,18 +50,14 @@ public class StreaksBadgesActivity extends AppCompatActivity {
         controllerStreak = findViewById(R.id.controllerStreak);
         techniqueStreak = findViewById(R.id.techniqueStreak);
         controllerLayout = findViewById(R.id.controller_layout);
-        controllerBadge = findViewById(R.id.badge_controller);
-        controllerDesc  = findViewById(R.id.desc_controller);
         techniqueLayout = findViewById(R.id.technique_layout);
-        techniqueBadge = findViewById(R.id.badge_technique);
-        techniqueDesc = findViewById(R.id.desc_technique);
         thresholdLayout = findViewById(R.id.threshold_layout);
-        thresholdBadge = findViewById(R.id.badge_threshold);
+        streaksPreviewController = findViewById(R.id.streaksPreviewController);
+        streaksPreviewTechnique = findViewById(R.id.streaksPreviewTechnique);
         thresholdDesc = findViewById(R.id.desc_threshold);
         controllerTimes = new ArrayList<>();
         techniqueTimes = new ArrayList<>();
         bestStreakController = 0;
-        totalTechniqueCount = 0;
         rescueThreshold = 4;
 
         controllerLayout.setVisibility(View.GONE);
@@ -93,6 +89,7 @@ public class StreaksBadgesActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(StreaksBadgesActivity.this, ChildHomeActivity.class);
+                intent.putExtra("childId", childId);
                 startActivity(intent);
             }
         });
@@ -150,7 +147,7 @@ public class StreaksBadgesActivity extends AppCompatActivity {
         String streakDisplay;
 
         if (controllerTimes.isEmpty()) {
-            String streakZero = "Controller Streak: 0";
+            String streakZero = "Controller Streak: 0 days";
             controllerStreak.setText(streakZero);
             return;
         }
@@ -173,8 +170,9 @@ public class StreaksBadgesActivity extends AppCompatActivity {
             bestStreakController = streak;
         }
 
-        streakDisplay = "Controller Streak: " + String.valueOf(streak);
+        streakDisplay = "Controller Streak: " + String.valueOf(streak) + " days";
         controllerStreak.setText(streakDisplay);
+        streaksPreviewController.setText(streakDisplay);
     }
 
     private void displayTechnique() {
@@ -186,7 +184,7 @@ public class StreaksBadgesActivity extends AppCompatActivity {
         String streakDisplay;
 
         if (techniqueTimes.isEmpty()) {
-            String streakZero = "Technique Streak: 0";
+            String streakZero = "Technique Streak: 0 days";
             techniqueStreak.setText(streakZero);
             return;
         }
@@ -206,13 +204,12 @@ public class StreaksBadgesActivity extends AppCompatActivity {
             streak++;
         }
 
-        streakDisplay = "Technique Streak: " + String.valueOf(streak);
+        streakDisplay = "Technique Streak: " + String.valueOf(streak) + " days";
         techniqueStreak.setText(streakDisplay);
+        streaksPreviewTechnique.setText(streakDisplay);
     }
 
-    //setVisibility.(View...)
     private void displayBadges() {
-
 
         // First perfect controller week
         if (bestStreakController >= 7) {
@@ -225,8 +222,33 @@ public class StreaksBadgesActivity extends AppCompatActivity {
         }
 
         // low rescue month
-        // TO DO
+        if (rescuesThisMonth() <= rescueThreshold) {
+            int count = rescuesThisMonth();
+            String msg = "Low rescue month! Only " + count + " rescues this month";
+            thresholdLayout.setVisibility(View.VISIBLE);
+            thresholdDesc.setText(msg);
+        }
+    }
 
+    private int rescuesThisMonth() {
+        ArrayList<LocalDate> dates = new ArrayList<>();
+        ArrayList<Month> Months = new ArrayList<>();
+        LocalDate today = LocalDate.now();
+        Month currentMonth = today.getMonth();
+        int count = 0;
+
+        if (techniqueTimes.isEmpty()) {
+            return count;
+        }
+
+        for (Long time: techniqueTimes) {
+            Month temp = Instant.ofEpochMilli(time).atZone(ZoneId.systemDefault()).toLocalDate().getMonth();
+            if (temp == currentMonth) {
+                count++;
+            }
+        }
+
+        return count;
     }
 
     private int countTechnique() {

@@ -62,5 +62,9 @@
     <string name="technique_streak">Technique Streak:</string>
     <string name="badge_desc">filler for description of badge</string>
     <string name="back_to_homepage">Back To Homepage</string>
+    <string name="controllerWeek">Have at least one perfect controller week!</string>
+    <string name="highQualityTechniqueDesc">10 high-quality technique sessions!</string>
+    <string name="thresholdBadge">Low rescue month!</string>
+    <string name="thresholdBadgeDesc">Low rescue month!</string>
 
 </resources>
