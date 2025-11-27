@@ -20,6 +20,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -39,6 +40,7 @@ public class ChildHomeActivity extends AppCompatActivity implements PasswordDial
 
     private CardView zoneButton, triageButton, logMedicineButton, streaksButton, dailyCheckInButton, manageInventoryButton;
     private TextView zoneTitle, zoneMessage, pefValue;
+    private BottomNavigationView bottomNav;
 
     private String currentParentEmail;
     private boolean isParentMode;
@@ -58,6 +60,7 @@ public class ChildHomeActivity extends AppCompatActivity implements PasswordDial
         textViewNotes = findViewById(R.id.textViewNotes);
         buttonLogout = findViewById(R.id.logout);
         buttonBackToParent = findViewById(R.id.backToParent);
+        bottomNav = findViewById(R.id.bottomNav);
 
         // Zone button views
         zoneButton = findViewById(R.id.zone_button);
@@ -217,6 +220,21 @@ public class ChildHomeActivity extends AppCompatActivity implements PasswordDial
             dailyCheckInIntent.putExtra("childId", finalChildId);
             dailyCheckInIntent.putExtra("parentId", finalParentId);
             startActivity(dailyCheckInIntent);
+        });
+        bottomNav.setSelectedItemId(R.id.nav_home);
+        bottomNav.setOnItemSelectedListener(item -> {
+            int itemId = item.getItemId();
+            if (itemId == R.id.nav_log) {
+                Intent logMedicineIntent = new Intent(ChildHomeActivity.this, LogMedicine.class);
+                logMedicineIntent.putExtra("childId", finalChildId);
+                logMedicineIntent.putExtra("parentId", finalParentId);
+                startActivity(logMedicineIntent);
+                return false;
+            }
+            if (itemId == R.id.nav_home){
+                return true;
+            }
+            return false;
         });
     }
 

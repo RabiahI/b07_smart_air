@@ -20,6 +20,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 import androidx.core.content.ContextCompat;
 
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -54,6 +55,7 @@ public class LogMedicine extends AppCompatActivity {
     private LinearLayout puffCard, afterButtons, medicineTypeLayout;
     private TextView txtBeforeSOB, txtAfterSOB, numOfPuffsText, txtPostCheck;
     private ScrollView questions;
+    private BottomNavigationView bottomNav;
 
 
 
@@ -68,6 +70,7 @@ public class LogMedicine extends AppCompatActivity {
 
         //link xml elements
         btnReturn = findViewById(R.id.btnReturn);
+        bottomNav = findViewById(R.id.bottomNav);
 
         medicineTypeLayout = findViewById(R.id.medicineTypeLayout);
         btnRescue = findViewById(R.id.btnRescue);
@@ -198,6 +201,18 @@ public class LogMedicine extends AppCompatActivity {
             public void handleOnBackPressed() {
                 showExitConfirmation();
             }
+        });
+        bottomNav.setSelectedItemId(R.id.nav_log);
+        bottomNav.setOnItemSelectedListener(item -> {
+            int itemId = item.getItemId();
+            if (itemId == R.id.nav_home) {
+                showExitConfirmation();
+                return false;
+            }
+            if (itemId == R.id.nav_log){
+                return true;
+            }
+            return false;
         });
 
     }
