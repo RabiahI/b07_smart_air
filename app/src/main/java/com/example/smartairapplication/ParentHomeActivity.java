@@ -2,18 +2,16 @@ package com.example.smartairapplication;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
-import android.widget.Button;
-
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 
 public class ParentHomeActivity extends AppCompatActivity {
 
-    Button logoutButton;
-    CardView childButton, manageProviderButton;
+    private CardView childButton, manageProviderButton;
+    private BottomNavigationView bottomNav;
 
 
     @Override
@@ -31,16 +29,9 @@ public class ParentHomeActivity extends AppCompatActivity {
             dialog.show(getSupportFragmentManager(), "onboarding_dialog");
         }
 
-        logoutButton = findViewById(R.id.logout);
         childButton = findViewById(R.id.manageChildrenButton);
         manageProviderButton = findViewById(R.id.manageSharingButton);
-
-        logoutButton.setOnClickListener(view -> {
-            FirebaseAuth.getInstance().signOut();
-            Intent intent = new Intent(getApplicationContext(), Login.class);
-            startActivity(intent);
-            finish();
-        });
+        bottomNav = findViewById(R.id.bottomNav);
 
         childButton.setOnClickListener(view -> {
             Intent intent = new Intent(getApplicationContext(), ChildManagementActivity.class);
@@ -52,5 +43,23 @@ public class ParentHomeActivity extends AppCompatActivity {
             startActivity(intent);
         });
 
+        bottomNav.setSelectedItemId(R.id.nav_home);
+
+        bottomNav.setOnItemSelectedListener(item -> {
+            int itemId = item.getItemId();
+            if (itemId == R.id.nav_alerts) {
+                startActivity(new Intent(getApplicationContext(), ParentAlertsActivity.class));
+                return false;
+            } else if (itemId == R.id.nav_history) {
+                startActivity(new Intent(getApplicationContext(), ParentHistoryActivity.class));
+                return false;
+            } else if (itemId == R.id.nav_settings) {
+                startActivity(new Intent(getApplicationContext(), ParentSettingsActivity.class));
+                return false;
+            } else if (itemId == R.id.nav_home) {
+                return true;
+            }
+            return false;
+        });
     }
 }
