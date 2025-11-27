@@ -27,6 +27,7 @@ import java.util.List;
 public class ParentHomeActivity extends AppCompatActivity {
 
     private CardView childButton, manageProviderButton;
+    private CardView manageInventoryButton;
     private BottomNavigationView bottomNav;
     private Spinner spinnerChildren;
     private List<String> childNames = new ArrayList<>();
@@ -59,6 +60,7 @@ public class ParentHomeActivity extends AppCompatActivity {
         childButton = findViewById(R.id.manageChildrenButton);
         manageProviderButton = findViewById(R.id.manageSharingButton);
         bottomNav = findViewById(R.id.bottomNav);
+        manageInventoryButton = findViewById(R.id.manageInventoryButton);
 
         loadChildrenIntoSpinner();
 
@@ -69,6 +71,13 @@ public class ParentHomeActivity extends AppCompatActivity {
 
         manageProviderButton.setOnClickListener(view -> {
             Intent intent = new Intent(getApplicationContext(), ManageAccessActivity.class);
+            startActivity(intent);
+        });
+
+        manageInventoryButton.setOnClickListener(view -> {
+            Intent intent = new Intent(ParentHomeActivity.this, ParentManageInventory.class);
+            intent.putExtra("childId", selectedChildId);
+            intent.putExtra("parentId", parentId);
             startActivity(intent);
         });
 
