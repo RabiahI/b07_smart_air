@@ -208,8 +208,24 @@ public class LogMedicine extends AppCompatActivity {
             if (itemId == R.id.nav_home) {
                 showExitConfirmation();
                 return false;
-            }
-            if (itemId == R.id.nav_log){
+            } else if (itemId == R.id.nav_settings) {
+                new AlertDialog.Builder(this)
+                        .setTitle("Go to Settings?")
+                        .setMessage("If you leave now, any unsaved changes will be lost.")
+                        .setPositiveButton("Leave", (dialog, which) -> {
+                            Intent settingsIntent = new Intent(LogMedicine.this, ChildSettingsActivity.class);
+                            settingsIntent.putExtra("childId", childId);
+                            settingsIntent.putExtra("parentId", parentId);
+                            startActivity(settingsIntent);
+                            finish();
+                        })
+                        .setNegativeButton("Stay", (dialog, which) -> {
+                            dialog.dismiss();
+                            bottomNav.setSelectedItemId(R.id.nav_log);
+                        })
+                        .show();
+                return false;
+            } else if (itemId == R.id.nav_log){
                 return true;
             }
             return false;
@@ -283,6 +299,7 @@ public class LogMedicine extends AppCompatActivity {
                 })
                 .setNegativeButton("Stay", (dialog, which) -> {
                     dialog.dismiss();
+                    bottomNav.setSelectedItemId(R.id.nav_log);
                 })
                 .show();
     }
