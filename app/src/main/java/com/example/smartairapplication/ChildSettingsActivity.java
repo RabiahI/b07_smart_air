@@ -135,11 +135,6 @@ public class ChildSettingsActivity extends AppCompatActivity implements Password
         bottomNav.setOnItemSelectedListener(item -> {
             int itemId = item.getItemId();
             if (itemId == R.id.nav_home) {
-                Intent intent = new Intent(ChildSettingsActivity.this, ChildHomeActivity.class);
-                intent.putExtra("childId", finalChildId);
-                intent.putExtra("parentId", finalParentId);
-                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-                startActivity(intent);
                 finish();
                 return true; 
             } else if (itemId == R.id.nav_log) {
