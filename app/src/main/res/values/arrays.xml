@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="child_options" >
+        <item>Child 1</item>
+        <item>Child 2</item>
+        <item>Child 3</item>
+        <item>Child 4</item>
+        <item>Child 5</item>
+        <item>Child 6</item>
+        <item>Child 7</item>
+        <item>Child 8</item>
+        <item>Child 9</item>
+        <item>Child 10</item>
+    </string-array>
+</resources>
