@@ -29,7 +29,7 @@ public class DailyCheckIn extends AppCompatActivity {
 
     private String childId, parentId;
     private RadioGroup nightWakingGroup, activityGroup, coughGroup;
-    private CheckBox trigExercise, trigColdAir, trigDust, trigSmoke, trigIllness, trigOdors, trigPets;
+    private CheckBox trigExercise, trigColdAir, trigDust, trigSmoke, trigIllness, trigOdors;
     private EditText inputNotes;
     private Button btnSubmit;
     private ImageView btnBack;
@@ -55,7 +55,6 @@ public class DailyCheckIn extends AppCompatActivity {
         trigSmoke = findViewById(R.id.trigSmoke);
         trigIllness = findViewById(R.id.trigIllness);
         trigOdors = findViewById(R.id.trigOdors);
-        trigPets = findViewById(R.id.trigPets);
 
         inputNotes = findViewById(R.id.inputNotes);
         btnSubmit = findViewById(R.id.btnSubmitCheckIn);
@@ -103,8 +102,7 @@ public class DailyCheckIn extends AppCompatActivity {
         ArrayList<String> triggerList = new ArrayList<>();
         if (trigExercise.isChecked()) triggerList.add("exercise");
         if (trigColdAir.isChecked()) triggerList.add("cold air");
-        if (trigDust.isChecked()) triggerList.add("dust");
-        if (trigPets.isChecked()) triggerList.add("pets");
+        if (trigDust.isChecked()) triggerList.add("dust/pets");
         if (trigSmoke.isChecked()) triggerList.add("smoke");
         if (trigIllness.isChecked()) triggerList.add("illness");
         if (trigOdors.isChecked()) triggerList.add("strong odors");

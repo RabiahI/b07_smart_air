@@ -20,7 +20,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 import androidx.core.content.ContextCompat;
 
-import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -29,7 +28,6 @@ import java.util.List;
 
 public class LogMedicine extends AppCompatActivity {
     private String childId, parentId;
-    private boolean isParentMode;
 
     private boolean techniqueCompleted = false;
     private boolean highQualityTechnique = false;
@@ -56,7 +54,6 @@ public class LogMedicine extends AppCompatActivity {
     private LinearLayout puffCard, afterButtons, medicineTypeLayout;
     private TextView txtBeforeSOB, txtAfterSOB, numOfPuffsText, txtPostCheck;
     private ScrollView questions;
-    private BottomNavigationView bottomNav;
 
 
 
@@ -68,11 +65,9 @@ public class LogMedicine extends AppCompatActivity {
 
         childId = getIntent().getStringExtra("childId");
         parentId = getIntent().getStringExtra("parentId");
-        isParentMode = getIntent().getBooleanExtra("isParentMode", false);
 
         //link xml elements
         btnReturn = findViewById(R.id.btnReturn);
-        bottomNav = findViewById(R.id.bottomNav);
 
         medicineTypeLayout = findViewById(R.id.medicineTypeLayout);
         btnRescue = findViewById(R.id.btnRescue);
@@ -204,35 +199,6 @@ public class LogMedicine extends AppCompatActivity {
                 showExitConfirmation();
             }
         });
-        bottomNav.setSelectedItemId(R.id.nav_log);
-        bottomNav.setOnItemSelectedListener(item -> {
-            int itemId = item.getItemId();
-            if (itemId == R.id.nav_home) {
-                showExitConfirmation();
-                return false;
-            } else if (itemId == R.id.nav_settings) {
-                new AlertDialog.Builder(this)
-                        .setTitle("Go to Settings?")
-                        .setMessage("If you leave now, any unsaved changes will be lost.")
-                        .setPositiveButton("Leave", (dialog, which) -> {
-                            Intent settingsIntent = new Intent(LogMedicine.this, ChildSettingsActivity.class);
-                            settingsIntent.putExtra("childId", childId);
-                            settingsIntent.putExtra("parentId", parentId);
-                            settingsIntent.putExtra("isParentMode", isParentMode);
-                            startActivity(settingsIntent);
-                            finish();
-                        })
-                        .setNegativeButton("Stay", (dialog, which) -> {
-                            dialog.dismiss();
-                            bottomNav.setSelectedItemId(R.id.nav_log);
-                        })
-                        .show();
-                return false;
-            } else if (itemId == R.id.nav_log){
-                return true;
-            }
-            return false;
-        });
 
     }
 
@@ -302,7 +268,6 @@ public class LogMedicine extends AppCompatActivity {
                 })
                 .setNegativeButton("Stay", (dialog, which) -> {
                     dialog.dismiss();
-                    bottomNav.setSelectedItemId(R.id.nav_log);
                 })
                 .show();
     }

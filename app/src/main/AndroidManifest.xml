@@ -65,9 +65,6 @@
             android:name=".ChildHomeActivity"
             android:exported="false" />
         <activity
-            android:name=".ChildSettingsActivity"
-            android:exported="false" />
-        <activity
             android:name=".Registration"
             android:exported="false" />
         <activity

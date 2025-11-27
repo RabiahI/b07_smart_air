@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:card_view="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/streaks_button"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="16dp"
@@ -39,7 +38,6 @@
                 android:src="@drawable/ic_flame" />
 
             <TextView
-                android:id="@+id/streaksPreviewController"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="12dp"
@@ -61,7 +59,6 @@
                 android:src="@drawable/ic_medal" />
 
             <TextView
-                android:id="@+id/streaksPreviewTechnique"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="12dp"
