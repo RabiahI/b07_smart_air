@@ -57,20 +57,23 @@ public class ChildSettingsActivity extends AppCompatActivity implements Password
             return;
         }
 
+        // Use the passed boolean as the source of truth
+        isParentMode = getIntent().getBooleanExtra("isParentMode", false);
+
         String intentChildId = getIntent().getStringExtra("childId");
         String intentParentId = getIntent().getStringExtra("parentId");
         final String finalChildId;
         final String finalParentId;
-
-        if (intentChildId != null && intentParentId == null) {
+        
+        if (isParentMode) {
+            // If in parent mode, the childId comes from the intent and parentId is the current user
             finalChildId = intentChildId;
             finalParentId = currentUser.getUid();
             currentParentEmail = currentUser.getEmail();
-            isParentMode = true;
         } else {
+            // If not in parent mode, the childId is the current user and parentId comes from the intent
             finalChildId = currentUser.getUid();
             finalParentId = intentParentId;
-            isParentMode = false;
         }
 
         childRef = database.getReference("Users")
@@ -141,6 +144,7 @@ public class ChildSettingsActivity extends AppCompatActivity implements Password
                 Intent intent = new Intent(ChildSettingsActivity.this, LogMedicine.class);
                 intent.putExtra("childId", finalChildId);
                 intent.putExtra("parentId", finalParentId);
+                intent.putExtra("isParentMode", isParentMode);
                 startActivity(intent);
                 finish();
                 return true;
@@ -168,6 +172,9 @@ public class ChildSettingsActivity extends AppCompatActivity implements Password
 
     @Override
     public void onPasswordVerified() {
+        Intent intent = new Intent(ChildSettingsActivity.this, ParentHomeActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent);
         finish();
     }
 }

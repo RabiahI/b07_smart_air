@@ -159,6 +159,7 @@ public class ChildHomeActivity extends AppCompatActivity implements PasswordDial
             Intent logMedicineIntent = new Intent(ChildHomeActivity.this, LogMedicine.class);
             logMedicineIntent.putExtra("childId", finalChildId);
             logMedicineIntent.putExtra("parentId", finalParentId);
+            logMedicineIntent.putExtra("isParentMode", isParentMode);
             startActivity(logMedicineIntent);
         });
 
@@ -190,12 +191,14 @@ public class ChildHomeActivity extends AppCompatActivity implements PasswordDial
                 Intent logMedicineIntent = new Intent(ChildHomeActivity.this, LogMedicine.class);
                 logMedicineIntent.putExtra("childId", finalChildId);
                 logMedicineIntent.putExtra("parentId", finalParentId);
+                logMedicineIntent.putExtra("isParentMode", isParentMode);
                 startActivity(logMedicineIntent);
                 return false;
             } else if (itemId == R.id.nav_settings) {
                 Intent settingsIntent = new Intent(ChildHomeActivity.this, ChildSettingsActivity.class);
                 settingsIntent.putExtra("childId", finalChildId);
                 settingsIntent.putExtra("parentId", finalParentId);
+                settingsIntent.putExtra("isParentMode", isParentMode);
                 startActivity(settingsIntent);
                 return false;
             } else if (itemId == R.id.nav_home){
