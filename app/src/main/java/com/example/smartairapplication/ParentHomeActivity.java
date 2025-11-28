@@ -41,6 +41,7 @@ public class ParentHomeActivity extends AppCompatActivity {
     private AlertsAdapter alertsAdapter;
     private List<Alert> alertList;
     private DatabaseReference alertsRef;
+    private List<Alert> allAlertsMasterList = new ArrayList<>();
 
 
     @Override
@@ -102,14 +103,14 @@ public class ParentHomeActivity extends AppCompatActivity {
         alertsRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                alertList.clear();
+                allAlertsMasterList.clear();
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                     Alert alert = snapshot.getValue(Alert.class);
                     if (alert != null) {
-                        alertList.add(0, alert);
+                        allAlertsMasterList.add(0, alert);
                     }
                 }
-                alertsAdapter.notifyDataSetChanged();
+                filterAlertsForSelectedChild();
             }
 
             @Override
@@ -183,6 +184,7 @@ public class ParentHomeActivity extends AppCompatActivity {
                 selectedChildId = savedId;
             }
         }
+        filterAlertsForSelectedChild();
 
         setupSpinnerListener();
     }
@@ -202,11 +204,27 @@ public class ParentHomeActivity extends AppCompatActivity {
                         "Switched to: " + childNames.get(position),
                         Toast.LENGTH_SHORT).show();
 
-                // TODO later: refresh dashboard tiles here
+                filterAlertsForSelectedChild();
             }
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {}
         });
+    }
+
+    private void filterAlertsForSelectedChild() {
+        if (selectedChildId == null && !childIds.isEmpty()) {
+            selectedChildId = childIds.get(0);
+        }
+        
+        alertList.clear();
+        if (selectedChildId != null) {
+            for (Alert alert : allAlertsMasterList) {
+                if (selectedChildId.equals(alert.getChildId())) {
+                    alertList.add(alert);
+                }
+            }
+        }
+        alertsAdapter.notifyDataSetChanged();
     }
 }
