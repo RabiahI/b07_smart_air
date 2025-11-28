@@ -2,12 +2,17 @@ package com.example.smartairapplication;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.text.InputType;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
+import androidx.appcompat.app.AlertDialog;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -42,6 +47,8 @@ public class ParentHomeActivity extends AppCompatActivity {
     private List<Alert> alertList;
     private DatabaseReference alertsRef;
     private List<Alert> allAlertsMasterList = new ArrayList<>();
+    private CardView zoneButton;
+    private TextView zoneTitle, zoneMessage, pefValue;
 
 
     @Override
@@ -62,7 +69,6 @@ public class ParentHomeActivity extends AppCompatActivity {
         spinnerChildren = findViewById(R.id.spinnerChildren);
         parentId = getIntent().getStringExtra("parentId");
         if (parentId == null) {
-            // fallback to logged-in user
             parentId = FirebaseAuth.getInstance().getCurrentUser().getUid();
         }
 
@@ -70,6 +76,13 @@ public class ParentHomeActivity extends AppCompatActivity {
         manageProviderButton = findViewById(R.id.manageSharingButton);
         bottomNav = findViewById(R.id.bottomNav);
         manageInventoryButton = findViewById(R.id.manageInventoryButton);
+        
+        zoneButton = findViewById(R.id.zone_button);
+        zoneTitle = findViewById(R.id.zone_title);
+        zoneMessage = findViewById(R.id.zone_message);
+        pefValue = findViewById(R.id.pef_value);
+        zoneButton.setOnClickListener(v -> showSetPersonalBestDialog());
+
 
         loadChildrenIntoSpinner();
 
@@ -185,6 +198,10 @@ public class ParentHomeActivity extends AppCompatActivity {
             }
         }
         filterAlertsForSelectedChild();
+        
+        if (selectedChildId != null) {
+            updatePefDisplayForChild(selectedChildId);
+        }
 
         setupSpinnerListener();
     }
@@ -195,8 +212,6 @@ public class ParentHomeActivity extends AppCompatActivity {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 
                 selectedChildId = childIds.get(position);
-
-                // Save selection
                 SharedPreferences prefs = getSharedPreferences("SmartAirPrefs", MODE_PRIVATE);
                 prefs.edit().putString("selectedChildId", selectedChildId).apply();
 
@@ -205,6 +220,7 @@ public class ParentHomeActivity extends AppCompatActivity {
                         Toast.LENGTH_SHORT).show();
 
                 filterAlertsForSelectedChild();
+                updatePefDisplayForChild(selectedChildId);
             }
 
             @Override
@@ -226,5 +242,89 @@ public class ParentHomeActivity extends AppCompatActivity {
             }
         }
         alertsAdapter.notifyDataSetChanged();
+    }
+}
+    private void updatePefDisplayForChild(String childId) {
+        if (childId == null) return;
+        DatabaseReference childRef = FirebaseDatabase.getInstance().getReference("Users")
+                .child("Parent").child(parentId).child("Children").child(childId);
+
+        childRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (snapshot.exists()) {
+                    Integer personalBest = snapshot.child("personalBest").getValue(Integer.class);
+                    Integer latestPef = snapshot.child("latestPef").getValue(Integer.class);
+                    
+                    if (personalBest == null) personalBest = 0;
+                    if (latestPef == null) latestPef = 0;
+
+                    updateZone(latestPef, personalBest);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Toast.makeText(ParentHomeActivity.this, "Failed to load PEF data.", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+    
+    private void updateZone(int currentPef, int personalBest) {
+        if (personalBest == 0) {
+            zoneTitle.setText(R.string.today_s_zone_not_set);
+            zoneMessage.setText(R.string.please_set_your_personal_best_pef);
+            zoneButton.setCardBackgroundColor(Color.parseColor("#9E9E9E")); // Gray
+            pefValue.setText("PEF: Not Set");
+            return;
+        }
+
+        double percentage = ((double) currentPef / personalBest) * 100;
+
+        if (percentage >= 80) {
+            zoneTitle.setText(R.string.today_s_zone_green);
+            zoneMessage.setText(""); 
+            zoneButton.setCardBackgroundColor(Color.parseColor("#90C4A5"));
+        } else if (percentage >= 50) {
+            zoneTitle.setText(R.string.today_s_zone_yellow);
+            zoneMessage.setText("Caution: Child may need their reliever inhaler.");
+            zoneButton.setCardBackgroundColor(Color.parseColor("#FFC107")); // Yellow
+        } else {
+            zoneTitle.setText(R.string.today_s_zone_red);
+            zoneMessage.setText("Danger: Child may need reliever and medical attention.");
+            zoneButton.setCardBackgroundColor(Color.parseColor("#F44336")); // Red
+        }
+        
+        pefValue.setText("PEF: " + currentPef + " (PB: " + personalBest + ")");
+    }
+
+    private void showSetPersonalBestDialog() {
+        if (selectedChildId == null) {
+            Toast.makeText(this, "Please select a child first.", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Set Personal Best");
+
+        final EditText input = new EditText(this);
+        input.setInputType(InputType.TYPE_CLASS_NUMBER);
+        input.setHint("Enter new Personal Best PEF value");
+        builder.setView(input);
+
+        builder.setPositiveButton("Save", (dialog, which) -> {
+            String pbString = input.getText().toString();
+            if (!pbString.isEmpty()) {
+                int newPersonalBest = Integer.parseInt(pbString);
+                DatabaseReference childRef = FirebaseDatabase.getInstance().getReference("Users")
+                        .child("Parent").child(parentId).child("Children").child(selectedChildId);
+                childRef.child("personalBest").setValue(newPersonalBest)
+                        .addOnSuccessListener(aVoid -> Toast.makeText(ParentHomeActivity.this, "Personal Best updated.", Toast.LENGTH_SHORT).show())
+                        .addOnFailureListener(e -> Toast.makeText(ParentHomeActivity.this, "Failed to update Personal Best.", Toast.LENGTH_SHORT).show());
+            }
+        });
+        builder.setNegativeButton("Cancel", (dialog, which) -> dialog.cancel());
+
+        builder.show();
     }
 }

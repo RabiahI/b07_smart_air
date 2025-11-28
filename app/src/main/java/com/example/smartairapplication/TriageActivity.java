@@ -163,14 +163,23 @@ public class TriageActivity extends AppCompatActivity {
                             .child("Logs").child("triageLogs").child(logEntryId);
                 }
 
-                String pef = editTextPef.getText().toString();
+                String pefString = editTextPef.getText().toString();
                 String rescueAttempts = editTextRescueAttempts.getText().toString();
 
                 TriageLog.RedFlags redFlags = new TriageLog.RedFlags(answers.get(0), answers.get(1), answers.get(2));
-                TriageLog logData = new TriageLog(rescueAttempts, pef, result, "", timeStampStarted,
+                TriageLog logData = new TriageLog(rescueAttempts, pefString, result, "", timeStampStarted,
                         escalated, parentAlertSent, redFlags);
 
                 triageLogRef.setValue(logData);
+
+                if (!pefString.isEmpty()) {
+                    int pefValue = Integer.parseInt(pefString);
+                    logPefValue(pefValue, parentId, childId);
+                    DatabaseReference childRef = FirebaseDatabase.getInstance().getReference("Users")
+                            .child("Parent").child(parentId)
+                            .child("Children").child(childId);
+                    childRef.child("latestPef").setValue(pefValue);
+                }
             }
 
             @Override
@@ -178,6 +187,16 @@ public class TriageActivity extends AppCompatActivity {
                 Toast.makeText(TriageActivity.this, "Database error while saving log: " + databaseError.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    private void logPefValue(int pefValue, String parentId, String childId) {
+        DatabaseReference pefLogRef = FirebaseDatabase.getInstance().getReference("Users")
+                .child("Parent").child(parentId)
+                .child("Children").child(childId)
+                .child("Logs").child("pefLogs").push();
+
+        PefLog logEntry = new PefLog(pefValue, System.currentTimeMillis());
+        pefLogRef.setValue(logEntry);
     }
 
     private void startTimer() {
