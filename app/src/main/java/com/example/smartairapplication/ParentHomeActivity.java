@@ -243,7 +243,6 @@ public class ParentHomeActivity extends AppCompatActivity {
         }
         alertsAdapter.notifyDataSetChanged();
     }
-}
     private void updatePefDisplayForChild(String childId) {
         if (childId == null) return;
         DatabaseReference childRef = FirebaseDatabase.getInstance().getReference("Users")
