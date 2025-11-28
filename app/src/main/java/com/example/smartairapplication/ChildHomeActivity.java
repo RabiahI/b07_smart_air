@@ -148,7 +148,7 @@ public class ChildHomeActivity extends AppCompatActivity implements PasswordDial
             }
         });
 
-        zoneButton.setOnClickListener(v -> showPefInputDialog());
+        zoneButton.setOnClickListener(v -> showPefInputDialog(finalParentId, finalChildId));
         triageButton.setOnClickListener(v -> {
             Intent triageIntent = new Intent(ChildHomeActivity.this, TriageActivity.class);
             triageIntent.putExtra("childId", finalChildId);
@@ -223,7 +223,7 @@ public class ChildHomeActivity extends AppCompatActivity implements PasswordDial
         }
     }
 
-    private void showPefInputDialog() {
+    private void showPefInputDialog(String parentId, String childId) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Enter PEF Value");
 
@@ -237,10 +237,7 @@ public class ChildHomeActivity extends AppCompatActivity implements PasswordDial
                 int currentPef = Integer.parseInt(pefString);
                 if (childRef != null) {
                     childRef.child("latestPef").setValue(currentPef);
-                    if (currentPef > personalBest) {
-                        childRef.child("personalBest").setValue(currentPef);
-                        Toast.makeText(ChildHomeActivity.this, "New Personal Best!", Toast.LENGTH_SHORT).show();
-                    }
+                    logPefValue(currentPef, parentId, childId);
                 }
             } else {
                 Toast.makeText(this, "Please enter a value", Toast.LENGTH_SHORT).show();
@@ -249,6 +246,16 @@ public class ChildHomeActivity extends AppCompatActivity implements PasswordDial
         builder.setNegativeButton("Cancel", (dialog, which) -> dialog.cancel());
 
         builder.show();
+    }
+
+    private void logPefValue(int pefValue, String parentId, String childId) {
+        DatabaseReference pefLogRef = FirebaseDatabase.getInstance().getReference("Users")
+                .child("Parent").child(parentId)
+                .child("Children").child(childId)
+                .child("Logs").child("pefLogs").push();
+
+        PefLog logEntry = new PefLog(pefValue, System.currentTimeMillis());
+        pefLogRef.setValue(logEntry);
     }
 
     private void updateZone(int currentPef) {
