@@ -17,6 +17,8 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
@@ -40,6 +42,11 @@ public class ParentHomeActivity extends AppCompatActivity {
     private String selectedChildId;
     private String parentId;
 
+    private RecyclerView alertsRecyclerView;
+    private AlertsAdapter alertsAdapter;
+    private List<Alert> alertList;
+    private DatabaseReference alertsRef;
+    private List<Alert> allAlertsMasterList = new ArrayList<>();
     private CardView zoneButton;
     private TextView zoneTitle, zoneMessage, pefValue;
 
@@ -94,6 +101,35 @@ public class ParentHomeActivity extends AppCompatActivity {
             intent.putExtra("childId", selectedChildId);
             intent.putExtra("parentId", parentId);
             startActivity(intent);
+        });
+        alertsRecyclerView = findViewById(R.id.alertsRecyclerView);
+        alertsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        alertList = new ArrayList<>();
+        alertsAdapter = new AlertsAdapter(this, alertList);
+        alertsRecyclerView.setAdapter(alertsAdapter);
+
+        alertsRef = FirebaseDatabase.getInstance().getReference("Users")
+                .child("Parent")
+                .child(parentId)
+                .child("Alerts");
+
+        alertsRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                allAlertsMasterList.clear();
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    Alert alert = snapshot.getValue(Alert.class);
+                    if (alert != null) {
+                        allAlertsMasterList.add(0, alert);
+                    }
+                }
+                filterAlertsForSelectedChild();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                Toast.makeText(ParentHomeActivity.this, "Failed to load alerts.", Toast.LENGTH_SHORT).show();
+            }
         });
 
         bottomNav.setSelectedItemId(R.id.nav_home);
@@ -161,6 +197,7 @@ public class ParentHomeActivity extends AppCompatActivity {
                 selectedChildId = savedId;
             }
         }
+        filterAlertsForSelectedChild();
         
         if (selectedChildId != null) {
             updatePefDisplayForChild(selectedChildId);
@@ -181,6 +218,8 @@ public class ParentHomeActivity extends AppCompatActivity {
                 Toast.makeText(ParentHomeActivity.this,
                         "Switched to: " + childNames.get(position),
                         Toast.LENGTH_SHORT).show();
+
+                filterAlertsForSelectedChild();
                 updatePefDisplayForChild(selectedChildId);
             }
 
@@ -189,6 +228,22 @@ public class ParentHomeActivity extends AppCompatActivity {
         });
     }
 
+    private void filterAlertsForSelectedChild() {
+        if (selectedChildId == null && !childIds.isEmpty()) {
+            selectedChildId = childIds.get(0);
+        }
+        
+        alertList.clear();
+        if (selectedChildId != null) {
+            for (Alert alert : allAlertsMasterList) {
+                if (selectedChildId.equals(alert.getChildId())) {
+                    alertList.add(alert);
+                }
+            }
+        }
+        alertsAdapter.notifyDataSetChanged();
+    }
+}
     private void updatePefDisplayForChild(String childId) {
         if (childId == null) return;
         DatabaseReference childRef = FirebaseDatabase.getInstance().getReference("Users")

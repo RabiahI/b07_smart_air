@@ -12,4 +12,8 @@
         <item>Child 9</item>
         <item>Child 10</item>
     </string-array>
+    <string-array name="sort_options_array">
+        <item>Sort by Date</item>
+        <item>Sort by Severity</item>
+    </string-array>
 </resources>
