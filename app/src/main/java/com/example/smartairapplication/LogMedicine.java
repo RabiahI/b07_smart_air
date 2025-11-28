@@ -21,8 +21,11 @@ import androidx.cardview.widget.CardView;
 import androidx.core.content.ContextCompat;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.Arrays;
 import java.util.List;
@@ -368,10 +371,54 @@ public class LogMedicine extends AppCompatActivity {
         ref.child(logId).setValue(log)
                 .addOnSuccessListener(aVoid -> {
                     Toast.makeText(this, "Medicine log saved!", Toast.LENGTH_SHORT).show();
+                    if ("Rescue".equals(inhalerType)) {
+                        checkForRapidRescueRepeats();
+                    }
                     finish();
                 })
                 .addOnFailureListener(e ->
                         Toast.makeText(this, "Failed: " +e.getMessage(), Toast.LENGTH_SHORT).show()
                 );
+    }
+
+    private void checkForRapidRescueRepeats() {
+        DatabaseReference logsRef = FirebaseDatabase.getInstance().getReference("Users")
+                .child("Parent")
+                .child(parentId)
+                .child("Children")
+                .child(childId)
+                .child("Logs")
+                .child("medicineLogs");
+
+        long threeHoursAgo = System.currentTimeMillis() - (3 * 60 * 60 * 1000);
+
+        logsRef.orderByChild("timestamp").startAt(threeHoursAgo).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                int rescueCount = 0;
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    MedicineLog log = snapshot.getValue(MedicineLog.class);
+                    if (log != null && "Rescue".equals(log.inhalerType)) {
+                        rescueCount++;
+                    }
+                }
+
+                if (rescueCount >= 3) {
+                    DatabaseReference parentAlertRef = FirebaseDatabase.getInstance().getReference("Users")
+                            .child("Parent")
+                            .child(parentId)
+                            .child("Alerts");
+                    
+                    String message = "Your child has used their rescue inhaler " + rescueCount + " times in the last 3 hours.";
+                    Alert newAlert = new Alert("Rapid Rescue Repeats", message, System.currentTimeMillis(), "high", childId);
+                    parentAlertRef.push().setValue(newAlert);
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                // You can add a toast or log here if needed
+            }
+        });
     }
 }
