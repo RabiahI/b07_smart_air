@@ -59,10 +59,22 @@
             android:name=".ParentHomeActivity"
             android:exported="false" />
         <activity
+            android:name=".ParentAlertsActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ParentHistoryActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ParentSettingsActivity"
+            android:exported="false" />
+        <activity
             android:name=".ProviderHomeActivity"
             android:exported="false" />
         <activity
             android:name=".ChildHomeActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ChildSettingsActivity"
             android:exported="false" />
         <activity
             android:name=".Registration"

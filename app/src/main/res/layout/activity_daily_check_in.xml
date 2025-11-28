@@ -181,7 +181,12 @@
                     android:layout_height="wrap_content"/>
                 <CheckBox
                     android:id="@+id/trigDust"
-                    android:text="Dust / pets"
+                    android:text="Dust"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+                <CheckBox
+                    android:id="@+id/trigPets"
+                    android:text="Pets"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"/>
                 <CheckBox

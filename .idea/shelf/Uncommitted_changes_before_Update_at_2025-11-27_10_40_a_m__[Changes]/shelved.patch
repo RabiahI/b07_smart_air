@@ -1,0 +1,459 @@
+Index: app/src/main/AndroidManifest.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"utf-8\"?>\r\n<manifest xmlns:android=\"http://schemas.android.com/apk/res/android\"\r\n    xmlns:tools=\"http://schemas.android.com/tools\">\r\n\r\n    <uses-permission android:name=\"android.permission.INTERNET\" />\r\n\r\n    <application\r\n        android:allowBackup=\"true\"\r\n        android:dataExtractionRules=\"@xml/data_extraction_rules\"\r\n        android:fullBackupContent=\"@xml/backup_rules\"\r\n        android:icon=\"@mipmap/ic_launcher\"\r\n        android:label=\"@string/app_name\"\r\n        android:roundIcon=\"@mipmap/ic_launcher_round\"\r\n        android:supportsRtl=\"true\"\r\n        android:theme=\"@style/Theme.Material3.DayNight.NoActionBar\">\r\n        <activity\r\n            android:name=\".ParentManageInventory\"\r\n            android:exported=\"false\" />\r\n        <activity\r\n            android:name=\".ManageInventoryChild\"\r\n            android:exported=\"false\" />\r\n        <activity\r\n            android:name=\".RoleSelectionActivity\"\r\n            android:exported=\"true\">\r\n            <intent-filter>\r\n                <action android:name=\"android.intent.action.MAIN\" />\r\n\r\n                <category android:name=\"android.intent.category.LAUNCHER\" />\r\n            </intent-filter>\r\n        </activity>\r\n        <activity\r\n            android:name=\".LogMedicine\"\r\n            android:exported=\"false\" />\r\n        <activity\r\n            android:name=\".TriageActivity\"\r\n            android:exported=\"false\" />\r\n        <activity\r\n            android:name=\".ManageAccessActivity\"\r\n            android:exported=\"false\" />\r\n        <activity\r\n            android:name=\".OnboardingActivity\"\r\n            android:exported=\"false\" />\r\n        <activity\r\n            android:name=\".AddChildActivity\"\r\n            android:exported=\"false\" />\r\n        <activity\r\n            android:name=\".ChildManagementActivity\"\r\n            android:exported=\"false\" />\r\n        <activity\r\n            android:name=\".ParentHomeActivity\"\r\n            android:exported=\"false\" />\r\n        <activity\r\n            android:name=\".ProviderHomeActivity\"\r\n            android:exported=\"false\" />\r\n        <activity\r\n            android:name=\".ChildHomeActivity\"\r\n            android:exported=\"false\" />\r\n        <activity\r\n            android:name=\".Registration\"\r\n            android:exported=\"false\" />\r\n        <activity\r\n            android:name=\".Login\"\r\n            android:exported=\"false\" />\r\n        <activity\r\n            android:name=\".ChildLoginActivity\"\r\n            android:exported=\"false\" />\r\n        <activity\r\n            android:name=\".MainActivity\"\r\n            android:exported=\"true\" />\r\n\r\n        <meta-data\r\n            android:name=\"preloaded_fonts\"\r\n            android:resource=\"@array/preloaded_fonts\" />\r\n    </application>\r\n\r\n</manifest>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/AndroidManifest.xml b/app/src/main/AndroidManifest.xml
+--- a/app/src/main/AndroidManifest.xml	(revision 7f66f1c65b1e42e45f70d0469a117ddfec5684a8)
++++ b/app/src/main/AndroidManifest.xml	(date 1764257851030)
+@@ -20,6 +20,9 @@
+             android:name=".ManageInventoryChild"
+             android:exported="false" />
+         <activity
++            android:name=".DailyCheckIn"
++            android:exported="false" />
++        <activity
+             android:name=".RoleSelectionActivity"
+             android:exported="true">
+             <intent-filter>
+Index: app/src/main/java/com/example/smartairapplication/SymptomLog.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/example/smartairapplication/SymptomLog.java b/app/src/main/java/com/example/smartairapplication/SymptomLog.java
+new file mode 100644
+--- /dev/null	(date 1764257851035)
++++ b/app/src/main/java/com/example/smartairapplication/SymptomLog.java	(date 1764257851035)
+@@ -0,0 +1,25 @@
++package com.example.smartairapplication;
++
++import java.util.ArrayList;
++
++public class SymptomLog {
++    public String timestamp;
++    public boolean nightWaking;
++    public boolean activityLimits;
++    public String coughWheeze; //"none", "mild", or "bad"
++    public ArrayList<String> triggers;
++    public String notes;
++
++    public SymptomLog(){}
++
++    public SymptomLog(String timestamp, boolean nightWaking, boolean activityLimits,
++                      String coughWheeze, ArrayList<String> triggers, String notes){
++        this.timestamp = timestamp;
++        this.nightWaking = nightWaking;
++        this.activityLimits = activityLimits;
++        this.coughWheeze = coughWheeze;
++        this.triggers = triggers;
++        this.notes = notes;
++    }
++
++}
+Index: app/src/main/java/com/example/smartairapplication/DailyCheckIn.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/example/smartairapplication/DailyCheckIn.java b/app/src/main/java/com/example/smartairapplication/DailyCheckIn.java
+new file mode 100644
+--- /dev/null	(date 1764257851034)
++++ b/app/src/main/java/com/example/smartairapplication/DailyCheckIn.java	(date 1764257851034)
+@@ -0,0 +1,142 @@
++package com.example.smartairapplication;
++
++import android.app.AlertDialog;
++import android.content.Intent;
++import android.os.Bundle;
++import android.widget.Button;
++import android.widget.CheckBox;
++import android.widget.EditText;
++import android.widget.ImageView;
++import android.widget.RadioGroup;
++import android.widget.Toast;
++
++import androidx.activity.EdgeToEdge;
++import androidx.activity.OnBackPressedCallback;
++import androidx.appcompat.app.AppCompatActivity;
++import androidx.core.graphics.Insets;
++import androidx.core.view.ViewCompat;
++import androidx.core.view.WindowInsetsCompat;
++
++import com.google.firebase.database.DatabaseReference;
++import com.google.firebase.database.FirebaseDatabase;
++
++import java.text.SimpleDateFormat;
++import java.util.ArrayList;
++import java.util.Date;
++import java.util.Locale;
++
++public class DailyCheckIn extends AppCompatActivity {
++
++    private String childId, parentId;
++    private RadioGroup nightWakingGroup, activityGroup, coughGroup;
++    private CheckBox trigExercise, trigColdAir, trigDust, trigSmoke, trigIllness, trigOdors;
++    private EditText inputNotes;
++    private Button btnSubmit;
++    private ImageView btnBack;
++
++
++    @Override
++    protected void onCreate(Bundle savedInstanceState) {
++        super.onCreate(savedInstanceState);
++        EdgeToEdge.enable(this);
++        setContentView(R.layout.activity_daily_check_in);
++
++        childId = getIntent().getStringExtra("childId");
++        parentId = getIntent().getStringExtra("parentId");
++        //link xml components
++        btnBack = findViewById(R.id.btnBack);
++        nightWakingGroup = findViewById(R.id.nightWakingGroup);
++        activityGroup = findViewById(R.id.activityGroup);
++        coughGroup = findViewById(R.id.coughGroup);
++
++        trigExercise = findViewById(R.id.trigExercise);
++        trigColdAir = findViewById(R.id.trigColdAir);
++        trigDust = findViewById(R.id.trigDust);
++        trigSmoke = findViewById(R.id.trigSmoke);
++        trigIllness = findViewById(R.id.trigIllness);
++        trigOdors = findViewById(R.id.trigOdors);
++
++        inputNotes = findViewById(R.id.inputNotes);
++        btnSubmit = findViewById(R.id.btnSubmitCheckIn);
++
++        btnBack.setOnClickListener(v -> showExitConfirmation());
++        btnSubmit.setOnClickListener(v -> {
++            int nightId = nightWakingGroup.getCheckedRadioButtonId();
++            int activityId = activityGroup.getCheckedRadioButtonId();
++            int coughId = coughGroup.getCheckedRadioButtonId();
++
++            if (nightId == -1 || activityId == -1 || coughId == -1) {
++                Toast.makeText(this, "Please answer all symptom questions", Toast.LENGTH_SHORT).show();
++                return;
++            }
++
++            saveSymptomLog();
++        });
++
++        getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
++            @Override
++            public void handleOnBackPressed() {
++                showExitConfirmation();
++            }
++        });
++
++    }
++
++    private void saveSymptomLog() {
++        //symptoms
++        boolean nightWaking = nightWakingGroup.getCheckedRadioButtonId() == R.id.nightYes;
++        boolean activityLimits = activityGroup.getCheckedRadioButtonId() == R.id.actYes;
++        String coughLevel;
++        int coughId = coughGroup.getCheckedRadioButtonId();
++        if (coughId == R.id.coughNone){
++            coughLevel = "none";
++        } else if (coughId == R.id.coughMild){
++            coughLevel = "mild";
++        } else if (coughId == R.id.coughBad){
++            coughLevel = "bad";
++        } else {
++            coughLevel = null;
++        }
++
++        //triggers
++        ArrayList<String> triggerList = new ArrayList<>();
++        if (trigExercise.isChecked()) triggerList.add("exercise");
++        if (trigColdAir.isChecked()) triggerList.add("cold air");
++        if (trigDust.isChecked()) triggerList.add("dust/pets");
++        if (trigSmoke.isChecked()) triggerList.add("smoke");
++        if (trigIllness.isChecked()) triggerList.add("illness");
++        if (trigOdors.isChecked()) triggerList.add("strong odors");
++
++        String notes = inputNotes.getText().toString().trim();
++        String timestamp = new SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.getDefault()).format(new Date());
++
++        SymptomLog log = new SymptomLog(timestamp, nightWaking, activityLimits, coughLevel,
++                                        triggerList, notes);
++        DatabaseReference ref = FirebaseDatabase.getInstance().getReference("Users")
++                .child("Parent").child(parentId)
++                .child("Children").child(childId)
++                .child("Logs").child("symptomLogs");
++
++        ref.push().setValue(log)
++                .addOnSuccessListener(a -> {
++                    Toast.makeText(this, "Daily check-in saved!", Toast.LENGTH_SHORT).show();
++                    finish();
++                })
++                .addOnFailureListener(e -> {
++                    Toast.makeText(this, "Error: " + e.getMessage(), Toast.LENGTH_SHORT).show();
++                });
++    }
++
++    private void showExitConfirmation(){
++        new AlertDialog.Builder(this)
++                .setTitle("Return to home?")
++                .setMessage("If you leave now, any unsaved changes will be lost.")
++                .setPositiveButton("Leave", (dialog, which) -> {
++                    finish();
++                })
++                .setNegativeButton("Stay", (dialog, which) -> {
++                    dialog.dismiss();
++                })
++                .show();
++    }
++}
+\ No newline at end of file
+Index: app/src/main/res/layout/activity_daily_check_in.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/res/layout/activity_daily_check_in.xml b/app/src/main/res/layout/activity_daily_check_in.xml
+new file mode 100644
+--- /dev/null	(date 1764257851036)
++++ b/app/src/main/res/layout/activity_daily_check_in.xml	(date 1764257851036)
+@@ -0,0 +1,240 @@
++<?xml version="1.0" encoding="utf-8"?>
++<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
++    xmlns:app="http://schemas.android.com/apk/res-auto"
++    xmlns:tools="http://schemas.android.com/tools"
++    android:id="@+id/main"
++    android:layout_width="match_parent"
++    android:layout_height="match_parent"
++    tools:context=".DailyCheckIn">
++
++    <androidx.constraintlayout.widget.ConstraintLayout
++        android:id="@+id/header"
++        android:layout_width="match_parent"
++        android:layout_height="wrap_content"
++        android:background="@drawable/header_sky"
++        android:padding="16dp"
++        app:layout_constraintStart_toStartOf="parent"
++        app:layout_constraintTop_toTopOf="parent">
++
++        <LinearLayout
++            android:id="@+id/headerRow"
++            android:layout_width="match_parent"
++            android:layout_height="wrap_content"
++            android:layout_marginTop="8dp"
++            android:gravity="center"
++            android:orientation="horizontal"
++            android:paddingTop="20dp"
++            app:layout_constraintTop_toTopOf="parent"
++            tools:layout_editor_absoluteX="16dp">
++
++            <ImageView
++                android:id="@+id/btnBack"
++                android:layout_width="32dp"
++                android:layout_height="32dp"
++                android:background="@drawable/bg_icon_circle_blue"
++                android:padding="6dp"
++                android:src="@drawable/ic_back_arrow" />
++
++            <TextView
++                android:id="@+id/sectionTitle"
++                android:layout_width="238dp"
++                android:layout_height="wrap_content"
++                android:layout_marginStart="15dp"
++                android:fontFamily="@font/inter_bold"
++                android:text="Daily Check-In"
++                android:textColor="@color/vivid_blue"
++                android:textSize="20sp"
++                android:textStyle="bold" />
++        </LinearLayout>
++
++        <TextView
++            android:id="@+id/instructions"
++            android:layout_width="0dp"
++            android:layout_height="wrap_content"
++            android:layout_marginStart="70dp"
++            android:layout_marginTop="6dp"
++            android:fontFamily="@font/inter"
++            android:text="Enter daily check-in to track symptoms"
++            android:textColor="@color/dark_blue_text"
++            android:textSize="12sp"
++            android:textStyle="bold"
++            app:layout_constraintEnd_toEndOf="parent"
++            app:layout_constraintStart_toStartOf="@id/headerRow"
++            app:layout_constraintTop_toBottomOf="@id/headerRow" />
++
++    </androidx.constraintlayout.widget.ConstraintLayout>
++
++    <ScrollView
++        android:layout_width="match_parent"
++        android:layout_height="0dp"
++        android:padding="20dp"
++        app:layout_constraintTop_toBottomOf="@+id/header"
++        app:layout_constraintBottom_toTopOf="@+id/bottomNav">
++
++        <LinearLayout
++            android:layout_width="match_parent"
++            android:layout_height="wrap_content"
++            android:orientation="vertical">
++
++            <TextView
++                android:layout_width="wrap_content"
++                android:layout_height="wrap_content"
++                android:layout_marginBottom="10dp"
++                android:text="Symptoms"
++                android:textSize="20sp"
++                android:textStyle="bold" />
++
++            <TextView
++                android:layout_width="wrap_content"
++                android:layout_height="wrap_content"
++                android:text="Did you wake up at night?"
++                android:textSize="16sp" />
++
++            <RadioGroup
++                android:id="@+id/nightWakingGroup"
++                android:layout_width="match_parent"
++                android:layout_height="wrap_content">
++                <RadioButton
++                    android:id="@+id/nightYes"
++                    android:layout_width="match_parent"
++                    android:layout_height="wrap_content"
++                    android:text="Yes"/>
++                <RadioButton
++                    android:id="@+id/nightNo"
++                    android:layout_width="match_parent"
++                    android:layout_height="wrap_content"
++                    android:text="No"/>
++            </RadioGroup>
++
++            <TextView
++                android:layout_width="wrap_content"
++                android:layout_height="wrap_content"
++                android:text="Any activity limits today?"
++                android:textSize="16sp" />
++
++            <RadioGroup
++                android:id="@+id/activityGroup"
++                android:layout_width="match_parent"
++                android:layout_height="wrap_content">
++                <RadioButton
++                    android:id="@+id/actYes"
++                    android:layout_width="match_parent"
++                    android:layout_height="wrap_content"
++                    android:text="Yes"/>
++                <RadioButton
++                    android:id="@+id/actNo"
++                    android:layout_width="match_parent"
++                    android:layout_height="wrap_content"
++                    android:text="No"/>
++            </RadioGroup>
++
++            <TextView
++                android:layout_width="wrap_content"
++                android:layout_height="wrap_content"
++                android:text="Any cough/wheeze?"
++                android:textSize="16sp" />
++
++            <RadioGroup
++                android:id="@+id/coughGroup"
++                android:layout_width="match_parent"
++                android:layout_height="wrap_content">
++                <RadioButton
++                    android:id="@+id/coughNone"
++                    android:text="None"
++                    android:layout_width="match_parent"
++                    android:layout_height="wrap_content"/>
++                <RadioButton
++                    android:id="@+id/coughMild"
++                    android:text="Mild"
++                    android:layout_width="match_parent"
++                    android:layout_height="wrap_content"/>
++                <RadioButton
++                    android:id="@+id/coughBad"
++                    android:text="Bad"
++                    android:layout_width="match_parent"
++                    android:layout_height="wrap_content"/>
++            </RadioGroup>
++
++            <TextView
++                android:layout_width="wrap_content"
++                android:layout_height="wrap_content"
++                android:layout_marginTop="15dp"
++                android:text="Triggers"
++                android:textSize="20sp"
++                android:textStyle="bold" />
++
++            <LinearLayout
++                android:id="@+id/triggerList"
++                android:orientation="vertical"
++                android:layout_width="match_parent"
++                android:layout_height="wrap_content">
++
++                <CheckBox
++                    android:id="@+id/trigExercise"
++                    android:text="Exercise"
++                    android:layout_width="match_parent"
++                    android:layout_height="wrap_content"/>
++                <CheckBox
++                    android:id="@+id/trigColdAir"
++                    android:text="Cold air"
++                    android:layout_width="match_parent"
++                    android:layout_height="wrap_content"/>
++                <CheckBox
++                    android:id="@+id/trigDust"
++                    android:text="Dust / pets"
++                    android:layout_width="match_parent"
++                    android:layout_height="wrap_content"/>
++                <CheckBox
++                    android:id="@+id/trigSmoke"
++                    android:text="Smoke"
++                    android:layout_width="match_parent"
++                    android:layout_height="wrap_content"/>
++                <CheckBox
++                    android:id="@+id/trigIllness"
++                    android:text="Illness"
++                    android:layout_width="match_parent"
++                    android:layout_height="wrap_content"/>
++                <CheckBox
++                    android:id="@+id/trigOdors"
++                    android:text="Strong odors / perfume"
++                    android:layout_width="match_parent"
++                    android:layout_height="wrap_content"/>
++            </LinearLayout>
++
++            <EditText
++                android:id="@+id/inputNotes"
++                android:layout_width="match_parent"
++                android:layout_height="100dp"
++                android:layout_marginTop="20dp"
++                android:background="@drawable/edit_text_background"
++                android:gravity="top"
++                android:hint="Optional notes"
++                android:paddingTop="10dp"
++                android:paddingLeft="10dp"/>
++
++            <Button
++                android:id="@+id/btnSubmitCheckIn"
++                android:layout_width="match_parent"
++                android:layout_height="wrap_content"
++                android:text="Submit"
++                android:layout_marginTop="20dp"
++                android:backgroundTint="@color/vivid_blue"
++                android:textColor="@android:color/white"/>
++        </LinearLayout>
++
++    </ScrollView>
++
++    <com.google.android.material.bottomnavigation.BottomNavigationView
++        android:id="@+id/bottomNav"
++        android:layout_width="0dp"
++        android:layout_height="wrap_content"
++        android:background="@color/white"
++        app:menu="@menu/menu_child_bottom_nav"
++        app:itemIconTint="@color/bottom_nav_selector"
++        app:itemTextColor="@color/bottom_nav_selector"
++        app:labelVisibilityMode="labeled"
++        app:layout_constraintBottom_toBottomOf="parent"
++        app:layout_constraintStart_toStartOf="parent"
++        app:layout_constraintEnd_toEndOf="parent" />
++
++</androidx.constraintlayout.widget.ConstraintLayout>
+\ No newline at end of file

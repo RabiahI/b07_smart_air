@@ -5,9 +5,11 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
+import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -34,6 +36,7 @@ public class ParentManageInventory extends AppCompatActivity {
     private RecyclerView recycler;
     private FloatingActionButton btnAdd;
     private BottomNavigationView bottomNav;
+    private ImageView btnBack;
 
     private List<Medicine> list = new ArrayList<>();
     private ParentInventoryAdapter adapter;
@@ -52,6 +55,7 @@ public class ParentManageInventory extends AppCompatActivity {
         recycler = findViewById(R.id.recyclerInventory);
         btnAdd = findViewById(R.id.btnAddMedicine);
         bottomNav = findViewById(R.id.bottomNav);
+        btnBack = findViewById(R.id.btnBack);
 
         adapter = new ParentInventoryAdapter(list, new ParentInventoryAdapter.OnParentActionListener() {
             @Override
@@ -72,10 +76,38 @@ public class ParentManageInventory extends AppCompatActivity {
 
         btnAdd.setOnClickListener(v -> showAddDialog());
 
+        btnBack.setOnClickListener(v -> showExitConfirmation());
+        getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                showExitConfirmation();
+            }
+        });
+
         // Navigation if needed later
         bottomNav.setOnItemSelectedListener(item -> {
             return false;
         });
+
+        getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                showExitConfirmation();
+            }
+        });
+    }
+
+    private void showExitConfirmation() {
+        new android.app.AlertDialog.Builder(this)
+                .setTitle("Return to home?")
+                .setMessage("If you leave now, any unsaved changes will be lost.")
+                .setPositiveButton("Leave", (dialog, which) -> {
+                    finish();
+                })
+                .setNegativeButton("Stay", (dialog, which) -> {
+                    dialog.dismiss();
+                })
+                .show();
     }
 
     private void loadInventory() {
