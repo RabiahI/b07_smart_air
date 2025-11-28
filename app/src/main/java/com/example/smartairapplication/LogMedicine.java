@@ -29,6 +29,7 @@ import java.util.List;
 
 public class LogMedicine extends AppCompatActivity {
     private String childId, parentId;
+    private boolean isParentMode;
 
     private boolean techniqueCompleted = false;
     private boolean highQualityTechnique = false;
@@ -67,6 +68,7 @@ public class LogMedicine extends AppCompatActivity {
 
         childId = getIntent().getStringExtra("childId");
         parentId = getIntent().getStringExtra("parentId");
+        isParentMode = getIntent().getBooleanExtra("isParentMode", false);
 
         //link xml elements
         btnReturn = findViewById(R.id.btnReturn);
@@ -216,6 +218,7 @@ public class LogMedicine extends AppCompatActivity {
                             Intent settingsIntent = new Intent(LogMedicine.this, ChildSettingsActivity.class);
                             settingsIntent.putExtra("childId", childId);
                             settingsIntent.putExtra("parentId", parentId);
+                            settingsIntent.putExtra("isParentMode", isParentMode);
                             startActivity(settingsIntent);
                             finish();
                         })
