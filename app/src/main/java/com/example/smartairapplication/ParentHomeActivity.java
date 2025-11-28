@@ -12,6 +12,8 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
@@ -34,6 +36,12 @@ public class ParentHomeActivity extends AppCompatActivity {
     private List<String> childIds = new ArrayList<>();
     private String selectedChildId;
     private String parentId;
+
+    private RecyclerView alertsRecyclerView;
+    private AlertsAdapter alertsAdapter;
+    private List<Alert> alertList;
+    private DatabaseReference alertsRef;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,6 +87,35 @@ public class ParentHomeActivity extends AppCompatActivity {
             intent.putExtra("childId", selectedChildId);
             intent.putExtra("parentId", parentId);
             startActivity(intent);
+        });
+        alertsRecyclerView = findViewById(R.id.alertsRecyclerView);
+        alertsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        alertList = new ArrayList<>();
+        alertsAdapter = new AlertsAdapter(this, alertList);
+        alertsRecyclerView.setAdapter(alertsAdapter);
+
+        alertsRef = FirebaseDatabase.getInstance().getReference("Users")
+                .child("Parent")
+                .child(parentId)
+                .child("Alerts");
+
+        alertsRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                alertList.clear();
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    Alert alert = snapshot.getValue(Alert.class);
+                    if (alert != null) {
+                        alertList.add(0, alert);
+                    }
+                }
+                alertsAdapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                Toast.makeText(ParentHomeActivity.this, "Failed to load alerts.", Toast.LENGTH_SHORT).show();
+            }
         });
 
         bottomNav.setSelectedItemId(R.id.nav_home);
