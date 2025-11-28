@@ -253,7 +253,7 @@ public class TriageActivity extends AppCompatActivity {
                 }
                 
                 long timestamp = System.currentTimeMillis();
-                Alert newAlert = new Alert(type, alertMessage, timestamp, severity);
+                Alert newAlert = new Alert(type, alertMessage, timestamp, severity, childId);
 
                 DatabaseReference parentAlertRef = FirebaseDatabase.getInstance()
                         .getReference("Users")
