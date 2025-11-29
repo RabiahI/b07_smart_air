@@ -14,6 +14,8 @@ import androidx.annotation.NonNull;
 import com.google.android.flexbox.FlexboxLayout;
 
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -48,11 +50,11 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.HistoryV
             symptoms.add("Activity Limits");
         }
         if (!Objects.equals(entry.coughWheeze, "none")){
-            symptoms.add("Coughing/Wheezing");
+            symptoms.add("Cough/Wheeze");
         }
 
         // date
-        holder.txtDate.setText(entry.timestamp);
+        holder.txtDate.setText(formatDate(entry.timestamp));
 
         // notes
         holder.txtNotes.setText(entry.notes != null ? entry.notes : "(No notes)");
@@ -110,5 +112,20 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.HistoryV
             containerTriggers = itemView.findViewById(R.id.containerTriggers);
         }
     }
+
+    private String formatDate(String timestamp) {
+        try {
+            DateTimeFormatter input = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+            DateTimeFormatter output = DateTimeFormatter.ofPattern("MMM d, yyyy");
+
+            LocalDateTime dt = LocalDateTime.parse(timestamp, input);
+            return output.format(dt);
+
+        } catch (Exception e) {
+            // fallback if parse fails
+            return timestamp;
+        }
+    }
+
 
 }

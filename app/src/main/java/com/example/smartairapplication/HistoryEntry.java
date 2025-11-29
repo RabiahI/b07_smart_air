@@ -1,5 +1,6 @@
 package com.example.smartairapplication;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class HistoryEntry {
