@@ -18,52 +18,58 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:padding="16dp"
-            >
+            android:orientation="vertical">
+
             <include layout="@layout/view_parent_header"/>
-            <include layout="@layout/zone_button_parent" />
 
-            <TextView
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginTop="10dp"
-                android:fontFamily="@font/inter_bold"
-                android:text="Today's Overview"
-                android:textColor="#555F6F"
-                android:textSize="24sp">
-            </TextView>
+                android:orientation="vertical"
+                android:padding="16dp">
 
-            <!-- replace under with layout for last rescue data, latest alerts-->
-            <include layout="@layout/view_rescue_data"/>
+                <include layout="@layout/zone_button_parent" />
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginTop="10dp"
-                android:fontFamily="@font/inter_bold"
-                android:text="Latest Alerts"
-                android:textColor="#555F6F"
-                android:textSize="24sp">
-            </TextView>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="10dp"
+                    android:fontFamily="@font/inter_bold"
+                    android:text="Today's Overview"
+                    android:textColor="#555F6F"
+                    android:textSize="24sp">
+                </TextView>
 
-            <include layout="@layout/view_last_alerts"/>
+                <!-- replace under with layout for last rescue data, latest alerts-->
+                <include layout="@layout/view_rescue_data"/>
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginTop="10dp"
-                android:fontFamily="@font/inter_bold"
-                android:text="Quick Actions"
-                android:textColor="#555F6F"
-                android:textSize="24sp">
-            </TextView>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="10dp"
+                    android:fontFamily="@font/inter_bold"
+                    android:text="Latest Alerts"
+                    android:textColor="#555F6F"
+                    android:textSize="24sp">
+                </TextView>
 
-            <include layout="@layout/quick_actions_parent"/>
-            
+                <include layout="@layout/view_last_alerts"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="10dp"
+                    android:fontFamily="@font/inter_bold"
+                    android:text="Quick Actions"
+                    android:textColor="#555F6F"
+                    android:textSize="24sp">
+                </TextView>
+
+                <include layout="@layout/quick_actions_parent"/>
+            </LinearLayout>
         </LinearLayout>
     </ScrollView>
 

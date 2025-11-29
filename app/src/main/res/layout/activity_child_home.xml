@@ -18,27 +18,33 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:padding="16dp"
-        >
+            android:orientation="vertical">
+
             <include layout="@layout/view_child_header"/>
-            <include layout="@layout/zone_button" />
 
-            <TextView
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginTop="10dp"
-                android:fontFamily="@font/inter_bold"
-                android:text="Quick Actions"
-                android:textColor="#555F6F"
-                android:textSize="24sp">
+                android:orientation="vertical"
+                android:padding="16dp">
 
-            </TextView>
+                <include layout="@layout/zone_button" />
 
-            <include layout="@layout/view_quick_actions"/>
-            <include layout="@layout/view_streaks_preview"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="10dp"
+                    android:fontFamily="@font/inter_bold"
+                    android:text="Quick Actions"
+                    android:textColor="#555F6F"
+                    android:textSize="24sp">
 
+                </TextView>
+
+                <include layout="@layout/view_quick_actions"/>
+                <include layout="@layout/view_streaks_preview"/>
+            </LinearLayout>
         </LinearLayout>
     </ScrollView>
 
