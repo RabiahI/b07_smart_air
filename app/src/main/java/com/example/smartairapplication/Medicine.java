@@ -7,6 +7,7 @@ public class Medicine {
     public String expiryDate;
     public int amountLeft;
     public boolean lowFlag;
+    public boolean expiryAlertSent = false;
 
     public Medicine() {} // Firebase
 
