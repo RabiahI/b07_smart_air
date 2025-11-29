@@ -7,9 +7,11 @@ import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.text.InputType;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -42,6 +44,9 @@ public class ChildHomeActivity extends AppCompatActivity implements PasswordDial
 
     private String currentParentEmail;
     private boolean isParentMode;
+    private TextView textWelcome;
+    private ImageView btnProfile;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,6 +69,9 @@ public class ChildHomeActivity extends AppCompatActivity implements PasswordDial
         streaksButton = findViewById(R.id.streaks_button);
         manageInventoryButton = findViewById(R.id.manageInventoryButton);
         dailyCheckInButton = findViewById(R.id.dailyCheckInButton);
+
+        textWelcome = findViewById(R.id.tvWelcome);
+        btnProfile = findViewById(R.id.btnProfile);
 
         // Show onboarding on first login
         if (OnboardingActivity.isFirstLogin()) {
@@ -115,7 +123,7 @@ public class ChildHomeActivity extends AppCompatActivity implements PasswordDial
                 .child(finalParentId)
                 .child("Children")
                 .child(finalChildId);
-        
+
         getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
             @Override
             public void handleOnBackPressed() {
@@ -133,9 +141,11 @@ public class ChildHomeActivity extends AppCompatActivity implements PasswordDial
                 if (snapshot.exists()) {
                     Child child = snapshot.getValue(Child.class);
                     if (child != null) {
+                        textWelcome.setText("Welcome " + child.getName()); //update welcome text
                         personalBest = child.getPersonalBest();
                         latestPef = child.getLatestPef();
                         updateZone(latestPef);
+
                     }
                 } else {
                     Toast.makeText(ChildHomeActivity.this, "Child data not found.", Toast.LENGTH_SHORT).show();
@@ -148,6 +158,13 @@ public class ChildHomeActivity extends AppCompatActivity implements PasswordDial
             }
         });
 
+        btnProfile.setOnClickListener(v -> {
+            Intent settingsIntent = new Intent(ChildHomeActivity.this, ChildSettingsActivity.class);
+            settingsIntent.putExtra("childId", finalChildId);
+            settingsIntent.putExtra("parentId", finalParentId);
+            settingsIntent.putExtra("isParentMode", isParentMode);
+            startActivity(settingsIntent);
+        });
         zoneButton.setOnClickListener(v -> showPefInputDialog(finalParentId, finalChildId));
         triageButton.setOnClickListener(v -> {
             Intent triageIntent = new Intent(ChildHomeActivity.this, TriageActivity.class);

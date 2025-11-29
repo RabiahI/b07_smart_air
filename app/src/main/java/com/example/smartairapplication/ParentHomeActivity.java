@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -49,6 +50,7 @@ public class ParentHomeActivity extends AppCompatActivity {
     private List<Alert> allAlertsMasterList = new ArrayList<>();
     private CardView zoneButton;
     private TextView zoneTitle, zoneMessage, pefValue;
+    private ImageView btnNotifications, btnProfile;
 
 
     @Override
@@ -82,9 +84,19 @@ public class ParentHomeActivity extends AppCompatActivity {
         zoneMessage = findViewById(R.id.zone_message);
         pefValue = findViewById(R.id.pef_value);
         zoneButton.setOnClickListener(v -> showSetPersonalBestDialog());
+        btnNotifications = findViewById(R.id.btnNotifications);
+        btnProfile = findViewById(R.id.btnProfile);
 
 
         loadChildrenIntoSpinner();
+
+        btnNotifications.setOnClickListener(v -> {
+            startActivity(new Intent(getApplicationContext(), ParentAlertsActivity.class));
+        });
+
+        btnProfile.setOnClickListener(v -> {
+            startActivity(new Intent(getApplicationContext(), ParentSettingsActivity.class));
+        });
 
         childButton.setOnClickListener(view -> {
             Intent intent = new Intent(getApplicationContext(), ChildManagementActivity.class);

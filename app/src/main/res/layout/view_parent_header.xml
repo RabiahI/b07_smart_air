@@ -45,18 +45,18 @@
 
         <ImageView
             android:id="@+id/btnNotifications"
-            android:layout_width="32dp"
-            android:layout_height="32dp"
-            android:layout_marginTop="15dp"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginTop="10dp"
             android:padding="6dp"
             android:background="@drawable/bg_icon_circle_blue"
             android:src="@drawable/ic_bell"/>
 
         <ImageView
             android:id="@+id/btnProfile"
-            android:layout_width="32dp"
-            android:layout_height="32dp"
-            android:layout_marginTop="15dp"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginTop="10dp"
             android:layout_marginStart="8dp"
             android:padding="6dp"
             android:background="@drawable/bg_icon_circle_blue"
@@ -71,7 +71,7 @@
         android:layout_marginTop="12dp"
         android:layout_marginStart="20dp"
         android:fontFamily="@font/inter"
-        android:text="Welcome back, Parent Name!"
+        android:text="Welcome!"
         android:textColor="@color/dark_blue_text"
         android:textSize="18sp"
         android:textStyle="bold"
@@ -90,12 +90,12 @@
         app:layout_constraintEnd_toEndOf="parent" />
 
     <TextView
-        android:id="@+id/tvTodayDate"
+        android:id="@+id/tvAboutApp"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="4dp"
         android:fontFamily="@font/poppins"
-        android:text="Today’s date"
+        android:text="Asthma care made easy"
         android:textColor="@color/dark_blue_text"
         android:textSize="13sp"
         app:layout_constraintBottom_toBottomOf="parent"
