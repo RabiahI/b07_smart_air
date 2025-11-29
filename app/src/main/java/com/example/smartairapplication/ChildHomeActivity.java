@@ -305,7 +305,7 @@ public class ChildHomeActivity extends AppCompatActivity implements PasswordDial
                 DatabaseReference alertsRef = FirebaseDatabase.getInstance().getReference("Users")
                     .child("Parent").child(parentId)
                     .child("Alerts").push();
-                String message = childName + "'s PEF is in the red zone, indicating a medical emergency.";
+                String message = childName + "'s PEF of " + currentPef + " is in the red zone, indicating a medical emergency.";
                 Alert alert = new Alert("Red Zone", message, System.currentTimeMillis(), "High", childId);
                 alertsRef.setValue(alert);
             }
