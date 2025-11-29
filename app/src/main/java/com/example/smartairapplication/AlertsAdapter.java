@@ -2,15 +2,18 @@ package com.example.smartairapplication;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
+import android.graphics.drawable.LayerDrawable;
 import android.graphics.drawable.GradientDrawable;
 import android.text.format.DateUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.content.res.AppCompatResources;
+import androidx.core.graphics.drawable.DrawableCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
@@ -44,34 +47,46 @@ public class AlertsAdapter extends RecyclerView.Adapter<AlertsAdapter.AlertViewH
         holder.alertTimestamp.setText(ago);
 
         String severity = alert.getSeverity();
-        if (severity != null) {
-            holder.severityBubble.setText(severity);
-            int iconResId;
-            int bubbleColor;
-
-            switch (severity.toLowerCase()) {
-                case "high":
-                    iconResId = R.drawable.ic_circlewarning;
-                    bubbleColor = Color.parseColor("#F44336"); // Red
-                    break;
-                case "medium":
-                    iconResId = R.drawable.ic_warning;
-                    bubbleColor = Color.parseColor("#FFA500"); // Orange
-                    break;
-                case "low":
-                    iconResId = R.drawable.ic_bell;
-                    bubbleColor = Color.parseColor("#2196F3"); // Blue
-                    break;
-                default:
-                    iconResId = R.drawable.ic_bell; // Default icon
-                    bubbleColor = Color.GRAY;
-                    break;
-            }
-            holder.severityIcon.setImageResource(iconResId);
-            
-            // Set bubble color
-            holder.severityBubble.getBackground().setTint(bubbleColor);
+        if (severity == null) {
+            severity = "low";
         }
+
+        holder.severityBubble.setText(severity);
+        int iconResId;
+        int mainColor;
+        int glowColor;
+        
+        switch (severity.toLowerCase()) {
+            case "high":
+                iconResId = R.drawable.ic_circlewarning;
+                mainColor = Color.parseColor("#F44336"); // Red
+                glowColor = Color.parseColor("#FFCDD2"); // Light Red
+                break;
+            case "medium":
+                iconResId = R.drawable.ic_warning;
+                mainColor = Color.parseColor("#FFA500"); // Orange
+                glowColor = Color.parseColor("#FFE0B2"); // Light Orange
+                break;
+            case "low":
+                iconResId = R.drawable.ic_bell;
+                mainColor = Color.parseColor("#2196F3"); // Blue
+                glowColor = Color.parseColor("#BBDEFB"); // Light Blue
+                break;
+            default:
+                iconResId = R.drawable.ic_bell;
+                mainColor = Color.GRAY;
+                glowColor = Color.LTGRAY;
+                break;
+        }
+
+        Drawable icon = AppCompatResources.getDrawable(context, iconResId);
+        DrawableCompat.setTint(icon, mainColor);
+        holder.severityIcon.setCompoundDrawablesWithIntrinsicBounds(null, icon, null, null);
+
+        LayerDrawable background = (LayerDrawable) holder.severityIcon.getBackground();
+        GradientDrawable roundedSquare = (GradientDrawable) background.getDrawable(0);
+        roundedSquare.setColor(glowColor);
+        holder.severityBubble.getBackground().setTint(mainColor);
     }
 
     @Override
@@ -80,7 +95,7 @@ public class AlertsAdapter extends RecyclerView.Adapter<AlertsAdapter.AlertViewH
     }
 
     public static class AlertViewHolder extends RecyclerView.ViewHolder {
-        ImageView severityIcon;
+        TextView severityIcon;
         TextView alertType;
         TextView alertMessage;
         TextView alertTimestamp;

@@ -8,14 +8,18 @@
     android:padding="12dp"
     android:layout_marginBottom="8dp">
 
-    <ImageView
+    <TextView
         android:id="@+id/severityIcon"
-        android:layout_width="32dp"
-        android:layout_height="32dp"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:background="@drawable/bg_severity_icon"
+        android:gravity="center"
+        android:padding="8dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
-        tools:src="@drawable/ic_circlewarning" />
+        tools:drawableTop="@drawable/ic_circlewarning"
+        tools:drawableTint="@android:color/white"/>
 
     <TextView
         android:id="@+id/alertType"
