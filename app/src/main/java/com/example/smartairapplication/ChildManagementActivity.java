@@ -195,7 +195,6 @@ public class ChildManagementActivity extends AppCompatActivity implements ChildA
         Child selectedChild = childList.get(position);
         Intent intent = new Intent(ChildManagementActivity.this, ChildHomeActivity.class);
         intent.putExtra("childId", selectedChild.getChildId());
-        intent.putExtra("parentId", currentParentId);
         startActivity(intent);
     }
 }
