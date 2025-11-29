@@ -5,84 +5,71 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:gravity="center_horizontal"
-    android:orientation="vertical"
-    android:padding="16dp">
+    android:orientation="vertical">
 
     <ScrollView
-        android:layout_width="391dp"
-        android:layout_height="800dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/bottomNav"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintEnd_toEndOf="parent">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            >
+            android:orientation="vertical">
+
             <include layout="@layout/view_parent_header"/>
-            <include layout="@layout/zone_button_parent" />
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginTop="10dp"
-                android:fontFamily="@font/inter_bold"
-                android:text="Today's Overview"
-                android:textColor="#555F6F"
-                android:textSize="24sp">
-            </TextView>
-
-            <!-- replace under with layout for last rescue data, latest alerts-->
-            <include layout="@layout/view_rescue_data"/>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginTop="10dp"
-                android:fontFamily="@font/inter_bold"
-                android:text="Latest Alerts"
-                android:textColor="#555F6F"
-                android:textSize="24sp">
-            </TextView>
-
-            <include layout="@layout/view_last_alerts"/>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginTop="10dp"
-                android:fontFamily="@font/inter_bold"
-                android:text="Quick Actions"
-                android:textColor="#555F6F"
-                android:textSize="24sp">
-            </TextView>
-
-            <include layout="@layout/quick_actions_parent"/>
-
-            <TextView
-                android:id="@+id/textViewName"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="24sp"
-                android:textStyle="bold"
-                android:layout_gravity="center"/>
-
-            <TextView
-                android:id="@+id/textViewNotes"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"/>
-
-            <View
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="100dp">
-            </View>
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="16dp">
 
+                <include layout="@layout/zone_button_parent" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="10dp"
+                    android:fontFamily="@font/inter_bold"
+                    android:text="Today's Overview"
+                    android:textColor="#555F6F"
+                    android:textSize="24sp">
+                </TextView>
+
+                <!-- replace under with layout for last rescue data, latest alerts-->
+                <include layout="@layout/view_rescue_data"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="10dp"
+                    android:fontFamily="@font/inter_bold"
+                    android:text="Latest Alerts"
+                    android:textColor="#555F6F"
+                    android:textSize="24sp">
+                </TextView>
+
+                <include layout="@layout/view_last_alerts"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="10dp"
+                    android:fontFamily="@font/inter_bold"
+                    android:text="Quick Actions"
+                    android:textColor="#555F6F"
+                    android:textSize="24sp">
+                </TextView>
+
+                <include layout="@layout/quick_actions_parent"/>
+            </LinearLayout>
         </LinearLayout>
     </ScrollView>
 
