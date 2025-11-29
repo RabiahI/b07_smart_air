@@ -19,7 +19,6 @@ import androidx.core.view.WindowInsetsCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -35,7 +34,6 @@ public class ParentManageInventory extends AppCompatActivity {
 
     private RecyclerView recycler;
     private FloatingActionButton btnAdd;
-    private BottomNavigationView bottomNav;
     private ImageView btnBack;
 
     private List<Medicine> list = new ArrayList<>();
@@ -54,7 +52,6 @@ public class ParentManageInventory extends AppCompatActivity {
 
         recycler = findViewById(R.id.recyclerInventory);
         btnAdd = findViewById(R.id.btnAddMedicine);
-        bottomNav = findViewById(R.id.bottomNav);
         btnBack = findViewById(R.id.btnBack);
 
         adapter = new ParentInventoryAdapter(list, new ParentInventoryAdapter.OnParentActionListener() {
@@ -82,11 +79,6 @@ public class ParentManageInventory extends AppCompatActivity {
             public void handleOnBackPressed() {
                 showExitConfirmation();
             }
-        });
-
-        // Navigation if needed later
-        bottomNav.setOnItemSelectedListener(item -> {
-            return false;
         });
 
         getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
