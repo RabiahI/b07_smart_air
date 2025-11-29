@@ -238,7 +238,7 @@ public class ParentHistoryActivity extends AppCompatActivity {
             if (start != null && entryDate.isBefore(start)) continue;
             if (end != null && entryDate.isAfter(end)) continue;
 
-            // symptom filtering (rebuild symptoms list for each entry)
+            // symptom filter (rebuild symptoms list for each entry)
             if (!filter.symptoms.isEmpty()) {
 
                 List<String> entrySymptoms = new ArrayList<>();
@@ -248,16 +248,16 @@ public class ParentHistoryActivity extends AppCompatActivity {
                 if (!Objects.equals(entry.coughWheeze, "none"))
                     entrySymptoms.add("cough/wheeze");
 
-                // does this entry match ANY selected symptoms?
-                boolean matchSymptom = false;
+                // does this entry match ALL selected symptoms?
+                boolean matchAllSymptoms = true;
                 for (String symptom : filter.symptoms) {
-                    if (entrySymptoms.contains(symptom)) {
-                        matchSymptom = true;
+                    if (!entrySymptoms.contains(symptom)) {
+                        matchAllSymptoms = false;
                         break;
                     }
                 }
 
-                if (!matchSymptom) continue;
+                if (!matchAllSymptoms) continue;
             }
 
 
@@ -272,14 +272,14 @@ public class ParentHistoryActivity extends AppCompatActivity {
                         }
                     }
                 }
-                boolean matchTrigger = false;
+                boolean matchAllTriggers = true;
                 for (String selected : filter.triggers) {
-                    if (entryTriggers.contains(selected)) {
-                        matchTrigger = true;
+                    if (!entryTriggers.contains(selected)) {
+                        matchAllTriggers = false;
                         break;
                     }
                 }
-                if (!matchTrigger) continue;
+                if (!matchAllTriggers) continue;
             }
             displayList.add(entry); //passed all filters
         }
