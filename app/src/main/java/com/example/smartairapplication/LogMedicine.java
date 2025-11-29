@@ -374,6 +374,31 @@ public class LogMedicine extends AppCompatActivity {
                     if ("Rescue".equals(inhalerType)) {
                         checkForRapidRescueRepeats();
                     }
+                    if ("Worse".equals(postFeeling)) {
+                        DatabaseReference childRef = FirebaseDatabase.getInstance().getReference("Users")
+                                .child("Parent").child(parentId)
+                                .child("Children").child(childId);
+
+                        childRef.child("name").addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(DataSnapshot snapshot) {
+                                String childName = snapshot.exists() ? snapshot.getValue(String.class) : "Your child";
+                                String message = childName + " is feeling worse after their dose.";
+                                Alert newAlert = new Alert("Worse After Dose", message, System.currentTimeMillis(), "high", childId);
+
+                                DatabaseReference parentAlertRef = FirebaseDatabase.getInstance().getReference("Users")
+                                        .child("Parent")
+                                        .child(parentId)
+                                        .child("Alerts");
+                                parentAlertRef.push().setValue(newAlert);
+                            }
+
+                            @Override
+                            public void onCancelled(DatabaseError error) {
+                                Toast.makeText(LogMedicine.this, "Failed to retrieve child's name for alert.", Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                    }
                     finish();
                 })
                 .addOnFailureListener(e ->
@@ -417,7 +442,7 @@ public class LogMedicine extends AppCompatActivity {
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-                // You can add a toast or log here if needed
+                Toast.makeText(LogMedicine.this, "Failed to check for rapid rescue repeats: " + databaseError.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
     }
