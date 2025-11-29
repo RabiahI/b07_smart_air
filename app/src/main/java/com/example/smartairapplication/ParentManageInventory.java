@@ -246,6 +246,7 @@ public class ParentManageInventory extends AppCompatActivity {
 
                     Medicine updated = new Medicine(n, p, e, amount, isLow);
                     updated.id = med.id;
+                    updated.expiryAlertSent = med.expiryAlertSent;
 
                     DatabaseReference ref = FirebaseDatabase.getInstance().getReference("Users")
                             .child("Parent").child(parentId)
