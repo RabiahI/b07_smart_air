@@ -81,35 +81,32 @@ public class ChildHomeActivity extends AppCompatActivity implements PasswordDial
             finish();
             return;
         }
+
         String intentChildId = getIntent().getStringExtra("childId");
         String intentParentId = getIntent().getStringExtra("parentId");
+        String currentUid = currentUser.getUid();
         final String finalChildId;
         final String finalParentId;
 
-        if (intentChildId != null && intentParentId == null) {
-            // Scenario 1: Parent viewing a specific child's profile
+        isParentMode = currentUid.equals(intentParentId) || (intentParentId == null && intentChildId != null);
+
+        if (isParentMode) {
+            finalParentId = currentUid;
             finalChildId = intentChildId;
-            finalParentId = currentUser.getUid();
             currentParentEmail = currentUser.getEmail();
-            isParentMode = true;
-        } else if (intentChildId == null && intentParentId != null) {
-            // Scenario 2: Child logged in directly
-            finalChildId = currentUser.getUid();
+        } else {
+            finalChildId = currentUid;
             finalParentId = intentParentId;
-            isParentMode = false;
-        } else if (intentChildId != null && intentChildId.equals(currentUser.getUid())) {
-            // Scenario 3: Child navigating back to ChildHomeActivity after direct login
-            finalChildId = intentChildId;
-            finalParentId = intentParentId;
-            isParentMode = false;
-        }else {
-            // Error or unexpected scenario
-            Toast.makeText(this, "Unable to determine child context. Please re-login.", Toast.LENGTH_LONG).show();
+        }
+
+        if (finalParentId == null || finalChildId == null) {
+            Toast.makeText(this, "Unable to determine user context. Please re-login.", Toast.LENGTH_LONG).show();
             FirebaseAuth.getInstance().signOut();
             startActivity(new Intent(ChildHomeActivity.this, Login.class));
             finish();
             return;
         }
+
         childRef = database.getReference("Users")
                 .child("Parent")
                 .child(finalParentId)

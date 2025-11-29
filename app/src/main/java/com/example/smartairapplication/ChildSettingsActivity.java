@@ -98,6 +98,7 @@ public class ChildSettingsActivity extends AppCompatActivity implements Password
 
                 FirebaseAuth.getInstance().signOut();
                 Intent intent = new Intent(getApplicationContext(), RoleSelectionActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(intent);
                 finish();
             });
@@ -165,7 +166,9 @@ public class ChildSettingsActivity extends AppCompatActivity implements Password
         } else {
             Toast.makeText(ChildSettingsActivity.this, "Parent email not found. Please re-login.", Toast.LENGTH_SHORT).show();
             FirebaseAuth.getInstance().signOut();
-            startActivity(new Intent(ChildSettingsActivity.this, Login.class));
+            Intent intent = new Intent(ChildSettingsActivity.this, Login.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            startActivity(intent);
             finish();
         }
     }
