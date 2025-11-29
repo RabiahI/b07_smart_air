@@ -1,12 +1,21 @@
 package com.example.smartairapplication;
 
+import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.content.Intent;
+import android.graphics.Canvas;
+import android.graphics.Paint;
+import android.graphics.pdf.PdfDocument;
+import android.net.Uri;
 import android.os.Bundle;
+
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import android.content.SharedPreferences;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -27,7 +36,12 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import org.w3c.dom.Text;
+
+import java.io.OutputStream;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -45,6 +59,11 @@ public class ParentHistoryActivity extends AppCompatActivity {
     private String childId;
 
     private ImageView filterButton;
+    private Button exportButton;
+
+    private ActivityResultLauncher<String> createPdfLauncher;
+    private ActivityResultLauncher<String> createCsvLauncher;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,6 +93,9 @@ public class ParentHistoryActivity extends AppCompatActivity {
         bottomNav = findViewById(R.id.bottomNav);
         bottomNav.setSelectedItemId(R.id.nav_history);
 
+        exportButton = findViewById(R.id.exportButton);
+        exportButton.setOnClickListener(v -> showExportDialog());
+
         bottomNav.setOnItemSelectedListener(item -> {
             int itemId = item.getItemId();
             if (itemId == R.id.nav_home) {
@@ -95,6 +117,156 @@ public class ParentHistoryActivity extends AppCompatActivity {
 
         loadHistory();
 
+        createPdfLauncher = registerForActivityResult(
+                new ActivityResultContracts.CreateDocument("application/pdf"),
+                uri -> {
+                    if (uri != null) writePDF(uri);
+                }
+        );
+
+        createCsvLauncher = registerForActivityResult(
+                new ActivityResultContracts.CreateDocument("text/csv"),
+                uri -> {
+                    if (uri != null) writeCSV(uri);
+                }
+        );
+
+    }
+
+    private void writeCSV(Uri uri) {
+        try {
+            OutputStream os = getContentResolver().openOutputStream(uri);
+            StringBuilder sb = new StringBuilder();
+
+            for (HistoryEntry entry : displayList) {
+
+                //format symptoms
+                List<String> symptoms = new ArrayList<>();
+                if (entry.nightWaking) symptoms.add("Night Waking");
+                if (entry.activityLimits) symptoms.add("Activity Limits");
+                if (!Objects.equals(entry.coughWheeze, "none")) symptoms.add("Cough/Wheeze");
+
+                String sym = TextUtils.join(" | ", symptoms);
+                String trig = entry.triggers != null ? TextUtils.join(" | ", entry.triggers) : "";
+                String notes = entry.notes != null ? entry.notes.replace(",", ";") : "";
+
+                sb.append(formatDate(entry.timestamp)).append(",");
+                sb.append(sym).append(",");
+                sb.append(trig).append(",");
+                sb.append(notes).append("\n");
+            }
+
+            os.write(sb.toString().getBytes());
+            os.close();
+
+            Toast.makeText(this, "CSV exported!", Toast.LENGTH_SHORT).show();
+
+        } catch (Exception e) {
+            Toast.makeText(this, "Failed to export CSV", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private void writePDF(Uri uri) {
+        try {
+            PdfDocument pdf = new PdfDocument();
+
+            Paint paint = new Paint();
+            paint.setTextSize(12f);
+
+            int pageWidth = 595;
+            int pageHeight = 842;
+
+            int y = 40;
+            int pageNumber = 1;
+
+            PdfDocument.PageInfo pageInfo = new PdfDocument.PageInfo.Builder(pageWidth, pageHeight, pageNumber).create();
+
+            PdfDocument.Page page = pdf.startPage(pageInfo);
+            Canvas canvas = page.getCanvas();
+
+            canvas.drawText("History Export", 20, y, paint);
+            y += 30;
+
+            for (HistoryEntry entry : displayList) {
+                if (y > pageHeight - 60) {
+                    pdf.finishPage(page);
+                    pageNumber++;
+
+                    pageInfo = new PdfDocument.PageInfo.Builder(pageWidth, pageHeight, pageNumber).create();
+                    page = pdf.startPage(pageInfo);
+                    canvas = page.getCanvas();
+                    y = 40;
+                }
+                canvas.drawText("Date: " + formatDate(entry.timestamp), 20, y, paint);
+                y+= 18;
+
+                //symptoms
+                List<String> symptoms = new ArrayList<>();
+                if (entry.nightWaking) symptoms.add("Night Waking");
+                if (entry.activityLimits) symptoms.add("Activity Limits");
+                if (!Objects.equals(entry.coughWheeze, "none")) symptoms.add("Cough/Wheeze");
+
+                canvas.drawText("Symptoms: " + TextUtils.join(", ", symptoms), 20, y, paint);
+                y += 18;
+
+                //triggers
+                canvas.drawText("Triggers: " + TextUtils.join(", ", entry.triggers), 20, y, paint);
+                y += 18;
+
+                //notes
+                canvas.drawText("Notes: " + (entry.notes == null ? "" : entry.notes), 20, y, paint);
+                y+= 28;
+            }
+
+            pdf.finishPage(page);
+
+            OutputStream os = getContentResolver().openOutputStream(uri);
+            pdf.writeTo(os);
+
+            os.close();
+            pdf.close();
+
+            Toast.makeText(this, "PDF exported!", Toast.LENGTH_SHORT).show();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            Toast.makeText(this, "Failed to export PDF", Toast.LENGTH_SHORT).show();
+        }
+    }
+    private String formatDate(String timestamp) {
+        try {
+            DateTimeFormatter input = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+            DateTimeFormatter output = DateTimeFormatter.ofPattern("MMM d, yyyy");
+            LocalDateTime dt = LocalDateTime.parse(timestamp, input);
+            return output.format(dt);
+        } catch (Exception e) {
+            return timestamp;
+        }
+    }
+
+    private void showExportDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Export History");
+
+        String[] options = {"Export as PDF", "Export as CSV"};
+        builder.setItems(options, (dialog, which) -> {
+            if (which ==0) {
+                exportPDF();
+            } else if (which == 1) {
+                exportCSV();
+            }
+        });
+
+        builder.show();
+    }
+
+    private void exportCSV() {
+        createCsvLauncher.launch("history_export.csv");
+
+    }
+
+    private void exportPDF() {
+        createPdfLauncher.launch("history_export.pdf");
     }
 
     private void loadHistory() {
