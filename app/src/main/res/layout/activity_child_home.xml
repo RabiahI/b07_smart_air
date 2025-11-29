@@ -5,8 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:gravity="center_horizontal"
-    android:orientation="vertical"
-    android:padding="16dp">
+    android:orientation="vertical">
 
     <ScrollView
         android:layout_width="0dp"
@@ -20,6 +19,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
+            android:padding="16dp"
         >
             <include layout="@layout/view_child_header"/>
             <include layout="@layout/zone_button" />
