@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/filterSheet"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="20dp"
+    android:background="@drawable/rounded_top_white">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="12dp"
+                android:text="Filters"
+                android:textSize="22sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="Date Range"
+                android:textStyle="bold" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <EditText
+                    android:id="@+id/inputStartDate"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:focusable="false"
+                    android:hint="Start date" />
+
+                <Space
+                    android:layout_width="10dp"
+                    android:layout_height="wrap_content" />
+
+                <EditText
+                    android:id="@+id/inputEndDate"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:focusable="false"
+                    android:hint="End date" />
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="Symptoms"
+                android:textStyle="bold" />
+
+            <com.google.android.material.chip.ChipGroup
+                android:id="@+id/chipGroupSymptoms"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="4dp"
+                app:singleSelection="false">
+
+                <com.google.android.material.chip.Chip
+                    android:checkable="true"
+                    android:text="Night Waking"
+                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"/>
+
+                <com.google.android.material.chip.Chip
+                    android:checkable="true"
+                    android:text="Activity Limits"
+                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"/>
+
+                <com.google.android.material.chip.Chip
+                    android:checkable="true"
+                    android:text="Cough/Wheeze"
+                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"/>
+
+            </com.google.android.material.chip.ChipGroup>
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="Triggers"
+                android:textStyle="bold" />
+
+            <com.google.android.material.chip.ChipGroup
+                android:id="@+id/chipGroupTriggers"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="4dp"
+                app:singleSelection="false">
+
+                <com.google.android.material.chip.Chip
+                    android:checkable="true"
+                    android:text="Exercise"
+                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"/>
+
+                <com.google.android.material.chip.Chip
+                    android:checkable="true"
+                    android:text="Cold air"
+                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"/>
+
+                <com.google.android.material.chip.Chip
+                    android:checkable="true"
+                    android:text="Dust"
+                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"/>
+
+                <com.google.android.material.chip.Chip
+                    android:checkable="true"
+                    android:text="Pets"
+                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"/>
+
+                <com.google.android.material.chip.Chip
+                    android:checkable="true"
+                    android:text="Smoke"
+                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"/>
+
+                <com.google.android.material.chip.Chip
+                    android:checkable="true"
+                    android:text="Illness"
+                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"/>
+
+                <com.google.android.material.chip.Chip
+                    android:checkable="true"
+                    android:text="Strong odors"
+                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"/>
+
+            </com.google.android.material.chip.ChipGroup>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:gravity="end"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/btnClearFilters"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Clear" />
+
+                <Space
+                    android:layout_width="12dp"
+                    android:layout_height="wrap_content" />
+
+                <Button
+                    android:id="@+id/btnApplyFilters"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Apply" />
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </ScrollView>
+</androidx.constraintlayout.widget.ConstraintLayout>
