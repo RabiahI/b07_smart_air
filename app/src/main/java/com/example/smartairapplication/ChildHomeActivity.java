@@ -36,6 +36,7 @@ public class ChildHomeActivity extends AppCompatActivity implements PasswordDial
     private FirebaseAuth mAuth;
     private int personalBest;
     private int latestPef;
+    private int previousPef = -1;
     private DatabaseReference childRef;
 
     private CardView zoneButton, triageButton, logMedicineButton, streaksButton, dailyCheckInButton, manageInventoryButton;
@@ -141,8 +142,8 @@ public class ChildHomeActivity extends AppCompatActivity implements PasswordDial
                         textWelcome.setText("Welcome " + child.getName()); //update welcome text
                         personalBest = child.getPersonalBest();
                         latestPef = child.getLatestPef();
-                        updateZone(latestPef);
-
+                        updateZone(latestPef, finalParentId, finalChildId, child.getName());
+                        previousPef = latestPef;
                     }
                 } else {
                     Toast.makeText(ChildHomeActivity.this, "Child data not found.", Toast.LENGTH_SHORT).show();
@@ -272,7 +273,7 @@ public class ChildHomeActivity extends AppCompatActivity implements PasswordDial
         pefLogRef.setValue(logEntry);
     }
 
-    private void updateZone(int currentPef) {
+    private void updateZone(int currentPef, String parentId, String childId, String childName) {
         if (personalBest == 0) {
             zoneTitle.setText(R.string.today_s_zone_not_set);
             zoneMessage.setText(R.string.please_set_your_personal_best_pef);
@@ -281,13 +282,17 @@ public class ChildHomeActivity extends AppCompatActivity implements PasswordDial
             return;
         }
 
-        double percentage = ((double) currentPef / personalBest) * 100;
+        double currentPercentage = ((double) currentPef / personalBest) * 100;
+        double previousPercentage = (previousPef == -1) ? 100 : ((double) previousPef / personalBest) * 100;
 
-        if (percentage >= 80) {
+        boolean isCurrentlyRed = currentPercentage < 50;
+        boolean wasPreviouslyRed = previousPercentage < 50;
+
+        if (currentPercentage >= 80) {
             zoneTitle.setText(R.string.today_s_zone_green);
             zoneMessage.setText(R.string.keep_up_your_routine);
             zoneButton.setCardBackgroundColor(Color.parseColor("#90C4A5"));
-        } else if (percentage >= 50) {
+        } else if (currentPercentage >= 50) {
             zoneTitle.setText(R.string.today_s_zone_yellow);
             zoneMessage.setText(R.string.caution_use_your_reliever_inhaler);
             zoneButton.setCardBackgroundColor(Color.parseColor("#FFC107")); // Yellow
@@ -295,6 +300,15 @@ public class ChildHomeActivity extends AppCompatActivity implements PasswordDial
             zoneTitle.setText(R.string.today_s_zone_red);
             zoneMessage.setText(R.string.danger_use_your_reliever_and_see_a_doctor);
             zoneButton.setCardBackgroundColor(Color.parseColor("#F44336")); // Red
+            
+            if (isCurrentlyRed && !wasPreviouslyRed) {
+                DatabaseReference alertsRef = FirebaseDatabase.getInstance().getReference("Users")
+                    .child("Parent").child(parentId)
+                    .child("Alerts").push();
+                String message = childName + "'s PEF is in the red zone, indicating a medical emergency.";
+                Alert alert = new Alert("Red Zone", message, System.currentTimeMillis(), "High", childId);
+                alertsRef.setValue(alert);
+            }
         }
 
         updatePefDisplay(currentPef);
