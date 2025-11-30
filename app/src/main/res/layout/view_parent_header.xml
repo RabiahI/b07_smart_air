@@ -28,7 +28,7 @@
             android:layout_marginStart="20dp"
             android:fontFamily="@font/baloo"
             android:text="SMART AIR"
-            android:textColor="@color/vivid_blue"
+            android:textColor="@color/dark_blue_text"
             android:textSize="32sp"
             android:textStyle="bold" />
     </LinearLayout>
@@ -86,6 +86,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="16dp"
+        android:background="@drawable/bubble_white"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 

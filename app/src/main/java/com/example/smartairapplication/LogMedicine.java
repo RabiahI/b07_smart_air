@@ -378,6 +378,7 @@ public class LogMedicine extends AppCompatActivity {
         ref.child(logId).setValue(log)
                 .addOnSuccessListener(aVoid -> {
                     Toast.makeText(this, "Medicine log saved!", Toast.LENGTH_SHORT).show();
+                    OverviewCalculator.updateDailyOverview(parentId, childId);
                     if ("Rescue".equals(inhalerType)) {
                         checkForRapidRescueRepeats();
                     }
@@ -430,7 +431,7 @@ public class LogMedicine extends AppCompatActivity {
                 int rescueCount = 0;
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                     MedicineLog log = snapshot.getValue(MedicineLog.class);
-                    if (log != null && "Rescue".equals(log.inhalerType)) {
+                    if (log != null && "Rescue".equals(log.getInhalerType())) {
                         rescueCount++;
                     }
                 }
