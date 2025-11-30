@@ -118,6 +118,8 @@
             android:exported="false"/>
         <activity android:name=".RescueLogsActivity"
             android:exported="false"/>
+        <activity android:name=".StreaksBadgesActivity"
+            android:exported="false"/>
 
         <meta-data
             android:name="preloaded_fonts"

@@ -1,4 +1,4 @@
-package com.example.smartairapplication;;
+package com.example.smartairapplication;
 
 import android.os.Bundle;
 import android.widget.Toast;

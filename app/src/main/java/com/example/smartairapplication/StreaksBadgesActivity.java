@@ -38,7 +38,10 @@ public class StreaksBadgesActivity extends AppCompatActivity {
     private ArrayList<Long> controllerTimes;
     private ArrayList<Long> techniqueTimes;
     private int bestStreakController;
-    private Long rescueThreshold;
+    private int rescueThreshold;
+    private boolean isParentMode;
+    private boolean thresholdLoaded = false;
+    private boolean logsLoaded = false;
 
 
     @Override
@@ -65,9 +68,14 @@ public class StreaksBadgesActivity extends AppCompatActivity {
 
         currentUser = FirebaseAuth.getInstance().getCurrentUser();
         childId = getIntent().getStringExtra("childId");
+        parentId = getIntent().getStringExtra("parentId");
+        isParentMode = getIntent().getBooleanExtra("isParentMode", false);
 
-        if (currentUser != null) {
-            parentId = currentUser.getUid();
+        if (parentId == null) {
+            currentUser = FirebaseAuth.getInstance().getCurrentUser();
+            if (currentUser != null) {
+                parentId = currentUser.getUid();
+            }
         }
 
         // check if child exists
@@ -76,13 +84,7 @@ public class StreaksBadgesActivity extends AppCompatActivity {
             return;
         }
 
-        // check if parent is logged in
-        if (parentId != null) {
-            dataRef = FirebaseDatabase.getInstance().getReference("Users").child("Parent").child(parentId).child("Children").child(childId);
-        }
-        else {
-            dataRef = FirebaseDatabase.getInstance().getReference("Users").child("Child").child(childId);
-        }
+        dataRef = FirebaseDatabase.getInstance().getReference("Users").child("Parent").child(parentId).child("Children").child(childId);
 
         buttonHomepage.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -90,6 +92,7 @@ public class StreaksBadgesActivity extends AppCompatActivity {
                 Intent intent = new Intent(StreaksBadgesActivity.this, ChildHomeActivity.class);
                 intent.putExtra("childId", childId);
                 intent.putExtra("parentId", parentId);
+                intent.putExtra("isParentMode", isParentMode);
                 startActivity(intent);
             }
         });
@@ -100,11 +103,20 @@ public class StreaksBadgesActivity extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if (!snapshot.exists()) {
                     Toast.makeText(StreaksBadgesActivity.this, "No threshold data found.", Toast.LENGTH_SHORT).show();
+                    rescueThreshold = 4;
                     return;
                 }
                 else {
-                    rescueThreshold = snapshot.getValue(Long.class);
+                    Long temp = snapshot.getValue(Long.class);
+                    if (temp != null) {
+                        rescueThreshold = temp.intValue();
+                    }
+                    else {
+                        rescueThreshold = 4;
+                    }
                 }
+                thresholdLoaded = true;
+                testDisplayBadges();
             }
 
             @Override
@@ -114,7 +126,12 @@ public class StreaksBadgesActivity extends AppCompatActivity {
         });
 
         displayStreaks();
-        displayBadges();
+    }
+
+    private void testDisplayBadges() {
+        if (thresholdLoaded && logsLoaded) {
+            displayBadges();
+        }
     }
 
     private void displayStreaks() {
@@ -123,6 +140,10 @@ public class StreaksBadgesActivity extends AppCompatActivity {
         logsRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
+
+                controllerTimes.clear();
+                techniqueTimes.clear();
+
                 if (!snapshot.exists()) {
                     String controllerMsg = "Controller Streak: No log information found";
                     String techniqueMsg = "Technique Streak: No log information found";
@@ -146,6 +167,8 @@ public class StreaksBadgesActivity extends AppCompatActivity {
 
                     displayController();
                     displayTechnique();
+                    logsLoaded = true;
+                    testDisplayBadges();
                 }
             }
 
