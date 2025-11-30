@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.text.InputType;
+import android.text.format.DateUtils;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -51,6 +52,7 @@ public class ParentHomeActivity extends AppCompatActivity {
     private CardView zoneButton;
     private TextView zoneTitle, zoneMessage, pefValue;
     private ImageView btnNotifications, btnProfile;
+    private TextView tvLastRescue, tvWeeklyRescueCount;
 
 
     @Override
@@ -86,6 +88,9 @@ public class ParentHomeActivity extends AppCompatActivity {
         zoneButton.setOnClickListener(v -> showSetPersonalBestDialog());
         btnNotifications = findViewById(R.id.btnNotifications);
         btnProfile = findViewById(R.id.btnProfile);
+
+        tvLastRescue = findViewById(R.id.tvLastRescue);
+        tvWeeklyRescueCount = findViewById(R.id.tvWeeklyRescueCount);
 
 
         loadChildrenIntoSpinner();
@@ -213,6 +218,7 @@ public class ParentHomeActivity extends AppCompatActivity {
         
         if (selectedChildId != null) {
             updatePefDisplayForChild(selectedChildId);
+            updateOverviewForChild(selectedChildId);
         }
 
         setupSpinnerListener();
@@ -233,6 +239,7 @@ public class ParentHomeActivity extends AppCompatActivity {
 
                 filterAlertsForSelectedChild();
                 updatePefDisplayForChild(selectedChildId);
+                updateOverviewForChild(selectedChildId);
             }
 
             @Override
@@ -277,6 +284,65 @@ public class ParentHomeActivity extends AppCompatActivity {
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
                 Toast.makeText(ParentHomeActivity.this, "Failed to load PEF data.", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void updateOverviewForChild(String childId) {
+        if (childId == null) return;
+
+        DatabaseReference medLogsRef = FirebaseDatabase.getInstance().getReference("Users")
+                .child("Parent").child(parentId).child("Children").child(childId)
+                .child("Logs").child("medicineLogs");
+
+        medLogsRef.orderByChild("timestamp").limitToLast(1).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (snapshot.exists()) {
+                    for (DataSnapshot medSnap : snapshot.getChildren()) {
+                        MedicineLog lastLog = medSnap.getValue(MedicineLog.class);
+                        if (lastLog != null) {
+                            CharSequence relativeTime = DateUtils.getRelativeTimeSpanString(lastLog.getTimestamp(), System.currentTimeMillis(), DateUtils.MINUTE_IN_MILLIS);
+                            tvLastRescue.setText("Last Rescue: " + relativeTime);
+                        }
+                    }
+                } else {
+                    tvLastRescue.setText("Last Rescue: No recent data");
+                }
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                tvLastRescue.setText("Last Rescue: Error");
+            }
+        });
+
+
+        DatabaseReference overviewRef = FirebaseDatabase.getInstance().getReference("Users")
+                .child("Parent").child(parentId).child("Children").child(childId)
+                .child("DailyOverviews");
+
+        overviewRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                int weeklyCount = 0;
+                List<DailyOverview> overviews = new ArrayList<>();
+                for (DataSnapshot daySnap : snapshot.getChildren()) {
+                    DailyOverview overview = daySnap.getValue(DailyOverview.class);
+                    if (overview != null) {
+                        overviews.add(overview);
+                    }
+                }
+                
+                for (int i = 0; i < 7 && i < overviews.size(); i++) {
+                    weeklyCount += overviews.get(i).rescueCount;
+                }
+                tvWeeklyRescueCount.setText("Weekly Rescue Count: " + weeklyCount);
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                tvWeeklyRescueCount.setText("Weekly Rescue Count: Error");
             }
         });
     }

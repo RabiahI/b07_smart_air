@@ -269,7 +269,9 @@ public class ChildHomeActivity extends AppCompatActivity implements PasswordDial
                 .child("Logs").child("pefLogs").push();
 
         PefLog logEntry = new PefLog(pefValue, System.currentTimeMillis());
-        pefLogRef.setValue(logEntry);
+        pefLogRef.setValue(logEntry).addOnSuccessListener(aVoid -> {
+            OverviewCalculator.updateDailyOverview(parentId, childId);
+        });
     }
 
     private void updateZone(int currentPef) {

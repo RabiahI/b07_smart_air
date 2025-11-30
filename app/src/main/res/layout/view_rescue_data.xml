@@ -15,6 +15,7 @@
         android:padding="18dp">
 
         <TextView
+            android:id="@+id/tvLastRescue"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="12dp"
@@ -38,6 +39,7 @@
                 android:src="@drawable/ic_dialog_alert" />
 
             <TextView
+                android:id="@+id/tvWeeklyRescueCount"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="12dp"
