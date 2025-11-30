@@ -4,15 +4,20 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.DashPathEffect;
+import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.text.InputType;
 import android.text.format.DateUtils;
+import android.util.DisplayMetrics;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.PopupWindow;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -45,7 +50,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ParentHomeActivity extends AppCompatActivity {
-
+    private PopupWindow alertsPopup;
     private CardView childButton, manageProviderButton;
     private CardView manageInventoryButton;
     private BottomNavigationView bottomNav;
@@ -55,7 +60,6 @@ public class ParentHomeActivity extends AppCompatActivity {
     private String selectedChildId;
     private String parentId;
 
-    private RecyclerView alertsRecyclerView;
     private AlertsAdapter alertsAdapter;
     private List<Alert> alertList;
     private DatabaseReference alertsRef;
@@ -66,6 +70,7 @@ public class ParentHomeActivity extends AppCompatActivity {
     private TextView tvLastRescue, tvWeeklyRescueCount;
 
     private LineChart zoneChart;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -107,8 +112,14 @@ public class ParentHomeActivity extends AppCompatActivity {
 
         loadChildrenIntoSpinner();
 
-        btnNotifications.setOnClickListener(v -> {
-            startActivity(new Intent(getApplicationContext(), ParentAlertsActivity.class));
+        alertList = new ArrayList<>();
+        alertsAdapter = new AlertsAdapter(this, alertList);
+
+        btnNotifications.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                toggleAlertsPopup(v);
+            }
         });
 
         btnProfile.setOnClickListener(v -> {
@@ -131,11 +142,6 @@ public class ParentHomeActivity extends AppCompatActivity {
             intent.putExtra("parentId", parentId);
             startActivity(intent);
         });
-        alertsRecyclerView = findViewById(R.id.alertsRecyclerView);
-        alertsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        alertList = new ArrayList<>();
-        alertsAdapter = new AlertsAdapter(this, alertList);
-        alertsRecyclerView.setAdapter(alertsAdapter);
 
         alertsRef = FirebaseDatabase.getInstance().getReference("Users")
                 .child("Parent")
@@ -267,6 +273,9 @@ public class ParentHomeActivity extends AppCompatActivity {
         alertList.clear();
         if (selectedChildId != null) {
             for (Alert alert : allAlertsMasterList) {
+                if (alertList.size() >= 4) {
+                    break;
+                }
                 if (selectedChildId.equals(alert.getChildId())) {
                     alertList.add(alert);
                 }
@@ -533,4 +542,31 @@ public class ParentHomeActivity extends AppCompatActivity {
 
         builder.show();
     }
+    private void toggleAlertsPopup(View anchor) {
+        if (alertsPopup != null && alertsPopup.isShowing()) {
+            alertsPopup.dismiss();
+            return;
+        }
+
+        LayoutInflater inflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
+        View popupView = inflater.inflate(R.layout.layout_alerts_hub, null);
+
+        RecyclerView alertsRecyclerView = popupView.findViewById(R.id.alertsRecyclerView);
+        alertsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        alertsRecyclerView.setAdapter(alertsAdapter);
+
+        DisplayMetrics displayMetrics = getResources().getDisplayMetrics();
+        int width = (int) (displayMetrics.widthPixels * 0.8);
+
+        alertsPopup = new PopupWindow(popupView, width, ViewGroup.LayoutParams.WRAP_CONTENT, true);
+
+        alertsPopup.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        alertsPopup.setOutsideTouchable(true);
+
+        int xOff = -anchor.getWidth();
+        int yOff = 8;
+
+        alertsPopup.showAsDropDown(anchor, xOff, yOff);
+    }
+
 }

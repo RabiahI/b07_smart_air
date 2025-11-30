@@ -38,6 +38,19 @@
                     android:layout_gravity="center"
                     android:layout_marginTop="10dp"
                     android:fontFamily="@font/inter_bold"
+                    android:text="Quick Actions"
+                    android:textColor="@color/outer_text"
+                    android:textSize="24sp">
+                </TextView>
+
+                <include layout="@layout/quick_actions_parent"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="10dp"
+                    android:fontFamily="@font/inter_bold"
                     android:text="Today's Overview"
                     android:textColor="@color/outer_text"
                     android:textSize="24sp">
@@ -46,32 +59,6 @@
                 <!-- replace under with layout for last rescue data, latest alerts-->
                 <include layout="@layout/view_rescue_data"/>
 
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_marginTop="10dp"
-                    android:fontFamily="@font/inter_bold"
-                    android:text="Latest Alerts"
-                    android:textColor="@color/outer_text"
-                    android:textSize="24sp">
-                </TextView>
-
-                <include layout="@layout/view_last_alerts"/>
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_marginTop="10dp"
-                    android:fontFamily="@font/inter_bold"
-                    android:text="Quick Actions"
-                    android:textColor="@color/outer_text"
-                    android:textSize="24sp">
-                </TextView>
-
-                <include layout="@layout/quick_actions_parent"/>
             </LinearLayout>
         </LinearLayout>
     </ScrollView>
