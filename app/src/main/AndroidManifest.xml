@@ -15,6 +15,9 @@
         android:theme="@style/Theme.Material3.DayNight.NoActionBar">
 
         <activity
+            android:name=".ProviderReportActivity"
+            android:exported="false" />
+        <activity
             android:name=".ChildPefHistory"
             android:exported="false" />
         <activity

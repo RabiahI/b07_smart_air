@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="8dp"
+    android:layout_marginBottom="16dp"
+    app:cardCornerRadius="18dp"
+    app:cardUseCompatPadding="true">
+
+    <LinearLayout
+        android:id="@+id/zoneDistributionCardContainer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp"
+        android:background="@drawable/card_lightgray_round">
+
+        <TextView
+            android:id="@+id/txtZoneTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Zone Distribution"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:fontFamily="@font/inter_bold"
+            android:textColor="#233647" />
+
+        <TextView
+            android:id="@+id/txtZoneSubtitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:text="Time spent in each asthma zone"
+            android:textSize="12sp"
+            android:fontFamily="@font/inter"
+            android:textColor="#6B7A90" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
+
+            <TextView
+                android:layout_width="70dp"
+                android:layout_height="wrap_content"
+                android:text="Green"
+                android:textSize="13sp"
+                android:textColor="#2D7A3F"
+                android:fontFamily="@font/inter" />
+
+            <ProgressBar
+                android:id="@+id/progGreen"
+                style="?android:attr/progressBarStyleHorizontal"
+                android:layout_width="0dp"
+                android:layout_height="12dp"
+                android:layout_weight="1"
+                android:progress="0"
+                android:max="100"
+                android:progressTint="#3DDC84"
+                android:backgroundTint="#E9FFF3" />
+
+            <TextView
+                android:id="@+id/txtGreenPercent"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:text="0%"
+                android:textSize="12sp"
+                android:textColor="#2D7A3F" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
+
+            <TextView
+                android:layout_width="70dp"
+                android:layout_height="wrap_content"
+                android:text="Yellow"
+                android:textSize="13sp"
+                android:textColor="#CC8A00"
+                android:fontFamily="@font/inter" />
+
+            <ProgressBar
+                android:id="@+id/progYellow"
+                style="?android:attr/progressBarStyleHorizontal"
+                android:layout_width="0dp"
+                android:layout_height="12dp"
+                android:layout_weight="1"
+                android:progress="0"
+                android:max="100"
+                android:progressTint="#FFC107"
+                android:backgroundTint="#FFF9E0" />
+
+            <TextView
+                android:id="@+id/txtYellowPercent"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:text="0%"
+                android:textSize="12sp"
+                android:textColor="#CC8A00" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
+
+            <TextView
+                android:layout_width="70dp"
+                android:layout_height="wrap_content"
+                android:text="Red"
+                android:textSize="13sp"
+                android:textColor="#C62828"
+                android:fontFamily="@font/inter" />
+
+            <ProgressBar
+                android:id="@+id/progRed"
+                style="?android:attr/progressBarStyleHorizontal"
+                android:layout_width="0dp"
+                android:layout_height="12dp"
+                android:layout_weight="1"
+                android:progress="0"
+                android:max="100"
+                android:progressTint="#F44336"
+                android:backgroundTint="#FFEBEE" />
+
+            <TextView
+                android:id="@+id/txtRedPercent"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:text="0%"
+                android:textSize="12sp"
+                android:textColor="#C62828" />
+        </LinearLayout>
+
+    </LinearLayout>
+
+</androidx.cardview.widget.CardView>
