@@ -197,7 +197,7 @@ public class ManageInventoryChild extends AppCompatActivity {
             Log.e("InventoryLog", "Error creating log entry: " + e.getMessage());
         }
     }
-}
+
     private void sendLowStockAlert(String medicineName) {
         String message = medicineName + " is low in stock. Remaining puffs are 20 or less.";
         Alert alert = new Alert("Low Stock", message, System.currentTimeMillis(), "Medium", childId);
