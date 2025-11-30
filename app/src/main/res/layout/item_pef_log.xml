@@ -14,6 +14,7 @@
     android:id="@+id/cardPef">
 
     <LinearLayout
+        android:id = "@+id/layoutPef"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="13dp"
