@@ -30,7 +30,7 @@ public class UserRoleManager {
                                 intent = new Intent(activity, ParentHomeActivity.class);
                                 break;
                             case "Provider":
-                                intent = new Intent(activity, ProviderHomeActivity.class);
+                                intent = new Intent(activity, ProviderManageChildren.class);
                                 break;
                             default:
                                 intent = new Intent(activity, Login.class);

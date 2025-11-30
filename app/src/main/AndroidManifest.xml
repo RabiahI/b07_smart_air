@@ -13,6 +13,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Material3.DayNight.NoActionBar">
+
         <activity
             android:name=".ChildPefHistory"
             android:exported="false" />
@@ -80,6 +81,9 @@
             android:name=".ParentSettingsActivity"
             android:exported="false" />
         <activity
+            android:name=".ProviderManageChildren"
+            android:exported="false" />
+        <activity
             android:name=".ProviderHomeActivity"
             android:exported="false" />
         <activity
@@ -100,6 +104,17 @@
         <activity
             android:name=".MainActivity"
             android:exported="true" />
+        <activity
+            android:name=".ManageDataSharingActivity"
+            android:exported="false" />
+        <activity android:name=".TriageLogActivity"
+            android:exported="false"/>
+        <activity android:name=".PefLogActivity"
+            android:exported="false"/>
+        <activity android:name=".SymptomsLogActivity"
+            android:exported="false"/>
+        <activity android:name=".RescueLogsActivity"
+            android:exported="false"/>
 
         <meta-data
             android:name="preloaded_fonts"

@@ -2,6 +2,7 @@ package com.example.smartairapplication;
 
 import android.os.Bundle;
 import android.text.InputType;
+import android.util.Log;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
@@ -22,6 +23,9 @@ import com.google.firebase.database.ValueEventListener;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -34,12 +38,12 @@ public class ManageInventoryChild extends AppCompatActivity {
     private String childId, parentId;
     private ImageView btnBack;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_manage_inventory_child);
+
         childId = getIntent().getStringExtra("childId");
         parentId = getIntent().getStringExtra("parentId");
 
@@ -66,12 +70,8 @@ public class ManageInventoryChild extends AppCompatActivity {
         new android.app.AlertDialog.Builder(this)
                 .setTitle("Return to home?")
                 .setMessage("If you leave now, any unsaved changes will be lost.")
-                .setPositiveButton("Leave", (dialog, which) -> {
-                    finish();
-                })
-                .setNegativeButton("Stay", (dialog, which) -> {
-                    dialog.dismiss();
-                })
+                .setPositiveButton("Leave", (dialog, which) -> finish())
+                .setNegativeButton("Stay", (dialog, which) -> dialog.dismiss())
                 .show();
     }
 
@@ -84,13 +84,27 @@ public class ManageInventoryChild extends AppCompatActivity {
         ref.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot snapshot) {
+
+                // create inventory node if missing
+                if (!snapshot.exists()) {
+                    ref.setValue(new Object());
+                    medicineList.clear();
+                    adapter.notifyDataSetChanged();
+                    return;
+                }
+
                 medicineList.clear();
                 for (DataSnapshot medSnap : snapshot.getChildren()) {
                     Medicine med = medSnap.getValue(Medicine.class);
-                    med.id = medSnap.getKey();
-                    medicineList.add(med);
-                    checkIfExpired(med);
+                    if (med != null) {
+                        med.id = medSnap.getKey();
+                        medicineList.add(med);
+                        checkIfExpired(med);
+                    }
+                 
+               
                 }
+
                 adapter.notifyDataSetChanged();
             }
 
@@ -98,6 +112,7 @@ public class ManageInventoryChild extends AppCompatActivity {
             public void onCancelled(DatabaseError error) {}
         });
     }
+
     private void showUpdateDialog(Medicine medicine) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Enter remaining puffs");
@@ -108,11 +123,12 @@ public class ManageInventoryChild extends AppCompatActivity {
 
         builder.setPositiveButton("Save", (dialog, which) -> {
             String text = input.getText().toString().trim();
-            // validate input
+
             if (text.isEmpty()) {
                 Toast.makeText(this, "Please enter a valid amount.", Toast.LENGTH_SHORT).show();
                 return;
             }
+
             int newAmount;
             try {
                 newAmount = Integer.parseInt(text);
@@ -120,6 +136,7 @@ public class ManageInventoryChild extends AppCompatActivity {
                 Toast.makeText(this, "Invalid number.", Toast.LENGTH_SHORT).show();
                 return;
             }
+
             if (newAmount < 0) {
                 Toast.makeText(this, "Amount cannot be negative.", Toast.LENGTH_SHORT).show();
                 return;
@@ -152,6 +169,35 @@ public class ManageInventoryChild extends AppCompatActivity {
         builder.show();
     }
 
+    private void logInventoryUpdate(String medicineName, int oldAmount, int newAmount) {
+        try {
+            Map<String, Object> logEntry = new HashMap<>();
+            logEntry.put("timestamp", System.currentTimeMillis());
+            logEntry.put("medicine", medicineName);
+            logEntry.put("amount_before", oldAmount);
+            logEntry.put("amount_after", newAmount);
+            logEntry.put("user_action", "Inventory amount manually updated by Parent.");
+
+            // Write the log entry to the separate history node
+            DatabaseReference logRef = FirebaseDatabase.getInstance().getReference("Users")
+                    .child("Parent").child(parentId)
+                    .child("Children").child(childId)
+                    .child("InventoryHistory")
+                    .push();
+
+            logRef.setValue(logEntry)
+                    .addOnSuccessListener(a -> {
+                        Log.d("InventoryLog", "Successfully logged update for " + medicineName);
+                    })
+                    .addOnFailureListener(e -> {
+                        Log.e("InventoryLog", "Failed to write history log: " + e.getMessage());
+                    });
+
+        } catch (Exception e) {
+            Log.e("InventoryLog", "Error creating log entry: " + e.getMessage());
+        }
+    }
+}
     private void sendLowStockAlert(String medicineName) {
         String message = medicineName + " is low in stock. Remaining puffs are 20 or less.";
         Alert alert = new Alert("Low Stock", message, System.currentTimeMillis(), "Medium", childId);

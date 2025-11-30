@@ -11,6 +11,7 @@ public class Child extends User {
     private int latestPef;
     private String accessStatus; //"not_shared", "generated", "accepted"
     private String inviteCode; //provider's invite code
+    private SharingSettings sharingSettings;
     private int threshold;
     private int controllerDays;
 
@@ -25,6 +26,7 @@ public class Child extends User {
         this.age = age;
         this.personalBest = personalBest;
         this.latestPef = latestPef;
+        this.sharingSettings = new SharingSettings();
         this.threshold = threshold;
         this.controllerDays = controllerDays;
     }
@@ -79,4 +81,13 @@ public class Child extends User {
     public void setControllerDays(int controllerDays) {this.controllerDays = controllerDays;}
     public void setAccessStatus(String accessStatus){this.accessStatus = accessStatus;  }
     public void setInviteCode(String inviteCode){this.inviteCode = inviteCode;  }
+
+    public void setSharingSettings(SharingSettings sharingSettings) { this.sharingSettings = sharingSettings; }
+
+    public SharingSettings getSharingSettings() {
+        if (sharingSettings == null) {
+            sharingSettings = new SharingSettings();
+        }
+        return sharingSettings;
+    }
 }

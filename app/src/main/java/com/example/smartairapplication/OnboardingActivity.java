@@ -24,21 +24,6 @@ public class OnboardingActivity extends AppCompatActivity {
             return insets;
         });
 
-//        if (isFirstLogin()) {
-//            Bundle extras = getIntent().getExtras();
-//            String role = extras != null ? extras.getString("role", "User") : "User";
-//            String uid = extras != null ? extras.getString("uid", "") : "";
-//
-//            OnboardingDialogFragment dialog = new OnboardingDialogFragment();
-//            Bundle args = new Bundle();
-//            args.putString("role", role);
-//            args.putString("uid", uid);
-//            dialog.setArguments(args);
-//            dialog.show(getSupportFragmentManager(), "onboardingDialog");
-//        } else {
-//            // Not a first login, close this activity
-//            finish();
-//        }
     }
 
     public static boolean isFirstLogin() {

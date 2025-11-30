@@ -14,41 +14,58 @@
         android:orientation="vertical"
         android:padding="16dp">
 
-        <!-- Child Name -->
-        <TextView
-            android:id="@+id/textViewChildName"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Child Name"
-            android:textSize="18sp"
-            android:textStyle="bold"
-            android:textColor="#2C3E50" />
-
-
-        <!-- Access Status Row -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:gravity="center_vertical"
-            android:layout_marginTop="2dp">
-            <!-- Icon to Represent Status -->
-            <ImageView
-                android:id="@+id/iconAccessStatus"
-                android:layout_width="20dp"
-                android:layout_height="20dp"
-                android:src="@drawable/ic_lock_outline"
-                android:layout_marginStart="2dp" />
+            android:padding="16dp">
 
+            <!-- Child Name -->
             <TextView
-                android:id="@+id/textViewAccessStatus"
+                android:id="@+id/textViewChildName"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Child Name"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:textColor="#2C3E50" />
+
+            <!-- Access Status Container aligned to the right -->
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
-                android:layout_weight="1"
-                android:text="Access: Not Shared"
-                android:textColor="#757575"
-                android:textSize="14sp" />
+                android:orientation="horizontal"
+                android:gravity="end"
+                android:layout_gravity="end"
+                android:layout_marginStart="16dp">
+
+                <ImageView
+                    android:id="@+id/iconAccessStatus"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:src="@drawable/ic_lock_outline" />
+
+                <TextView
+                    android:id="@+id/textViewAccessStatus"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:text="Access: Not Shared"
+                    android:textColor="#757575"
+                    android:textSize="14sp" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_horizontal"
+            android:layout_marginTop="2dp">
 
             <Button
                 android:id="@+id/buttonInviteProvider"
@@ -59,9 +76,22 @@
                 android:textSize="14sp"
                 android:backgroundTint="@color/dark_blue_text"
                 android:textColor="@android:color/white"
+                android:layout_marginRight="16dp"
                 android:paddingHorizontal="16dp" />
 
+            <Button
+                android:id="@+id/buttonManageDataSharing"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Manage Data Sharing"
+                android:textAllCaps="false"
+                android:textSize="14sp"
+                android:backgroundTint="#6f32a8"
+                android:textColor="@android:color/white"
+                android:paddingHorizontal="16dp" />
         </LinearLayout>
+
+
 
         <!-- Invite Code Row (visible only when code exists) -->
         <LinearLayout
@@ -118,4 +148,3 @@
     </LinearLayout>
 
 </androidx.cardview.widget.CardView>
-

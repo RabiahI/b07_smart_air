@@ -1,0 +1,238 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="16dp">
+
+    <LinearLayout
+        android:id="@+id/pefCard"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:orientation="vertical"
+        android:padding="16dp"
+        android:background="@drawable/rounded_box"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <TextView
+            android:id="@+id/pefTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Peak Flow (PEF)"
+            android:textSize="20sp"
+            android:textColor="#4b629f"
+            android:fontFamily="@font/roca_two_bold"
+            android:paddingBottom="16dp"/>
+
+        <LinearLayout
+            android:id="@+id/pefEntry1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:paddingTop="12dp"
+            android:paddingBottom="12dp"
+            android:background="?attr/selectableItemBackground"
+            android:clickable="true"
+            android:focusable="true">
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/pefDate1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Today"
+                    android:textSize="16sp"
+                    android:textColor="#333333"
+                    android:fontFamily="@font/roca_two_bold"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical">
+
+                <TextView
+                    android:id="@+id/pefValue1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="450"
+                    android:textSize="32sp"
+                    android:textColor="#4b629f"
+                    android:fontFamily="@font/roca_two_bold"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text=" L/min"
+                    android:textSize="14sp"
+                    android:textColor="#666666"
+                    android:layout_marginStart="4dp"/>
+            </LinearLayout>
+
+            <View
+                android:id="@+id/pefIndicator1"
+                android:layout_width="12dp"
+                android:layout_height="12dp"
+                android:layout_marginStart="16dp" />
+
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#E0E0E0"/>
+
+        <LinearLayout
+            android:id="@+id/pefEntry2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:paddingTop="12dp"
+            android:paddingBottom="12dp"
+            android:background="?attr/selectableItemBackground"
+            android:clickable="true"
+            android:focusable="true">
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/pefDate2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Yesterday"
+                    android:textSize="16sp"
+                    android:textColor="#333333"
+                    android:fontFamily="@font/roca_two_bold"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical">
+
+                <TextView
+                    android:id="@+id/pefValue2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="420"
+                    android:textSize="32sp"
+                    android:textColor="#4b629f"
+                    android:fontFamily="@font/roca_two_bold"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text=" L/min"
+                    android:textSize="14sp"
+                    android:textColor="#666666"
+                    android:layout_marginStart="4dp"/>
+            </LinearLayout>
+
+            <View
+                android:id="@+id/pefIndicator2"
+                android:layout_width="12dp"
+                android:layout_height="12dp"
+                android:layout_marginStart="16dp" />
+
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#E0E0E0"/>
+
+        <LinearLayout
+            android:id="@+id/pefEntry3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:paddingTop="12dp"
+            android:paddingBottom="12dp"
+            android:background="?attr/selectableItemBackground"
+            android:clickable="true"
+            android:focusable="true">
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/pefDate3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Nov 27"
+                    android:textSize="16sp"
+                    android:textColor="#333333"
+                    android:fontFamily="@font/roca_two_bold"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical">
+
+                <TextView
+                    android:id="@+id/pefValue3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="410"
+                    android:textSize="32sp"
+                    android:textColor="#4b629f"
+                    android:fontFamily="@font/roca_two_bold"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text=" L/min"
+                    android:textSize="14sp"
+                    android:textColor="#666666"
+                    android:layout_marginStart="4dp"/>
+            </LinearLayout>
+
+            <View
+                android:id="@+id/pefIndicator3"
+                android:layout_width="12dp"
+                android:layout_height="12dp"
+                android:layout_marginStart="16dp"/>
+
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/viewAllPefButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end|bottom"
+            android:text="View All"
+            android:textSize="14sp"
+            android:backgroundTint="#4b629f"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp"/>
+
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
