@@ -3,6 +3,8 @@ package com.example.smartairapplication;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.graphics.DashPathEffect;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.text.InputType;
 import android.text.format.DateUtils;
@@ -15,13 +17,22 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 import androidx.appcompat.app.AlertDialog;
-
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.github.mikephil.charting.charts.LineChart;
+import com.github.mikephil.charting.components.AxisBase;
+import com.github.mikephil.charting.components.Legend;
+import com.github.mikephil.charting.components.XAxis;
+import com.github.mikephil.charting.components.YAxis;
+import com.github.mikephil.charting.data.Entry;
+import com.github.mikephil.charting.data.LineData;
+import com.github.mikephil.charting.data.LineDataSet;
+import com.github.mikephil.charting.formatter.IndexAxisValueFormatter;
+import com.github.mikephil.charting.formatter.ValueFormatter;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -54,6 +65,7 @@ public class ParentHomeActivity extends AppCompatActivity {
     private ImageView btnNotifications, btnProfile;
     private TextView tvLastRescue, tvWeeklyRescueCount;
 
+    private LineChart zoneChart;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,7 +92,7 @@ public class ParentHomeActivity extends AppCompatActivity {
         manageProviderButton = findViewById(R.id.manageSharingButton);
         bottomNav = findViewById(R.id.bottomNav);
         manageInventoryButton = findViewById(R.id.manageInventoryButton);
-        
+
         zoneButton = findViewById(R.id.zone_button);
         zoneTitle = findViewById(R.id.zone_title);
         zoneMessage = findViewById(R.id.zone_message);
@@ -91,7 +103,7 @@ public class ParentHomeActivity extends AppCompatActivity {
 
         tvLastRescue = findViewById(R.id.tvLastRescue);
         tvWeeklyRescueCount = findViewById(R.id.tvWeeklyRescueCount);
-
+        zoneChart = findViewById(R.id.zoneChart);
 
         loadChildrenIntoSpinner();
 
@@ -189,10 +201,10 @@ public class ParentHomeActivity extends AppCompatActivity {
 
                 ArrayAdapter<String> adapter = new ArrayAdapter<>(
                         ParentHomeActivity.this,
-                        android.R.layout.simple_spinner_item,
+                        R.layout.spinner_item,
                         childNames
                 );
-                adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                adapter.setDropDownViewResource(R.layout.spinner_dropdown_item);
                 spinnerChildren.setAdapter(adapter);
 
                 loadSavedSelection();
@@ -215,7 +227,7 @@ public class ParentHomeActivity extends AppCompatActivity {
             }
         }
         filterAlertsForSelectedChild();
-        
+
         if (selectedChildId != null) {
             updatePefDisplayForChild(selectedChildId);
             updateOverviewForChild(selectedChildId);
@@ -251,7 +263,7 @@ public class ParentHomeActivity extends AppCompatActivity {
         if (selectedChildId == null && !childIds.isEmpty()) {
             selectedChildId = childIds.get(0);
         }
-        
+
         alertList.clear();
         if (selectedChildId != null) {
             for (Alert alert : allAlertsMasterList) {
@@ -273,7 +285,7 @@ public class ParentHomeActivity extends AppCompatActivity {
                 if (snapshot.exists()) {
                     Integer personalBest = snapshot.child("personalBest").getValue(Integer.class);
                     Integer latestPef = snapshot.child("latestPef").getValue(Integer.class);
-                    
+
                     if (personalBest == null) personalBest = 0;
                     if (latestPef == null) latestPef = 0;
 
@@ -332,12 +344,13 @@ public class ParentHomeActivity extends AppCompatActivity {
                         overviews.add(overview);
                     }
                 }
-                
+
                 for (int i = 0; i < 7 && i < overviews.size(); i++) {
                     weeklyCount += overviews.get(i).rescueCount;
                 }
                 tvWeeklyRescueCount.setText("Weekly Rescue Count: " + weeklyCount);
 
+                setupZoneChart(overviews);
             }
 
             @Override
@@ -346,7 +359,123 @@ public class ParentHomeActivity extends AppCompatActivity {
             }
         });
     }
-    
+
+    private void setupZoneChart(List<DailyOverview> overviews) {
+        if (overviews == null || overviews.isEmpty()) {
+            zoneChart.clear();
+            zoneChart.invalidate();
+            return;
+        }
+
+        int maxPoints = 7; // show last 7 days
+        int pointsToUse = Math.min(maxPoints, overviews.size());
+
+        List<Entry> zoneEntries = new ArrayList<>();
+        final List<String> xAxisLabels = new ArrayList<>();
+        final List<DailyOverview> visibleOverviews = new ArrayList<>();
+
+        int xIndex = 0;
+
+        for (int i = pointsToUse - 1; i >= 0; i--, xIndex++) {
+            DailyOverview overview = overviews.get(i);
+            visibleOverviews.add(overview);
+
+            int zoneValue;
+            switch (overview.zone) {
+                case "Green":  zoneValue = 3; break;
+                case "Yellow": zoneValue = 2; break;
+                case "Red":
+                default:       zoneValue = 1; break;
+            }
+
+            zoneEntries.add(new Entry(xIndex, zoneValue));
+
+            String[] parts = overview.date.split("-");
+            if (parts.length == 3) {
+                xAxisLabels.add(parts[1] + "/" + parts[2]);
+            } else {
+                xAxisLabels.add(overview.date);
+            }
+        }
+
+        LineDataSet zoneDataSet = new LineDataSet(zoneEntries, "Zone");
+        zoneDataSet.setColor(Color.WHITE);
+        zoneDataSet.setLineWidth(2.5f);
+        zoneDataSet.setCircleColor(Color.WHITE);
+        zoneDataSet.setCircleHoleColor(Color.WHITE);
+        zoneDataSet.setCircleRadius(4f);
+        zoneDataSet.setCircleHoleRadius(2f);
+        zoneDataSet.setDrawValues(false);
+        zoneDataSet.setMode(LineDataSet.Mode.LINEAR);
+        zoneDataSet.setDrawFilled(true);
+        zoneDataSet.setFillColor(Color.WHITE);
+        zoneDataSet.setFillAlpha(80);
+        zoneDataSet.setAxisDependency(YAxis.AxisDependency.LEFT);
+
+
+        LineData lineData = new LineData(zoneDataSet);
+        zoneChart.setData(lineData);
+        zoneChart.getDescription().setEnabled(false);
+        zoneChart.setBackgroundColor(Color.TRANSPARENT);
+        zoneChart.setDrawGridBackground(true);
+        zoneChart.setGridBackgroundColor(Color.parseColor("#8EC9FF"));
+
+        zoneChart.animateY(800);
+        zoneChart.setPinchZoom(true);
+        zoneChart.setDoubleTapToZoomEnabled(false);
+
+
+        Legend legend = zoneChart.getLegend();
+        legend.setEnabled(false);
+
+        XAxis xAxis = zoneChart.getXAxis();
+        xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
+        xAxis.setDrawGridLines(false);
+        xAxis.setDrawAxisLine(false);
+        xAxis.setGranularity(1f);
+        xAxis.setTextColor(Color.WHITE);
+        xAxis.setTextSize(11f);
+        xAxis.setLabelRotationAngle(-35f);
+        xAxis.setValueFormatter(new IndexAxisValueFormatter(xAxisLabels));
+        xAxis.setLabelCount(Math.min(4, xAxisLabels.size()), false);
+
+
+        YAxis leftAxis = zoneChart.getAxisLeft();
+        leftAxis.setEnabled(true);
+        leftAxis.setDrawGridLines(true);
+        leftAxis.setAxisLineColor(Color.WHITE);
+        leftAxis.setAxisLineWidth(1f);
+        leftAxis.enableGridDashedLine(8f, 8f, 0f);
+        leftAxis.setGridColor(Color.WHITE);
+        leftAxis.setGridLineWidth(1f);
+        leftAxis.setTextColor(Color.WHITE);
+        leftAxis.setAxisMinimum(0f);
+        leftAxis.setAxisMaximum(4f);
+        leftAxis.setLabelCount(5, true);
+
+        leftAxis.setValueFormatter(new ValueFormatter() {
+            @Override
+            public String getAxisLabel(float value, AxisBase axis) {
+                int v = Math.round(value);
+                if (v == 1) return "🔴";
+                if (v == 2) return "🟡";
+                if (v == 3) return "🟢";
+                return "";
+            }
+        });
+
+        zoneChart.getAxisRight().setEnabled(false);
+
+
+        CustomMarkerView marker =
+                new CustomMarkerView(this, R.layout.custom_marker_view, visibleOverviews);
+        marker.setChartView(zoneChart);
+        zoneChart.setMarker(marker);
+
+        zoneChart.invalidate();
+
+    }
+
     private void updateZone(int currentPef, int personalBest) {
         if (personalBest == 0) {
             zoneTitle.setText(R.string.today_s_zone_not_set);

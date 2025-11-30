@@ -5,7 +5,9 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:gravity="center_horizontal"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:background="@color/background">
+
 
     <ScrollView
         android:layout_width="0dp"
@@ -37,12 +39,13 @@
                     android:layout_marginTop="10dp"
                     android:fontFamily="@font/inter_bold"
                     android:text="Today's Overview"
-                    android:textColor="#555F6F"
+                    android:textColor="@color/outer_text"
                     android:textSize="24sp">
                 </TextView>
 
                 <!-- replace under with layout for last rescue data, latest alerts-->
                 <include layout="@layout/view_rescue_data"/>
+
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -51,7 +54,7 @@
                     android:layout_marginTop="10dp"
                     android:fontFamily="@font/inter_bold"
                     android:text="Latest Alerts"
-                    android:textColor="#555F6F"
+                    android:textColor="@color/outer_text"
                     android:textSize="24sp">
                 </TextView>
 
@@ -64,7 +67,7 @@
                     android:layout_marginTop="10dp"
                     android:fontFamily="@font/inter_bold"
                     android:text="Quick Actions"
-                    android:textColor="#555F6F"
+                    android:textColor="@color/outer_text"
                     android:textSize="24sp">
                 </TextView>
 
