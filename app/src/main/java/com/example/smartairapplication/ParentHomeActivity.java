@@ -70,6 +70,7 @@ public class ParentHomeActivity extends AppCompatActivity {
     private TextView tvLastRescue, tvWeeklyRescueCount;
 
     private LineChart zoneChart;
+    private int chartDays = 7;
 
 
     @Override
@@ -184,6 +185,16 @@ public class ParentHomeActivity extends AppCompatActivity {
                 return true;
             }
             return false;
+        });
+
+        TextView toggleDaysButton = findViewById(R.id.toggleDaysButton);
+        toggleDaysButton.setOnClickListener(v -> {
+            if (chartDays == 7) {
+                chartDays = 30;
+            } else {
+                chartDays = 7;
+            }
+            updateOverviewForChild(selectedChildId);
         });
     }
 
@@ -376,8 +387,7 @@ public class ParentHomeActivity extends AppCompatActivity {
             return;
         }
 
-        int maxPoints = 7; // show last 7 days
-        int pointsToUse = Math.min(maxPoints, overviews.size());
+        int pointsToUse = Math.min(chartDays, overviews.size());
 
         List<Entry> zoneEntries = new ArrayList<>();
         final List<String> xAxisLabels = new ArrayList<>();
@@ -480,6 +490,9 @@ public class ParentHomeActivity extends AppCompatActivity {
                 new CustomMarkerView(this, R.layout.custom_marker_view, visibleOverviews);
         marker.setChartView(zoneChart);
         zoneChart.setMarker(marker);
+
+        TextView zoneChartTitle = findViewById(R.id.zoneChartTitle);
+        zoneChartTitle.setText("Daily Zone (last " + chartDays + " days)");
 
         zoneChart.invalidate();
 
