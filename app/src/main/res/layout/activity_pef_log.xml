@@ -29,6 +29,6 @@
         android:paddingTop="8dp"
         android:paddingBottom="8dp"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-        tools:listitem="@layout/item_pef_log" />
+        tools:listitem="@layout/item_provider_pef_log" />
 
 </LinearLayout>
