@@ -25,7 +25,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/baloo"
-                android:text="@string/today_s_zone_green"
+                android:text="Today's Zone: \nNo data found"
                 android:textColor="@android:color/white"
                 android:textSize="24sp"
                 android:textStyle="bold" />
@@ -44,7 +44,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="1dp"
                 android:fontFamily="@font/poppins_medium"
-                android:text="@string/pef_280_pb_310"
+                android:text = "No data found"
                 android:textColor="@android:color/white" />
         </LinearLayout>
 
