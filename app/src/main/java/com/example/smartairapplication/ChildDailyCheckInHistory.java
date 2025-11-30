@@ -10,15 +10,15 @@ import androidx.core.view.WindowInsetsCompat;
 
 public class ChildDailyCheckInHistory extends AppCompatActivity {
 
+    private String childId, parentId;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_child_daily_check_in_history);
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
-            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
-            return insets;
-        });
+
+        childId = getIntent().getStringExtra("childId");
+        parentId = getIntent().getStringExtra("parentId");
     }
 }

@@ -5,15 +5,20 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginBottom="16dp"
-    app:cardCornerRadius="18dp"
-    app:cardUseCompatPadding="true"
-    app:cardElevation="4dp"
+    app:cardCornerRadius="0dp"
+    app:cardUseCompatPadding="false"
+    app:strokeWidth="0dp"
+    app:strokeColor="@android:color/transparent"
+    app:cardBackgroundColor="@android:color/transparent"
+    app:cardElevation="0dp"
     android:id="@+id/cardMedicine">
 
     <LinearLayout
+        android:id = "@+id/layoutMedicine"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="16dp"
+        android:background="@drawable/bg_orange_log"
         android:orientation="horizontal">
 
         <ImageView
@@ -32,7 +37,7 @@
             android:paddingStart="14dp">
 
             <TextView
-                android:id="@+id/txtMedicineName"
+                android:id="@+id/txtMedType"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Rescue"
@@ -95,8 +100,6 @@
                 android:textSize="14dp" />
 
         </LinearLayout>
-
-
 
     </LinearLayout>
 

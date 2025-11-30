@@ -149,6 +149,13 @@ public class ChildSettingsActivity extends AppCompatActivity implements Password
                 startActivity(intent);
                 finish();
                 return true;
+            } else if (itemId == R.id.nav_history){
+                Intent intent = new Intent(ChildSettingsActivity.this, ChildHistory.class);
+                intent.putExtra("childId", finalChildId);
+                intent.putExtra("parentId", finalParentId);
+                intent.putExtra("isParentMode", isParentMode);
+                startActivity(intent);
+                finish();
             } else if (itemId == R.id.nav_settings) {
                 return true;
             }

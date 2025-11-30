@@ -41,7 +41,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="6dp"
-            android:layout_marginStart="60dp"
+            android:layout_marginStart="65dp"
             android:fontFamily="@font/inter"
             android:text="See all medicine logs and daily check-ins"
             android:textColor="@color/dark_blue_text"
@@ -123,7 +123,7 @@
         </com.google.android.material.card.MaterialCardView>
 
         <com.google.android.material.card.MaterialCardView
-            android:id="@+id/cardDailyCheckins"
+            android:id="@+id/cardSymptomLogs"
             android:layout_width="350dp"
             android:layout_height="wrap_content"
             android:layout_marginBottom="16dp"
@@ -175,7 +175,7 @@
         </com.google.android.material.card.MaterialCardView>
 
         <com.google.android.material.card.MaterialCardView
-            android:id="@+id/cardPefEntries"
+            android:id="@+id/cardPefLogs"
             android:layout_width="350dp"
             android:layout_height="wrap_content"
             android:foreground="?attr/selectableItemBackground"
@@ -241,6 +241,6 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:menu="@menu/menu_parent_bottom_nav" />
+        app:menu="@menu/menu_child_bottom_nav" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
