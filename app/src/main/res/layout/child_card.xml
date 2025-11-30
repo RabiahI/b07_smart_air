@@ -15,7 +15,7 @@
         <LinearLayout
             android:layout_width="80dp"
             android:layout_height="match_parent"
-            android:background="#7B68EE"
+            android:background="@color/dark_blue_text"
             android:gravity="center"
             android:orientation="vertical"
             android:padding="8dp">
@@ -70,7 +70,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="8dp"
                 android:text="Login"
-                android:textAllCaps="false" />
+                android:textAllCaps="false"
+                android:backgroundTint="@color/dark_blue_text"/>
 
             <TextView
                 android:id="@+id/textViewDob"
@@ -103,6 +104,7 @@
                     android:layout_height="wrap_content"
                     android:drawableLeft="@drawable/ic_edit"
                     android:text="Edit"
+                    android:backgroundTint="@color/dark_blue_text"
                     android:textAllCaps="false"
                     android:layout_marginEnd="8dp"/>
 
@@ -112,6 +114,7 @@
                     android:layout_height="wrap_content"
                     android:drawableLeft="@drawable/ic_delete"
                     android:text="Delete"
+                    android:backgroundTint="@color/dark_blue_text"
                     android:textAllCaps="false"/>
             </LinearLayout>
 

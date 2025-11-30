@@ -5,6 +5,7 @@ import android.os.CountDownTimer;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -59,7 +60,8 @@ public class TriageActivity extends AppCompatActivity {
         editTextPef = findViewById(R.id.edit_text_pef);
         editTextRescueAttempts = findViewById(R.id.edit_text_rescue_attempts);
         submitInputsButton = findViewById(R.id.submit_inputs_button);
-
+        ImageView btnReturn = findViewById(R.id.btnReturn);
+        btnReturn.setOnClickListener(v -> finish());
 
         questions = new ArrayList<>();
         questions.add("Is the person unable to speak in full sentences?");
