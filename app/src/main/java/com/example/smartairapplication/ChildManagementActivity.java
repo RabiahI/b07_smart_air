@@ -167,6 +167,8 @@ public class ChildManagementActivity extends AppCompatActivity implements ChildA
         intent.putExtra("notes", selectedChild.getNotes());
         intent.putExtra("personalBest", selectedChild.getPersonalBest());
         intent.putExtra("latestPef", selectedChild.getLatestPef());
+        intent.putExtra("threshold", selectedChild.getThreshold());
+        intent.putExtra("controllerDays", selectedChild.getControllerDays());
         startActivity(intent);
     }
 
