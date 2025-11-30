@@ -22,8 +22,8 @@ public class PefLogAdapter extends RecyclerView.Adapter<PefLogAdapter.PefViewHol
     @NonNull
     @Override
     public PefViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        // Inflate the item layout (you must create R.layout.item_pef_log)
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_pef_log, parent, false);
+        // Inflate the item layout
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_provider_pef_log, parent, false);
         return new PefViewHolder(view);
     }
 
@@ -52,7 +52,7 @@ public class PefLogAdapter extends RecyclerView.Adapter<PefLogAdapter.PefViewHol
 
         public PefViewHolder(@NonNull View itemView) {
             super(itemView);
-            // Initialize views (IDs must match your item_pef_log.xml)
+            // Initialize views
             pefDate = itemView.findViewById(R.id.pef_log_date);
             pefValue = itemView.findViewById(R.id.pef_log_value);
         }
