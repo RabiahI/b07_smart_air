@@ -11,10 +11,12 @@ public class Child extends User {
     private int latestPef;
     private String accessStatus; //"not_shared", "generated", "accepted"
     private String inviteCode; //provider's invite code
+    private int threshold;
+    private int controllerDays;
 
     public Child(){}
 
-    public Child(String email, String childId, String name, String dob, String notes, int age, int personalBest, int latestPef){
+    public Child(String email, String childId, String name, String dob, String notes, int age, int personalBest, int latestPef, int threshold, int controllerDays){
         super(email);
         this.childId = childId;
         this.name = name;
@@ -23,10 +25,12 @@ public class Child extends User {
         this.age = age;
         this.personalBest = personalBest;
         this.latestPef = latestPef;
+        this.threshold = threshold;
+        this.controllerDays = controllerDays;
     }
 
     // Constructor with parentId
-    public Child(String email, String childId, String parentId, String name, String dob, String notes, int age, int personalBest, int latestPef){
+    public Child(String email, String childId, String parentId, String name, String dob, String notes, int age, int personalBest, int latestPef, int threshold, int controllerDays){
         super(email);
         this.childId = childId;
         this.parentId = parentId;
@@ -36,6 +40,8 @@ public class Child extends User {
         this.age = age;
         this.personalBest = personalBest;
         this.latestPef = latestPef;
+        this.threshold = threshold;
+        this.controllerDays = controllerDays;
     }
 
     public String getChildId(){ return childId; }
@@ -48,6 +54,8 @@ public class Child extends User {
     public int getLatestPef() { return latestPef; }
     public String getAccessStatus(){return accessStatus;}
     public String getInviteCode(){return inviteCode;}
+    public int getThreshold() {return threshold;}
+    public int getControllerDays() {return controllerDays;}
     public void setChildId(String childId){
         this.childId = childId;
     }
@@ -67,7 +75,8 @@ public class Child extends User {
     }
     public void setPersonalBest(int personalBest) { this.personalBest = personalBest; }
     public void setLatestPef(int latestPef) { this.latestPef = latestPef; }
-
+    public void setThreshold(int threshold) {this.threshold = threshold;}
+    public void setControllerDays(int controllerDays) {this.controllerDays = controllerDays;}
     public void setAccessStatus(String accessStatus){this.accessStatus = accessStatus;  }
     public void setInviteCode(String inviteCode){this.inviteCode = inviteCode;  }
 }

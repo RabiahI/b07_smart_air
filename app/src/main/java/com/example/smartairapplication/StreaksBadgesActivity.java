@@ -38,7 +38,7 @@ public class StreaksBadgesActivity extends AppCompatActivity {
     private ArrayList<Long> controllerTimes;
     private ArrayList<Long> techniqueTimes;
     private int bestStreakController;
-    private int rescueThreshold;
+    private Long rescueThreshold;
 
 
     @Override
@@ -58,7 +58,6 @@ public class StreaksBadgesActivity extends AppCompatActivity {
         controllerTimes = new ArrayList<>();
         techniqueTimes = new ArrayList<>();
         bestStreakController = 0;
-        rescueThreshold = 4;
 
         controllerLayout.setVisibility(View.GONE);
         techniqueLayout.setVisibility(View.GONE);
@@ -92,6 +91,25 @@ public class StreaksBadgesActivity extends AppCompatActivity {
                 intent.putExtra("childId", childId);
                 intent.putExtra("parentId", parentId);
                 startActivity(intent);
+            }
+        });
+
+        DatabaseReference thresholdRef = dataRef.child("threshold");
+        thresholdRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (!snapshot.exists()) {
+                    Toast.makeText(StreaksBadgesActivity.this, "No threshold data found.", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                else {
+                    rescueThreshold = snapshot.getValue(Long.class);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Toast.makeText(StreaksBadgesActivity.this, "Failed to load streaks and badges data.", Toast.LENGTH_SHORT).show();
             }
         });
 
