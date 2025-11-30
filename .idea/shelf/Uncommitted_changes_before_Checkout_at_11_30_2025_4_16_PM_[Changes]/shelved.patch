@@ -1,0 +1,136 @@
+Index: app/src/main/res/layout/view_streaks_preview.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"utf-8\"?>\r\n<androidx.cardview.widget.CardView xmlns:android=\"http://schemas.android.com/apk/res/android\"\r\n    xmlns:card_view=\"http://schemas.android.com/apk/res-auto\"\r\n    android:id=\"@+id/streaks_button\"\r\n    android:layout_width=\"match_parent\"\r\n    android:layout_height=\"wrap_content\"\r\n    android:layout_margin=\"16dp\"\r\n    card_view:cardBackgroundColor=\"#FFF9EB\"\r\n    card_view:cardCornerRadius=\"20dp\"\r\n    card_view:cardElevation=\"6dp\">\r\n\r\n    <LinearLayout\r\n        android:layout_width=\"match_parent\"\r\n        android:layout_height=\"wrap_content\"\r\n        android:orientation=\"vertical\"\r\n        android:padding=\"18dp\">\r\n\r\n        <TextView\r\n            android:layout_width=\"wrap_content\"\r\n            android:layout_height=\"wrap_content\"\r\n            android:layout_marginBottom=\"12dp\"\r\n            android:fontFamily=\"@font/inter_bold\"\r\n            android:text=\"Streaks &amp; Badges\"\r\n            android:textColor=\"#a45e00\"\r\n            android:textSize=\"18sp\"\r\n            android:textStyle=\"bold\" />\r\n\r\n        <LinearLayout\r\n            android:layout_width=\"match_parent\"\r\n            android:layout_height=\"wrap_content\"\r\n            android:gravity=\"center_vertical\"\r\n            android:paddingBottom=\"10dp\">\r\n\r\n            <ImageView\r\n                android:layout_width=\"42dp\"\r\n                android:layout_height=\"42dp\"\r\n                android:background=\"@drawable/bg_icon_circle_orange\"\r\n                android:padding=\"7dp\"\r\n                android:src=\"@drawable/ic_flame\" />\r\n\r\n            <TextView\r\n                android:id=\"@+id/streaksPreviewController\"\r\n                android:layout_width=\"wrap_content\"\r\n                android:layout_height=\"wrap_content\"\r\n                android:layout_marginStart=\"12dp\"\r\n                android:fontFamily=\"@font/inter\"\r\n                android:text=\"Controller Streak: 3 days\"\r\n                android:textColor=\"#444444\"\r\n                android:textSize=\"15sp\" />\r\n        </LinearLayout>\r\n\r\n        <LinearLayout\r\n            android:layout_width=\"match_parent\"\r\n            android:layout_height=\"wrap_content\"\r\n            android:gravity=\"center_vertical\">\r\n\r\n            <ImageView\r\n                android:layout_width=\"42dp\"\r\n                android:layout_height=\"42dp\"\r\n                android:padding=\"5dp\"\r\n                android:src=\"@drawable/ic_medal\" />\r\n\r\n            <TextView\r\n                android:id=\"@+id/streaksPreviewTechnique\"\r\n                android:layout_width=\"wrap_content\"\r\n                android:layout_height=\"wrap_content\"\r\n                android:layout_marginStart=\"12dp\"\r\n                android:fontFamily=\"@font/inter\"\r\n                android:text=\"Technique Progress: 4/10 sessions\"\r\n                android:textColor=\"#444444\"\r\n                android:textSize=\"15sp\" />\r\n        </LinearLayout>\r\n\r\n        <TextView\r\n            android:id=\"@+id/viewStreaks\"\r\n            android:layout_width=\"wrap_content\"\r\n            android:layout_height=\"wrap_content\"\r\n            android:layout_marginTop=\"16dp\"\r\n            android:text=\"View all >\"\r\n            android:textColor=\"#9810fa\"\r\n            android:textSize=\"15sp\"\r\n            android:textStyle=\"bold\" />\r\n\r\n    </LinearLayout>\r\n</androidx.cardview.widget.CardView>\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/res/layout/view_streaks_preview.xml b/app/src/main/res/layout/view_streaks_preview.xml
+--- a/app/src/main/res/layout/view_streaks_preview.xml	(revision de086836b756e4de66255f152226b4aa63edbd4a)
++++ b/app/src/main/res/layout/view_streaks_preview.xml	(date 1764524403377)
+@@ -44,7 +44,7 @@
+                 android:layout_height="wrap_content"
+                 android:layout_marginStart="12dp"
+                 android:fontFamily="@font/inter"
+-                android:text="Controller Streak: 3 days"
++                android:text="Controller Streak: Fetching Data..."
+                 android:textColor="#444444"
+                 android:textSize="15sp" />
+         </LinearLayout>
+@@ -66,7 +66,7 @@
+                 android:layout_height="wrap_content"
+                 android:layout_marginStart="12dp"
+                 android:fontFamily="@font/inter"
+-                android:text="Technique Progress: 4/10 sessions"
++                android:text="Technique Progress: Fetching Data..."
+                 android:textColor="#444444"
+                 android:textSize="15sp" />
+         </LinearLayout>
+Index: .idea/deploymentTargetSelector.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<project version=\"4\">\r\n  <component name=\"deploymentTargetSelector\">\r\n    <selectionStates>\r\n      <SelectionState runConfigName=\"app\">\r\n        <option name=\"selectionMode\" value=\"DROPDOWN\" />\r\n        <DropdownSelection timestamp=\"2025-11-29T16:22:32.943223Z\">\r\n          <Target type=\"DEFAULT_BOOT\">\r\n            <handle>\r\n              <DeviceId pluginId=\"LocalEmulator\" identifier=\"path=/Users/Sylvia/.android/avd/Medium_Phone.avd\" />\r\n        <DropdownSelection timestamp=\"2025-11-29T20:21:22.209916200Z\">\r\n          <Target type=\"DEFAULT_BOOT\">\r\n            <handle>\r\n              <DeviceId pluginId=\"LocalEmulator\" identifier=\"path=C:\\Users\\Miiracle\\.android\\avd\\Medium_Phone_2.avd\" />\r\n            </handle>\r\n          </Target>\r\n        </DropdownSelection>\r\n        <DialogSelection />\r\n      </SelectionState>\r\n    </selectionStates>\r\n  </component>\r\n</project>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/deploymentTargetSelector.xml b/.idea/deploymentTargetSelector.xml
+--- a/.idea/deploymentTargetSelector.xml	(revision de086836b756e4de66255f152226b4aa63edbd4a)
++++ b/.idea/deploymentTargetSelector.xml	(date 1764527201903)
+@@ -4,18 +4,6 @@
+     <selectionStates>
+       <SelectionState runConfigName="app">
+         <option name="selectionMode" value="DROPDOWN" />
+-        <DropdownSelection timestamp="2025-11-29T16:22:32.943223Z">
+-          <Target type="DEFAULT_BOOT">
+-            <handle>
+-              <DeviceId pluginId="LocalEmulator" identifier="path=/Users/Sylvia/.android/avd/Medium_Phone.avd" />
+-        <DropdownSelection timestamp="2025-11-29T20:21:22.209916200Z">
+-          <Target type="DEFAULT_BOOT">
+-            <handle>
+-              <DeviceId pluginId="LocalEmulator" identifier="path=C:\Users\Miiracle\.android\avd\Medium_Phone_2.avd" />
+-            </handle>
+-          </Target>
+-        </DropdownSelection>
+-        <DialogSelection />
+       </SelectionState>
+     </selectionStates>
+   </component>
+Index: .idea/appInsightsSettings.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<project version=\"4\">\r\n  <component name=\"AppInsightsSettings\">\r\n    <option name=\"selectedTabId\" value=\"Android Vitals\" />\r\n    <option name=\"tabSettings\">\r\n      <map>\r\n        <entry key=\"Firebase Crashlytics\">\r\n          <value>\r\n            <InsightsFilterSettings>\r\n              <option name=\"connection\">\r\n                <ConnectionSetting>\r\n                  <option name=\"appId\" value=\"com.example.smartairapplication\" />\r\n                  <option name=\"mobileSdkAppId\" value=\"1:594561787269:android:38cfd40d1b6f9e860d50ec\" />\r\n                  <option name=\"projectId\" value=\"b07smartair\" />\r\n                  <option name=\"projectNumber\" value=\"594561787269\" />\r\n                </ConnectionSetting>\r\n              </option>\r\n              <option name=\"signal\" value=\"SIGNAL_UNSPECIFIED\" />\r\n              <option name=\"timeIntervalDays\" value=\"THIRTY_DAYS\" />\r\n              <option name=\"visibilityType\" value=\"ALL\" />\r\n            </InsightsFilterSettings>\r\n          </value>\r\n        </entry>\r\n      </map>\r\n    </option>\r\n  </component>\r\n</project>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/appInsightsSettings.xml b/.idea/appInsightsSettings.xml
+--- a/.idea/appInsightsSettings.xml	(revision de086836b756e4de66255f152226b4aa63edbd4a)
++++ b/.idea/appInsightsSettings.xml	(date 1764528707259)
+@@ -1,7 +1,7 @@
+ <?xml version="1.0" encoding="UTF-8"?>
+ <project version="4">
+   <component name="AppInsightsSettings">
+-    <option name="selectedTabId" value="Android Vitals" />
++    <option name="selectedTabId" value="Firebase Crashlytics" />
+     <option name="tabSettings">
+       <map>
+         <entry key="Firebase Crashlytics">
+Index: gradle/libs.versions.toml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>[versions]\r\nagp = \"8.12.3\"\r\njunit = \"4.13.2\"\r\njunitVersion = \"1.3.0\"\r\nespressoCore = \"3.7.0\"\r\nappcompat = \"1.7.1\"\r\nmaterial = \"1.13.0\"\r\nactivity = \"1.11.0\"\r\nconstraintlayout = \"2.2.1\"\r\ngoogleGmsGoogleServices = \"4.4.4\"\r\nfirebaseAuth = \"24.0.1\"\r\nfirebaseDatabase = \"22.0.1\"\r\ncardview = \"1.0.0\"\r\nrecyclerview = \"1.4.0\"\r\nfirebaseFirestore = \"26.0.2\"\r\n\r\n[libraries]\r\njunit = { group = \"junit\", name = \"junit\", version.ref = \"junit\" }\r\next-junit = { group = \"androidx.test.ext\", name = \"junit\", version.ref = \"junitVersion\" }\r\nespresso-core = { group = \"androidx.test.espresso\", name = \"espresso-core\", version.ref = \"espressoCore\" }\r\nappcompat = { group = \"androidx.appcompat\", name = \"appcompat\", version.ref = \"appcompat\" }\r\nmaterial = { group = \"com.google.android.material\", name = \"material\", version.ref = \"material\" }\r\nactivity = { group = \"androidx.activity\", name = \"activity\", version.ref = \"activity\" }\r\nconstraintlayout = { group = \"androidx.constraintlayout\", name = \"constraintlayout\", version.ref = \"constraintlayout\" }\r\nfirebase-auth = { group = \"com.google.firebase\", name = \"firebase-auth\", version.ref = \"firebaseAuth\" }\r\nfirebase-database = { group = \"com.google.firebase\", name = \"firebase-database\", version.ref = \"firebaseDatabase\" }\r\ncardview = { group = \"androidx.cardview\", name = \"cardview\", version.ref = \"cardview\" }\r\nrecyclerview = { group = \"androidx.recyclerview\", name = \"recyclerview\", version.ref = \"recyclerview\" }\r\nfirebase-firestore = { group = \"com.google.firebase\", name = \"firebase-firestore\", version.ref = \"firebaseFirestore\" }\r\n\r\n[plugins]\r\nandroid-application = { id = \"com.android.application\", version.ref = \"agp\" }\r\ngoogle-gms-google-services = { id = \"com.google.gms.google-services\", version.ref = \"googleGmsGoogleServices\" }\r\n\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/gradle/libs.versions.toml b/gradle/libs.versions.toml
+--- a/gradle/libs.versions.toml	(revision de086836b756e4de66255f152226b4aa63edbd4a)
++++ b/gradle/libs.versions.toml	(date 1764528804957)
+@@ -11,6 +11,7 @@
+ firebaseAuth = "24.0.1"
+ firebaseDatabase = "22.0.1"
+ cardview = "1.0.0"
++mockitoAll = "1.10.19"
+ recyclerview = "1.4.0"
+ firebaseFirestore = "26.0.2"
+ 
+@@ -25,6 +26,7 @@
+ firebase-auth = { group = "com.google.firebase", name = "firebase-auth", version.ref = "firebaseAuth" }
+ firebase-database = { group = "com.google.firebase", name = "firebase-database", version.ref = "firebaseDatabase" }
+ cardview = { group = "androidx.cardview", name = "cardview", version.ref = "cardview" }
++mockito-all = { module = "org.mockito:mockito-all", version.ref = "mockitoAll" }
+ recyclerview = { group = "androidx.recyclerview", name = "recyclerview", version.ref = "recyclerview" }
+ firebase-firestore = { group = "com.google.firebase", name = "firebase-firestore", version.ref = "firebaseFirestore" }
+ 
+Index: settings.gradle.kts
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>pluginManagement {\r\n    repositories {\r\n        google {\r\n            content {\r\n                includeGroupByRegex(\"com\\\\.android.*\")\r\n                includeGroupByRegex(\"com\\\\.google.*\")\r\n                includeGroupByRegex(\"androidx.*\")\r\n            }\r\n        }\r\n        mavenCentral()\r\n        gradlePluginPortal()\r\n    }\r\n}\r\ndependencyResolutionManagement {\r\n    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)\r\n    repositories {\r\n        google()\r\n        mavenCentral()\r\n        maven(url = \"https://jitpack.io\")\r\n    }\r\n}\r\n\r\nrootProject.name = \"Smart Air Application\"\r\ninclude(\":app\")
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/settings.gradle.kts b/settings.gradle.kts
+--- a/settings.gradle.kts	(revision de086836b756e4de66255f152226b4aa63edbd4a)
++++ b/settings.gradle.kts	(date 1764526577549)
+@@ -16,7 +16,7 @@
+     repositories {
+         google()
+         mavenCentral()
+-        maven(url = "https://jitpack.io")
++        maven (url = "https://jitpack.io")
+     }
+ }
+ 
+Index: .idea/misc.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<project version=\"4\">\r\n  <component name=\"ExternalStorageConfigurationManager\" enabled=\"true\" />\r\n  <component name=\"ProjectRootManager\" version=\"2\" languageLevel=\"JDK_21\" default=\"true\" project-jdk-name=\"jbr-21\" project-jdk-type=\"JavaSDK\">\r\n    <output url=\"file://$PROJECT_DIR$/build/classes\" />\r\n  </component>\r\n  <component name=\"ProjectType\">\r\n    <option name=\"id\" value=\"Android\" />\r\n  </component>\r\n  <component name=\"VisualizationToolProject\">\r\n    <option name=\"state\">\r\n      <ProjectState>\r\n        <option name=\"scale\" value=\"0.2392626953125\" />\r\n      </ProjectState>\r\n    </option>\r\n  </component>\r\n</project>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/misc.xml b/.idea/misc.xml
+--- a/.idea/misc.xml	(revision de086836b756e4de66255f152226b4aa63edbd4a)
++++ b/.idea/misc.xml	(date 1764536711500)
+@@ -1,4 +1,3 @@
+-<?xml version="1.0" encoding="UTF-8"?>
+ <project version="4">
+   <component name="ExternalStorageConfigurationManager" enabled="true" />
+   <component name="ProjectRootManager" version="2" languageLevel="JDK_21" default="true" project-jdk-name="jbr-21" project-jdk-type="JavaSDK">
