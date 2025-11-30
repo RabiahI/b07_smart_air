@@ -69,8 +69,9 @@ public class ParentHomeActivity extends AppCompatActivity {
     private ImageView btnNotifications, btnProfile;
     private TextView tvLastRescue, tvWeeklyRescueCount;
 
-    private LineChart zoneChart;
+    private LineChart zoneChart, rescueChart;
     private int chartDays = 7;
+    private boolean isZoneChartVisible = true;
 
 
     @Override
@@ -110,6 +111,7 @@ public class ParentHomeActivity extends AppCompatActivity {
         tvLastRescue = findViewById(R.id.tvLastRescue);
         tvWeeklyRescueCount = findViewById(R.id.tvWeeklyRescueCount);
         zoneChart = findViewById(R.id.zoneChart);
+        rescueChart = findViewById(R.id.rescueChart);
 
         loadChildrenIntoSpinner();
 
@@ -196,6 +198,23 @@ public class ParentHomeActivity extends AppCompatActivity {
             }
             updateOverviewForChild(selectedChildId);
         });
+
+        TextView toggleChartButton = findViewById(R.id.toggleChartButton);
+        toggleChartButton.setOnClickListener(v -> {
+            isZoneChartVisible = !isZoneChartVisible;
+            updateChartVisibility();
+            updateOverviewForChild(selectedChildId);
+        });
+    }
+
+    private void updateChartVisibility() {
+        if (isZoneChartVisible) {
+            zoneChart.setVisibility(View.VISIBLE);
+            rescueChart.setVisibility(View.GONE);
+        } else {
+            zoneChart.setVisibility(View.GONE);
+            rescueChart.setVisibility(View.VISIBLE);
+        }
     }
 
     private void loadChildrenIntoSpinner() {
@@ -371,6 +390,7 @@ public class ParentHomeActivity extends AppCompatActivity {
                 tvWeeklyRescueCount.setText("Weekly Rescue Count: " + weeklyCount);
 
                 setupZoneChart(overviews);
+                setupRescueChart(overviews);
             }
 
             @Override
@@ -378,6 +398,92 @@ public class ParentHomeActivity extends AppCompatActivity {
                 tvWeeklyRescueCount.setText("Weekly Rescue Count: Error");
             }
         });
+    }
+
+    private void setupRescueChart(List<DailyOverview> overviews) {
+        if (overviews == null || overviews.isEmpty()) {
+            rescueChart.clear();
+            rescueChart.invalidate();
+            return;
+        }
+
+        int pointsToUse = Math.min(chartDays, overviews.size());
+
+        List<Entry> rescueEntries = new ArrayList<>();
+        final List<String> xAxisLabels = new ArrayList<>();
+        final List<DailyOverview> visibleOverviews = new ArrayList<>();
+
+        int xIndex = 0;
+        for (int i = pointsToUse - 1; i >= 0; i--, xIndex++) {
+            DailyOverview overview = overviews.get(i);
+            visibleOverviews.add(overview);
+            rescueEntries.add(new Entry(xIndex, overview.rescueCount));
+
+            String[] parts = overview.date.split("-");
+            if (parts.length == 3) {
+                xAxisLabels.add(parts[1] + "/" + parts[2]);
+            } else {
+                xAxisLabels.add(overview.date);
+            }
+        }
+
+        LineDataSet rescueDataSet = new LineDataSet(rescueEntries, "Rescues");
+        rescueDataSet.setColor(Color.WHITE);
+        rescueDataSet.setLineWidth(2.5f);
+        rescueDataSet.setCircleColor(Color.WHITE);
+        rescueDataSet.setCircleHoleColor(Color.WHITE);
+        rescueDataSet.setCircleRadius(4f);
+        rescueDataSet.setCircleHoleRadius(2f);
+        rescueDataSet.setDrawValues(false);
+        rescueDataSet.setMode(LineDataSet.Mode.LINEAR);
+        rescueDataSet.setAxisDependency(YAxis.AxisDependency.LEFT);
+        rescueDataSet.setHighLightColor(Color.WHITE);
+        rescueDataSet.setHighlightLineWidth(2f);
+
+        LineData lineData = new LineData(rescueDataSet);
+        rescueChart.setData(lineData);
+        rescueChart.getDescription().setEnabled(false);
+        rescueChart.setBackgroundColor(Color.TRANSPARENT);
+        rescueChart.setDrawGridBackground(true);
+        rescueChart.setGridBackgroundColor(Color.parseColor("#8EC9FF"));
+
+        rescueChart.animateY(800);
+        rescueChart.setPinchZoom(true);
+        rescueChart.setDoubleTapToZoomEnabled(false);
+
+        rescueChart.getLegend().setEnabled(false);
+
+        XAxis xAxis = rescueChart.getXAxis();
+        xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
+        xAxis.setDrawGridLines(false);
+        xAxis.setDrawAxisLine(false);
+        xAxis.setGranularity(1f);
+        xAxis.setTextColor(Color.WHITE);
+        xAxis.setTextSize(11f);
+        xAxis.setLabelRotationAngle(-45f);
+        xAxis.setValueFormatter(new IndexAxisValueFormatter(xAxisLabels));
+        xAxis.setLabelCount(Math.min(4, xAxisLabels.size()), false);
+
+        YAxis leftAxis = rescueChart.getAxisLeft();
+        leftAxis.setEnabled(true);
+        leftAxis.setDrawGridLines(true);
+        leftAxis.setAxisLineColor(Color.WHITE);
+        leftAxis.setAxisLineWidth(1f);
+        leftAxis.enableGridDashedLine(8f, 8f, 0f);
+        leftAxis.setGridColor(Color.WHITE);
+        leftAxis.setGridLineWidth(1f);
+        leftAxis.setTextColor(Color.WHITE);
+        leftAxis.setAxisMinimum(0f);
+        leftAxis.setGranularity(1f);
+
+        rescueChart.getAxisRight().setEnabled(false);
+
+        CustomMarkerView rescueMarker =
+                new CustomMarkerView(this, R.layout.custom_marker_view, visibleOverviews, "RESCUE");
+        rescueMarker.setChartView(rescueChart);
+        rescueChart.setMarker(rescueMarker);
+
+        rescueChart.invalidate();
     }
 
     private void setupZoneChart(List<DailyOverview> overviews) {
@@ -430,6 +536,8 @@ public class ParentHomeActivity extends AppCompatActivity {
         zoneDataSet.setFillColor(Color.WHITE);
         zoneDataSet.setFillAlpha(80);
         zoneDataSet.setAxisDependency(YAxis.AxisDependency.LEFT);
+        zoneDataSet.setHighLightColor(Color.WHITE);
+        zoneDataSet.setHighlightLineWidth(2f);
 
 
         LineData lineData = new LineData(zoneDataSet);
@@ -487,12 +595,16 @@ public class ParentHomeActivity extends AppCompatActivity {
 
 
         CustomMarkerView marker =
-                new CustomMarkerView(this, R.layout.custom_marker_view, visibleOverviews);
+                new CustomMarkerView(this, R.layout.custom_marker_view, visibleOverviews, "ZONE");
         marker.setChartView(zoneChart);
         zoneChart.setMarker(marker);
 
         TextView zoneChartTitle = findViewById(R.id.zoneChartTitle);
-        zoneChartTitle.setText("Daily Zone (last " + chartDays + " days)");
+        if (isZoneChartVisible) {
+            zoneChartTitle.setText("Daily Zone (last " + chartDays + " days)");
+        } else {
+            zoneChartTitle.setText("Daily Rescues (last " + chartDays + " days)");
+        }
 
         zoneChart.invalidate();
 
