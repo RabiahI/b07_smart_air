@@ -36,6 +36,7 @@ public class ParentHomeActivity extends AppCompatActivity {
 
     private CardView childButton, manageProviderButton;
     private CardView manageInventoryButton;
+    private CardView providerReportButton;
     private BottomNavigationView bottomNav;
     private Spinner spinnerChildren;
     private List<String> childNames = new ArrayList<>();
@@ -78,6 +79,7 @@ public class ParentHomeActivity extends AppCompatActivity {
         manageProviderButton = findViewById(R.id.manageSharingButton);
         bottomNav = findViewById(R.id.bottomNav);
         manageInventoryButton = findViewById(R.id.manageInventoryButton);
+        providerReportButton = findViewById(R.id.providerReportButton);
         
         zoneButton = findViewById(R.id.zone_button);
         zoneTitle = findViewById(R.id.zone_title);
@@ -114,6 +116,14 @@ public class ParentHomeActivity extends AppCompatActivity {
             intent.putExtra("parentId", parentId);
             startActivity(intent);
         });
+
+        providerReportButton.setOnClickListener(v -> {
+            Intent intent = new Intent(ParentHomeActivity.this, ProviderReportActivity.class);
+            intent.putExtra("childId", selectedChildId);
+            intent.putExtra("parentId", parentId);
+            startActivity(intent);
+        });
+
         alertsRecyclerView = findViewById(R.id.alertsRecyclerView);
         alertsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         alertList = new ArrayList<>();
