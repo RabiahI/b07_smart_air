@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/childHeader"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -27,7 +28,7 @@
             android:layout_marginStart="20dp"
             android:fontFamily="@font/baloo"
             android:text="SMART AIR"
-            android:textColor="@color/vivid_blue"
+            android:textColor="@color/dark_blue_text"
             android:textSize="32sp"
             android:textStyle="bold" />
     </LinearLayout>
@@ -44,18 +45,18 @@
 
         <ImageView
             android:id="@+id/btnNotifications"
-            android:layout_width="32dp"
-            android:layout_height="32dp"
-            android:layout_marginTop="15dp"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginTop="10dp"
             android:padding="6dp"
             android:background="@drawable/bg_icon_circle_blue"
             android:src="@drawable/ic_bell"/>
 
         <ImageView
             android:id="@+id/btnProfile"
-            android:layout_width="32dp"
-            android:layout_height="32dp"
-            android:layout_marginTop="15dp"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginTop="10dp"
             android:layout_marginStart="8dp"
             android:padding="6dp"
             android:background="@drawable/bg_icon_circle_blue"
@@ -70,7 +71,7 @@
         android:layout_marginTop="12dp"
         android:layout_marginStart="20dp"
         android:fontFamily="@font/inter"
-        android:text="Welcome back, Parent Name!"
+        android:text="Welcome!"
         android:textColor="@color/dark_blue_text"
         android:textSize="18sp"
         android:textStyle="bold"
@@ -78,35 +79,24 @@
         app:layout_constraintStart_toStartOf="@id/logoRow"
         app:layout_constraintTop_toBottomOf="@id/logoRow" />
 
-    <!-- Dropdown menu -->
-    <com.google.android.material.textfield.TextInputLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="290dp"
-        android:layout_marginEnd="20dp"
-        android:layout_marginTop="20dp"
-        app:layout_constraintStart_toEndOf="@id/tvWelcome"
-        app:layout_constraintTop_toTopOf="@id/tvWelcome"
-        app:layout_constraintBottom_toBottomOf="@id/tvWelcome"
-        android:id="@+id/Dropdown"
-        android:hint="Child 1">
-
-        <com.google.android.material.textfield.MaterialAutoCompleteTextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/child"
-            android:inputType="none"
-            app:simpleItems="@array/child_options"/>
-    </com.google.android.material.textfield.TextInputLayout>
-
     <!-- Date -->
+
+    <Spinner
+        android:id="@+id/spinnerChildren"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:background="@drawable/bubble_white"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
     <TextView
-        android:id="@+id/tvTodayDate"
+        android:id="@+id/tvAboutApp"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="4dp"
         android:fontFamily="@font/poppins"
-        android:text="Today’s date"
+        android:text="Asthma care made easy"
         android:textColor="@color/dark_blue_text"
         android:textSize="13sp"
         app:layout_constraintBottom_toBottomOf="parent"

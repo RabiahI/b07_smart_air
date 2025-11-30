@@ -14,13 +14,41 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Material3.DayNight.NoActionBar">
         <activity
+            android:name=".ChildPefHistory"
+            android:exported="false" />
+        <activity
+            android:name=".ChildDailyCheckInHistory"
+            android:exported="false" />
+        <activity
+            android:name=".ChildMedicineLogHistory"
+            android:exported="false" />
+        <activity
+            android:name=".ChildHistory"
+            android:exported="false" />
+        <activity
+            android:name=".ParentManageInventory"
+            android:exported="false" />
+        <activity
+            android:name=".ManageInventoryChild"
+            android:exported="false" />
+        <activity
+            android:name=".DailyCheckIn"
+            android:exported="false" />
+        <activity
             android:name=".RoleSelectionActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".TechniqueIntro"
+            android:exported="false" />
+        <activity
+            android:name=".TechniqueHelper"
+            android:exported="false" />
         <activity
             android:name=".LogMedicine"
             android:exported="false" />
@@ -43,10 +71,22 @@
             android:name=".ParentHomeActivity"
             android:exported="false" />
         <activity
+            android:name=".ParentAlertsActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ParentHistoryActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ParentSettingsActivity"
+            android:exported="false" />
+        <activity
             android:name=".ProviderHomeActivity"
             android:exported="false" />
         <activity
             android:name=".ChildHomeActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ChildSettingsActivity"
             android:exported="false" />
         <activity
             android:name=".Registration"

@@ -89,6 +89,7 @@ public class StreaksBadgesActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(StreaksBadgesActivity.this, ChildHomeActivity.class);
                 intent.putExtra("childId", childId);
+                intent.putExtra("parentId", parentId);
                 startActivity(intent);
             }
         });
