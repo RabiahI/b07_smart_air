@@ -14,64 +14,80 @@
         android:elevation="4dp"
         app:cardCornerRadius="12dp">
 
-        <LinearLayout
-            android:orientation="vertical"
-            android:gravity="center"
-            android:padding="20dp"
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:padding="20dp">
 
-            <TextView
-                android:id="@+id/childName"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Child Name"
-                android:textSize="15sp"
-                android:textStyle="bold"
-                android:textColor="#1F2937"
-                android:gravity="center" />
+            <ImageView
+                android:id="@+id/deleteChildButton"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@android:drawable/ic_menu_close_clear_cancel"
+                android:tint="#B91C1C"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentEnd="true"
+                android:layout_margin="4dp" />
 
             <LinearLayout
+                android:id="@+id/contentLayout"
                 android:orientation="vertical"
+                android:gravity="center"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="12dp"
-                android:gravity="center">
+                android:layout_marginTop="10dp">
 
                 <TextView
-                    android:id="@+id/dobLabel"
+                    android:id="@+id/childName"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="DOB: "
-                    android:textSize="14sp"
-                    android:textColor="#4B5563"
+                    android:text="Child Name"
+                    android:textSize="15sp"
+                    android:textStyle="bold"
+                    android:textColor="#1F2937"
                     android:gravity="center" />
 
-                <TextView
-                    android:id="@+id/ageLabel"
-                    android:layout_width="wrap_content"
+                <LinearLayout
+                    android:orientation="vertical"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="4dp"
-                    android:text="Age:"
-                    android:textSize="14sp"
-                    android:textColor="#4B5563"
-                    android:gravity="center" />
+                    android:layout_marginTop="12dp"
+                    android:gravity="center">
 
+                    <TextView
+                        android:id="@+id/dobLabel"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="DOB:"
+                        android:textSize="14sp"
+                        android:textColor="#4B5563"
+                        android:gravity="center" />
+
+                    <TextView
+                        android:id="@+id/ageLabel"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
+                        android:text="Age:"
+                        android:textSize="14sp"
+                        android:textColor="#4B5563"
+                        android:gravity="center" />
+                </LinearLayout>
+
+                <Button
+                    android:id="@+id/viewDataButton"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:text="View Data"
+                    android:textSize="13sp"
+                    android:textStyle="bold"
+                    android:backgroundTint="#4b629f"
+                    android:textColor="#FFFFFF"
+                    android:paddingVertical="10dp" />
             </LinearLayout>
 
-            <Button
-                android:id="@+id/viewDataButton"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="12dp"
-                android:text="View Data"
-                android:textSize="13sp"
-                android:textStyle="bold"
-                android:backgroundTint="#4b629f"
-                android:textColor="#FFFFFF"
-                android:paddingVertical="10dp" />
-
-        </LinearLayout>
+        </RelativeLayout>
 
     </androidx.cardview.widget.CardView>
 

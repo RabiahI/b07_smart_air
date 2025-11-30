@@ -15,6 +15,36 @@
         android:theme="@style/Theme.Material3.DayNight.NoActionBar">
 
         <activity
+            android:name=".ParentManageInventory"
+            android:exported="false" />
+        <activity
+            android:name=".ManageInventoryChild"
+            android:exported="false" />
+        <activity
+            android:name=".DailyCheckIn"
+            android:exported="false" />
+        <activity
+            android:name=".RoleSelectionActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".TechniqueIntro"
+            android:exported="false" />
+        <activity
+            android:name=".TechniqueHelper"
+            android:exported="false" />
+        <activity
+            android:name=".LogMedicine"
+            android:exported="false" />
+        <activity
+            android:name=".TriageActivity"
+            android:exported="false" />
+        <activity
             android:name=".ManageAccessActivity"
             android:exported="false" />
         <activity
@@ -30,6 +60,15 @@
             android:name=".ParentHomeActivity"
             android:exported="false" />
         <activity
+            android:name=".ParentAlertsActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ParentHistoryActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ParentSettingsActivity"
+            android:exported="false" />
+        <activity
             android:name=".ProviderManageChildren"
             android:exported="false" />
         <activity
@@ -39,22 +78,31 @@
             android:name=".ChildHomeActivity"
             android:exported="false" />
         <activity
+            android:name=".ChildSettingsActivity"
+            android:exported="false" />
+        <activity
             android:name=".Registration"
             android:exported="false" />
         <activity
             android:name=".Login"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
+            android:exported="false" />
+        <activity
+            android:name=".ChildLoginActivity"
+            android:exported="false" />
         <activity
             android:name=".MainActivity"
             android:exported="true" />
         <activity
             android:name=".ManageDataSharingActivity"
             android:exported="false" />
+        <activity android:name=".TriageLogActivity"
+            android:exported="false"/>
+        <activity android:name=".PefLogActivity"
+            android:exported="false"/>
+        <activity android:name=".SymptomsLogActivity"
+            android:exported="false"/>
+        <activity android:name=".RescueLogsActivity"
+            android:exported="false"/>
 
         <meta-data
             android:name="preloaded_fonts"

@@ -6,12 +6,15 @@
 
 
     <LinearLayout
+        android:id="@+id/triage_container"
         android:layout_width="match_parent"
-        android:layout_height="150dp"
+        android:layout_height="210dp"
+
         android:layout_margin="13dp"
         android:background="@drawable/rounded_box"
         android:orientation="vertical"
         android:padding="13dp">
+
 
         <TextView
             android:id="@+id/triageContainerText"
@@ -23,40 +26,61 @@
             android:fontFamily="@font/roca_two_bold"/>
 
         <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Most Recent Triage Event"
+            android:textSize="16sp"/>
+
+        <TextView
             android:id="@+id/triageDate"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="🚨 (Date)"
             android:textSize="15.5sp"
+            android:paddingLeft="15sp"
             android:textColor="#c60000"
             android:paddingBottom="2dp"/>
 
         <TextView
-            android:id="@+id/triageZone"
+            android:id="@+id/triageEscalated"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Red Zone - 3 rescue uses"
+            android:text="triage escalated"
             android:textSize="15.5sp"
+            android:paddingLeft="15sp"
             android:textColor="@color/black"
             android:paddingBottom="2dp"/>
 
         <TextView
-            android:id="@+id/triageSymptoms"
+            android:id="@+id/triagePEF"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Symptoms: Trouble speaking, chest pulling"
             android:textSize="15.5sp"
+            android:paddingLeft="15sp"
             android:textColor="@color/black"
             android:paddingBottom="2dp"/>
 
         <TextView
-            android:id="@+id/triageResolved"
+            android:id="@+id/triageResult"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="✓ Resolved at home"
+            android:paddingLeft="15sp"
             android:textSize="15.5sp"
             android:textColor="#1c764e"
-            android:paddingBottom="2dp"/>
+            android:paddingBottom="0dp"/>
+
+        <Button
+            android:id="@+id/viewAllTriagesButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end|bottom"
+            android:text="View All"
+            android:backgroundTint="#4b629f"
+            android:textSize="14sp"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp"/>
 
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -23,7 +23,7 @@
             android:orientation="vertical">
 
             <include
-                layout="@layout/view_child_header"
+                layout="@layout/view_provider_header"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="1dp"/>

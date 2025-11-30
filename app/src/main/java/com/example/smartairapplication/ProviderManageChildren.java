@@ -32,7 +32,7 @@ public class ProviderManageChildren extends AppCompatActivity implements Childre
     private EditText accessCodeInput;
     private Child selectedChild;
     private Button submitAccessCodeButton;
-
+    private Button deleteChildButton;
 
 
     @Override
@@ -88,10 +88,69 @@ public class ProviderManageChildren extends AppCompatActivity implements Childre
 
     @Override
     public void onViewDataClick(Child child) {
+        if (child.getParentId() == null) {
+            Toast.makeText(this, "This child is missing parentId. Please delete and re-add using the access code.", Toast.LENGTH_LONG).show();
+            android.util.Log.e("ProviderManage", "parentId is NULL - child needs to be re-added");
+            return; // Don't proceed
+        }
+        android.util.Log.d("ProviderManage", "=== onViewDataClick ===");
+        android.util.Log.d("ProviderManage", "childId: " + child.getChildId());
+        android.util.Log.d("ProviderManage", "parentId: " + child.getParentId());
+        android.util.Log.d("ProviderManage", "name: " + child.getName());
+
         Intent intent = new Intent(this, ProviderHomeActivity.class);
         intent.putExtra("childId", child.getChildId());
+        intent.putExtra("parentId", child.getParentId());
         startActivity(intent);
     }
+
+    private void deleteChild(Child child) {
+        if (child == null) return;
+
+        new androidx.appcompat.app.AlertDialog.Builder(this)
+                .setTitle("Delete Child")
+                .setMessage("Are you sure you want to delete " + child.getName() + "?")
+                .setPositiveButton("Yes", (dialog, which) -> {
+                    String providerId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+
+                    // Remove from provider's node
+                    DatabaseReference providerRef = FirebaseDatabase.getInstance()
+                            .getReference("Users")
+                            .child("Provider")
+                            .child(providerId)
+                            .child("Children")
+                            .child(child.getChildId());
+
+                    providerRef.removeValue().addOnCompleteListener(task -> {
+                        if (task.isSuccessful()) {
+                            // Optionally, remove or update from parent's node
+                            DatabaseReference parentRef = FirebaseDatabase.getInstance()
+                                    .getReference("Users")
+                                    .child("Parent")
+                                    .child(child.getParentId())
+                                    .child("Children")
+                                    .child(child.getChildId());
+
+                            parentRef.removeValue().addOnCompleteListener(parentTask -> {
+                                if (parentTask.isSuccessful()) {
+                                    childrenList.remove(child);
+                                    childrenAdapter.notifyDataSetChanged();
+                                    Toast.makeText(this, "Child deleted successfully", Toast.LENGTH_SHORT).show();
+                                } else {
+                                    Toast.makeText(this, "Failed to update parent node", Toast.LENGTH_SHORT).show();
+                                }
+                            });
+
+                        } else {
+                            Toast.makeText(this, "Failed to delete child", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+
+                })
+                .setNegativeButton("Cancel", null)
+                .show();
+    }
+
 
     private void loadProviderChildren() {
         String providerId = FirebaseAuth.getInstance().getCurrentUser().getUid();
@@ -150,6 +209,7 @@ public class ProviderManageChildren extends AppCompatActivity implements Childre
                                             "Access already accepted for this child.", Toast.LENGTH_SHORT).show();
                                 } else {
                                     String childId = childSnap.getKey();
+                                    String parentId = parentSnap.getKey();
 
                                     String childName = childSnap.child("name").getValue(String.class);
                                     Toast.makeText(ProviderManageChildren.this,
@@ -159,6 +219,7 @@ public class ProviderManageChildren extends AppCompatActivity implements Childre
                                     Child child = new Child();
                                     child.setChildId(childId);
                                     child.setName(childName);
+                                    child.setParentId(parentId);
                                     child.setAccessStatus("accepted");
 
                                     childrenList.add(child);

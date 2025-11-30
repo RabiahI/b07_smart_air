@@ -3,13 +3,14 @@
     android:id="@+id/quickActionsSection"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:rowCount="2"
     android:columnCount="2"
-    android:padding="10dp">
+    android:padding="10dp"
+    android:rowCount="2">
 
 
     <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:card_view="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/logMedicineButton"
         android:layout_width="170dp"
         android:layout_height="130dp"
         android:layout_margin="10dp"
@@ -46,6 +47,7 @@
 
     <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:card_view="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/dailyCheckInButton"
         android:layout_width="170dp"
         android:layout_height="130dp"
         android:layout_margin="10dp"
@@ -82,6 +84,7 @@
 
     <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:card_view="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/manageInventoryButton"
         android:layout_width="170dp"
         android:layout_height="130dp"
         android:layout_margin="10dp"
@@ -101,14 +104,14 @@
                 android:layout_height="50dp"
                 android:background="@drawable/bg_rounded_icon_white"
                 android:padding="10dp"
-                android:src="@drawable/ic_video" />
+                android:src="@drawable/ic_inventory" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 android:fontFamily="@font/poppins_bold"
-                android:text="Technique Helper"
+                android:text="Manage Inventory"
                 android:textColor="#a45e00"
                 android:textSize="15sp"
                 android:textStyle="bold" />
@@ -116,8 +119,9 @@
 
     </androidx.cardview.widget.CardView>
 
-    <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    <androidx.cardview.widget.CardView
         xmlns:card_view="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/triageButton"
         android:layout_width="170dp"
         android:layout_height="130dp"
         android:layout_margin="10dp"
@@ -128,7 +132,6 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="#FDD2D2"
-            android:backgroundTint="#FDD2D2"
             android:gravity="center"
             android:orientation="vertical">
 
@@ -144,7 +147,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 android:fontFamily="@font/poppins_bold"
-                android:text="Triage"
+                android:text="Asthma Help Now"
                 android:textColor="#c60000"
                 android:textSize="15sp"
                 android:textStyle="bold" />
@@ -152,4 +155,3 @@
 
     </androidx.cardview.widget.CardView>
 </GridLayout>
-
