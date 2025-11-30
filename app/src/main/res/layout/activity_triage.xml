@@ -1,134 +1,268 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="16dp"
+    android:background="@color/background"
     tools:context=".TriageActivity">
 
-    <TextView
-        android:id="@+id/safety_warning"
-        android:layout_width="wrap_content"
+    <!-- 🔹 HEADER LIKE activity_log_medicine -->
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/childHeader"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:text="If you are ever unsure or symptoms are rapidly worsening, call emergency services immediately."
-        android:textAlignment="center"
-        android:textColor="@android:color/holo_red_dark"
-        android:textStyle="bold" />
-
-    <LinearLayout
-        android:id="@+id/question_layout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:gravity="center"
-        android:orientation="vertical">
-
-        <TextView
-            android:id="@+id/question_text"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Is the person unable to speak in full sentences?"
-            android:textSize="24sp"
-            android:textStyle="bold" />
+        android:background="@drawable/header_sky"
+        android:padding="16dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
 
         <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="24dp"
-            android:orientation="horizontal">
-
-            <Button
-                android:id="@+id/yes_button"
-                android:layout_width="120dp"
-                android:layout_height="60dp"
-                android:layout_marginEnd="16dp"
-                android:text="Yes" />
-
-            <Button
-                android:id="@+id/no_button"
-                android:layout_width="120dp"
-                android:layout_height="60dp"
-                android:text="No" />
-        </LinearLayout>
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/inputs_layout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:gravity="center"
-        android:orientation="vertical"
-        android:visibility="gone">
-
-        <EditText
-            android:id="@+id/edit_text_pef"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Enter PEF (optional)"
-            android:inputType="number" />
-
-        <EditText
-            android:id="@+id/edit_text_rescue_attempts"
+            android:id="@+id/headerRow"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:hint="How many rescue attempts?"
-            android:inputType="number" />
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingTop="20dp"
+            app:layout_constraintTop_toTopOf="parent">
 
-        <Button
-            android:id="@+id/submit_inputs_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:text="Continue" />
+            <ImageView
+                android:id="@+id/btnReturn"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:background="@drawable/bg_icon_circle_blue"
+                android:padding="6dp"
+                android:src="@drawable/ic_back_arrow" />
 
-    </LinearLayout>
-
-
-    <LinearLayout
-        android:id="@+id/result_layout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:gravity="center"
-        android:orientation="vertical"
-        android:visibility="gone">
+            <TextView
+                android:id="@+id/sectionTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="15dp"
+                android:fontFamily="@font/inter_bold"
+                android:text="Asthma Triage"
+                android:textColor="@color/vivid_blue"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+        </LinearLayout>
 
         <TextView
-            android:id="@+id/severity_label"
-            android:layout_width="wrap_content"
+            android:id="@+id/instructions"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:textSize="28sp"
+            android:layout_marginTop="6dp"
+            android:layout_marginStart="70dp"
+            android:fontFamily="@font/inter"
+            android:text="Check breathing and symptoms to see what to do next"
+            android:textColor="@color/dark_blue_text"
+            android:textSize="12sp"
             android:textStyle="bold"
-            tools:text="Severity: Severe" />
+            app:layout_constraintTop_toBottomOf="@id/headerRow"
+            app:layout_constraintStart_toStartOf="@id/headerRow"
+            app:layout_constraintEnd_toEndOf="parent" />
 
-        <TextView
-            android:id="@+id/action_label"
-            android:layout_width="wrap_content"
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <!-- 🔹 SAFETY BANNER BELOW HEADER -->
+    <TextView
+        android:id="@+id/safety_warning"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginEnd="24dp"
+        android:layout_marginTop="16dp"
+        android:background="@android:color/holo_red_dark"
+        android:fontFamily="sans-serif-medium"
+        android:padding="12dp"
+        android:text="If you are ever unsure or symptoms are rapidly worsening, call emergency services immediately."
+        android:textAlignment="center"
+        android:textColor="@android:color/white"
+        android:textStyle="bold"
+        app:layout_constraintTop_toBottomOf="@id/childHeader"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+
+    <!-- 🔹 MAIN CONTENT COLUMN -->
+    <LinearLayout
+        android:id="@+id/content_container"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginEnd="24dp"
+        android:layout_marginTop="24dp"
+        android:layout_marginBottom="24dp"
+        android:gravity="center_horizontal"
+        android:orientation="vertical"
+        app:layout_constraintTop_toBottomOf="@id/safety_warning"
+        app:layout_constraintBottom_toTopOf="@+id/start_over_button"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <!-- Question card -->
+        <LinearLayout
+            android:id="@+id/question_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@android:color/white"
+            android:elevation="2dp"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:padding="24dp">
+
+            <TextView
+                android:id="@+id/question_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="sans-serif-medium"
+                android:text="Is the person unable to speak in full sentences?"
+                android:textAlignment="center"
+                android:textSize="22sp"
+                android:textStyle="bold" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:gravity="center"
+                android:orientation="horizontal"
+                android:weightSum="2">
+
+                <Button
+                    android:id="@+id/yes_button"
+                    android:layout_width="0dp"
+                    android:layout_height="48dp"
+                    android:layout_marginEnd="8dp"
+                    android:layout_weight="1"
+                    android:backgroundTint="@color/dark_blue_text"
+                    android:fontFamily="sans-serif-medium"
+                    android:text="Yes"
+                    android:textAllCaps="false" />
+
+                <Button
+                    android:id="@+id/no_button"
+                    android:layout_width="0dp"
+                    android:layout_height="48dp"
+                    android:layout_marginStart="8dp"
+                    android:layout_weight="1"
+                    android:backgroundTint="@color/dark_blue_text"
+                    android:fontFamily="sans-serif-medium"
+                    android:text="No"
+                    android:textAllCaps="false" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <!-- Inputs card -->
+        <LinearLayout
+            android:id="@+id/inputs_layout"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:textAlignment="center"
-            android:textSize="20sp"
-            tools:text="Action: Call 911 immediately" />
+            android:background="@android:color/white"
+            android:elevation="2dp"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:padding="24dp"
+            android:visibility="gone">
 
-        <TextView
-            android:id="@+id/timer_text"
-            android:layout_width="wrap_content"
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="12dp"
+                android:fontFamily="sans-serif-medium"
+                android:text="Add more details"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+            <EditText
+                android:id="@+id/edit_text_pef"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Enter PEF (optional)"
+                android:inputType="number"
+                android:padding="8dp" />
+
+            <EditText
+                android:id="@+id/edit_text_rescue_attempts"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:hint="How many rescue attempts?"
+                android:inputType="number"
+                android:padding="8dp" />
+
+            <Button
+                android:id="@+id/submit_inputs_button"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:layout_marginTop="16dp"
+                android:backgroundTint="@color/dark_blue_text"
+                android:fontFamily="sans-serif-medium"
+                android:text="Continue"
+                android:textAllCaps="false" />
+        </LinearLayout>
+
+        <!-- Result card -->
+        <LinearLayout
+            android:id="@+id/result_layout"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:textSize="20sp"
-            android:visibility="gone"
-            tools:text="10:00" />
+            android:background="@android:color/white"
+            android:elevation="2dp"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:padding="24dp"
+            android:visibility="gone">
 
-        <Button
-            android:id="@+id/start_over_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="24dp"
-            android:text="Start Over" />
+            <TextView
+                android:id="@+id/severity_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="sans-serif-medium"
+                android:textSize="26sp"
+                android:textStyle="bold"
+                tools:text="Severity: Severe" />
+
+            <TextView
+                android:id="@+id/action_label"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:fontFamily="sans-serif"
+                android:textAlignment="center"
+                android:textSize="18sp"
+                tools:text="Action: Call 911 immediately" />
+
+            <TextView
+                android:id="@+id/timer_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:fontFamily="sans-serif-medium"
+                android:textSize="20sp"
+                android:visibility="gone"
+                tools:text="10:00" />
+        </LinearLayout>
+
     </LinearLayout>
 
-</RelativeLayout>
+    <!-- Bottom button -->
+    <Button
+        android:id="@+id/start_over_button"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginEnd="24dp"
+        android:layout_marginBottom="24dp"
+        android:backgroundTint="@color/dark_blue_text"
+        android:fontFamily="sans-serif-medium"
+        android:text="Start Over"
+        android:textAllCaps="false"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
