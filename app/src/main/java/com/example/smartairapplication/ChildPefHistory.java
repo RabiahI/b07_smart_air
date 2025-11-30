@@ -93,7 +93,7 @@ public class ChildPefHistory extends AppCompatActivity {
                 }
 
                 // sort newest first
-                pefList.sort((a, b) -> Long.compare(b.timestamp, a.timestamp));
+                pefList.sort((a, b) -> Long.compare(b.getTimestamp(), a.getTimestamp()));
 
                 adapter.notifyDataSetChanged();
             }

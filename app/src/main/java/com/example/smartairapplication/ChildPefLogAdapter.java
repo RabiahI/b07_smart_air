@@ -42,7 +42,7 @@ public class ChildPefLogAdapter extends RecyclerView.Adapter<ChildPefLogAdapter.
     public void onBindViewHolder(@NonNull ChildPefLogAdapter.PefLogViewHolder holder, int position) {
         PefLog entry = pefList.get(position);
 
-        long timestamp = entry.timestamp;  // timestamp
+        long timestamp = entry.getTimestamp();  // timestamp
 
         //convert to date
         Date date = new Date(timestamp);
@@ -55,10 +55,10 @@ public class ChildPefLogAdapter extends RecyclerView.Adapter<ChildPefLogAdapter.
 
         holder.txtDate.setText(formattedDate);
         holder.txtTime.setText(formattedTime);
-        holder.txtPefValue.setText(String.valueOf(entry.value));
+        holder.txtPefValue.setText(String.valueOf(entry.getPefValue()));
 
         //compute zone
-        String zone = computeZone(entry.value);
+        String zone = computeZone(entry.getPefValue());
 
         //styling for zones
         switch (zone) {

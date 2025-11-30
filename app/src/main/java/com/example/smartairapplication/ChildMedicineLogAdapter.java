@@ -35,7 +35,7 @@ public class ChildMedicineLogAdapter extends RecyclerView.Adapter<ChildMedicineL
     public void onBindViewHolder(@NonNull MedLogViewHolder holder, int position) {
         MedicineLog log = logs.get(position);
 
-        long timestamp = log.timestamp;  // timestamp
+        long timestamp = log.getTimestamp();  // timestamp
 
         //convert to date
         Date date = new Date(timestamp);
@@ -46,13 +46,13 @@ public class ChildMedicineLogAdapter extends RecyclerView.Adapter<ChildMedicineL
         SimpleDateFormat timeFormat = new SimpleDateFormat("h:mm a", Locale.getDefault());
         String formattedTime = timeFormat.format(date);
 
-        holder.txtName.setText(log.inhalerType);
+        holder.txtName.setText(log.getInhalerType());
         holder.txtDate.setText(formattedDate);
         holder.txtTime.setText(formattedTime);
-        holder.txtDosage.setText(String.valueOf(log.puffCount));
+        holder.txtDosage.setText(String.valueOf(log.getPuffCount()));
 
         //styling for rescue vs controller
-        if (Objects.equals(log.inhalerType, "Rescue")){
+        if (Objects.equals(log.getInhalerType(), "Rescue")){
             holder.layoutMedicine.setBackgroundResource(R.drawable.bg_orange_log);
         } else {
             holder.layoutMedicine.setBackgroundResource(R.drawable.bg_blue_log);
