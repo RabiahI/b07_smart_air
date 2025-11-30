@@ -231,6 +231,13 @@ public class LogMedicine extends AppCompatActivity {
                         })
                         .show();
                 return false;
+            } else if (itemId == R.id.nav_history){
+                Intent intent = new Intent(LogMedicine.this, ChildHistory.class);
+                intent.putExtra("childId", childId);
+                intent.putExtra("parentId", parentId);
+                intent.putExtra("isParentMode", isParentMode);
+                startActivity(intent);
+                finish();
             } else if (itemId == R.id.nav_log){
                 return true;
             }

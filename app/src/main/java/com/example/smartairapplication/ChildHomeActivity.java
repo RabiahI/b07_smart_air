@@ -193,7 +193,7 @@ public class ChildHomeActivity extends AppCompatActivity implements PasswordDial
             startActivity(manageInventoryIntent);
           });
         
-      dailyCheckInButton.setOnClickListener(v -> {
+        dailyCheckInButton.setOnClickListener(v -> {
             Intent dailyCheckInIntent = new Intent(ChildHomeActivity.this, DailyCheckIn.class);
             dailyCheckInIntent.putExtra("childId", finalChildId);
             dailyCheckInIntent.putExtra("parentId", finalParentId);
@@ -215,6 +215,13 @@ public class ChildHomeActivity extends AppCompatActivity implements PasswordDial
                 settingsIntent.putExtra("parentId", finalParentId);
                 settingsIntent.putExtra("isParentMode", isParentMode);
                 startActivity(settingsIntent);
+                return false;
+            } else if (itemId == R.id.nav_history) {
+                Intent historyIntent = new Intent(ChildHomeActivity.this, ChildHistory.class);
+                historyIntent.putExtra("childId", finalChildId);
+                historyIntent.putExtra("parentId", finalParentId);
+                historyIntent.putExtra("isParentMode", isParentMode);
+                startActivity(historyIntent);
                 return false;
             } else if (itemId == R.id.nav_home){
                 return true;
