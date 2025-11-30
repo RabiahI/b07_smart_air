@@ -13,7 +13,7 @@ import com.google.firebase.auth.FirebaseUser;
 public class ParentSettingsActivity extends AppCompatActivity {
 
     private TextView textViewName, textViewNotes;
-    private Button logoutButton, providerAccessButton;
+    private Button logoutButton;
     private BottomNavigationView bottomNav;
     private FirebaseAuth mAuth;
 
@@ -28,7 +28,6 @@ public class ParentSettingsActivity extends AppCompatActivity {
         textViewName = findViewById(R.id.textViewName);
         textViewNotes = findViewById(R.id.textViewNotes);
         logoutButton = findViewById(R.id.logout);
-        providerAccessButton = findViewById(R.id.providerAccess);
         bottomNav = findViewById(R.id.bottomNav);
 
         if (currentUser != null) {
@@ -41,15 +40,11 @@ public class ParentSettingsActivity extends AppCompatActivity {
         logoutButton.setOnClickListener(view -> {
             FirebaseAuth.getInstance().signOut();
             Intent intent = new Intent(getApplicationContext(), Login.class);
-            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             startActivity(intent);
             finish();
         });
 
-        providerAccessButton.setOnClickListener(view -> {
-            Intent intent = new Intent(getApplicationContext(), ManageAccessActivity.class);
-            startActivity(intent);
-        });
 
         bottomNav.setSelectedItemId(R.id.nav_settings);
 

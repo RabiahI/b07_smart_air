@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#fafbfc">
+    android:background="@color/background">
 
     <!-- Scrollable content -->
     <ScrollView
@@ -18,8 +18,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:padding="16dp">
+            android:orientation="vertical">
 
             <include
                 android:id="@+id/provider_header"
@@ -38,9 +37,13 @@
             <include
                 android:id="@+id/triage_container"
                 layout="@layout/provider_triage_container"
+                android:layout_marginBottom="1dp"/>
+                
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="16dp"/>
+                android:orientation="vertical"
+                android:padding="16dp">
 
             <include
                 android:id="@+id/symptoms_containers"
@@ -64,6 +67,37 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="16dp"/>
 a
+                <include
+                    layout="@layout/zone_button" />
+
+                <include
+                    layout="@layout/provider_triage_container"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="16dp"/>
+
+                <include
+                    layout="@layout/symptoms_containers"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="16dp"/>
+
+                <include
+                    layout="@layout/triggers_containers"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="16dp"/>
+
+                <!-- Logout button at bottom of scrollable content -->
+                <Button
+                    android:id="@+id/logout"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="24dp"
+                    android:text="Logout"/>
+
+            </LinearLayout>
         </LinearLayout>
     </ScrollView>
 
@@ -76,6 +110,7 @@ a
         app:menu="@menu/menu_provider_bottom_nav"
         app:itemIconTint="@color/bottom_nav_selector"
         app:itemTextColor="@color/bottom_nav_selector"
+        app:itemActiveIndicatorStyle="@null"
         app:labelVisibilityMode="labeled"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"

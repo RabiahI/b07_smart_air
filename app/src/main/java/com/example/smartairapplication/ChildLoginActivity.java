@@ -72,7 +72,6 @@ public class ChildLoginActivity extends AppCompatActivity {
                     if (snapshot.exists()) {
                         Toast.makeText(ChildLoginActivity.this, "Welcome back!", Toast.LENGTH_SHORT).show();
                         Intent intent = new Intent(ChildLoginActivity.this, ChildHomeActivity.class);
-                        intent.putExtra("childId", childId);
                         intent.putExtra("parentId", parentId);
                         startActivity(intent);
                         finish();
@@ -119,7 +118,6 @@ public class ChildLoginActivity extends AppCompatActivity {
                                             // Child is confirmed to be under the correct parent
                                             Toast.makeText(ChildLoginActivity.this, "Login Successful.", Toast.LENGTH_SHORT).show();
                                             Intent intent = new Intent(ChildLoginActivity.this, ChildHomeActivity.class);
-                                            intent.putExtra("childId", childId);
                                             intent.putExtra("parentId", parentId);
                                             startActivity(intent);
                                             finish();

@@ -7,9 +7,11 @@ import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.text.InputType;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -34,6 +36,7 @@ public class ChildHomeActivity extends AppCompatActivity implements PasswordDial
     private FirebaseAuth mAuth;
     private int personalBest;
     private int latestPef;
+    private int previousPef = -1;
     private DatabaseReference childRef;
 
     private CardView zoneButton, triageButton, logMedicineButton, streaksButton, dailyCheckInButton, manageInventoryButton;
@@ -42,6 +45,9 @@ public class ChildHomeActivity extends AppCompatActivity implements PasswordDial
 
     private String currentParentEmail;
     private boolean isParentMode;
+    private TextView textWelcome;
+    private ImageView btnProfile;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,6 +71,9 @@ public class ChildHomeActivity extends AppCompatActivity implements PasswordDial
         manageInventoryButton = findViewById(R.id.manageInventoryButton);
         dailyCheckInButton = findViewById(R.id.dailyCheckInButton);
 
+        textWelcome = findViewById(R.id.tvWelcome);
+        btnProfile = findViewById(R.id.btnProfile);
+
         // Show onboarding on first login
         if (OnboardingActivity.isFirstLogin()) {
             OnboardingDialogFragment dialog = new OnboardingDialogFragment();
@@ -81,41 +90,38 @@ public class ChildHomeActivity extends AppCompatActivity implements PasswordDial
             finish();
             return;
         }
+
         String intentChildId = getIntent().getStringExtra("childId");
         String intentParentId = getIntent().getStringExtra("parentId");
+        String currentUid = currentUser.getUid();
         final String finalChildId;
         final String finalParentId;
 
-        if (intentChildId != null && intentParentId == null) {
-            // Scenario 1: Parent viewing a specific child's profile
+        isParentMode = currentUid.equals(intentParentId) || (intentParentId == null && intentChildId != null);
+
+        if (isParentMode) {
+            finalParentId = currentUid;
             finalChildId = intentChildId;
-            finalParentId = currentUser.getUid();
             currentParentEmail = currentUser.getEmail();
-            isParentMode = true;
-        } else if (intentChildId == null && intentParentId != null) {
-            // Scenario 2: Child logged in directly
-            finalChildId = currentUser.getUid();
+        } else {
+            finalChildId = currentUid;
             finalParentId = intentParentId;
-            isParentMode = false;
-        } else if (intentChildId != null && intentChildId.equals(currentUser.getUid())) {
-            // Scenario 3: Child navigating back to ChildHomeActivity after direct login
-            finalChildId = intentChildId;
-            finalParentId = intentParentId;
-            isParentMode = false;
-        }else {
-            // Error or unexpected scenario
-            Toast.makeText(this, "Unable to determine child context. Please re-login.", Toast.LENGTH_LONG).show();
+        }
+
+        if (finalParentId == null || finalChildId == null) {
+            Toast.makeText(this, "Unable to determine user context. Please re-login.", Toast.LENGTH_LONG).show();
             FirebaseAuth.getInstance().signOut();
             startActivity(new Intent(ChildHomeActivity.this, Login.class));
             finish();
             return;
         }
+
         childRef = database.getReference("Users")
                 .child("Parent")
                 .child(finalParentId)
                 .child("Children")
                 .child(finalChildId);
-        
+
         getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
             @Override
             public void handleOnBackPressed() {
@@ -133,9 +139,11 @@ public class ChildHomeActivity extends AppCompatActivity implements PasswordDial
                 if (snapshot.exists()) {
                     Child child = snapshot.getValue(Child.class);
                     if (child != null) {
+                        textWelcome.setText("Welcome " + child.getName()); //update welcome text
                         personalBest = child.getPersonalBest();
                         latestPef = child.getLatestPef();
-                        updateZone(latestPef);
+                        updateZone(latestPef, finalParentId, finalChildId, child.getName());
+                        previousPef = latestPef;
                     }
                 } else {
                     Toast.makeText(ChildHomeActivity.this, "Child data not found.", Toast.LENGTH_SHORT).show();
@@ -148,6 +156,13 @@ public class ChildHomeActivity extends AppCompatActivity implements PasswordDial
             }
         });
 
+        btnProfile.setOnClickListener(v -> {
+            Intent settingsIntent = new Intent(ChildHomeActivity.this, ChildSettingsActivity.class);
+            settingsIntent.putExtra("childId", finalChildId);
+            settingsIntent.putExtra("parentId", finalParentId);
+            settingsIntent.putExtra("isParentMode", isParentMode);
+            startActivity(settingsIntent);
+        });
         zoneButton.setOnClickListener(v -> showPefInputDialog(finalParentId, finalChildId));
         triageButton.setOnClickListener(v -> {
             Intent triageIntent = new Intent(ChildHomeActivity.this, TriageActivity.class);
@@ -178,7 +193,7 @@ public class ChildHomeActivity extends AppCompatActivity implements PasswordDial
             startActivity(manageInventoryIntent);
           });
         
-      dailyCheckInButton.setOnClickListener(v -> {
+        dailyCheckInButton.setOnClickListener(v -> {
             Intent dailyCheckInIntent = new Intent(ChildHomeActivity.this, DailyCheckIn.class);
             dailyCheckInIntent.putExtra("childId", finalChildId);
             dailyCheckInIntent.putExtra("parentId", finalParentId);
@@ -200,6 +215,13 @@ public class ChildHomeActivity extends AppCompatActivity implements PasswordDial
                 settingsIntent.putExtra("parentId", finalParentId);
                 settingsIntent.putExtra("isParentMode", isParentMode);
                 startActivity(settingsIntent);
+                return false;
+            } else if (itemId == R.id.nav_history) {
+                Intent historyIntent = new Intent(ChildHomeActivity.this, ChildHistory.class);
+                historyIntent.putExtra("childId", finalChildId);
+                historyIntent.putExtra("parentId", finalParentId);
+                historyIntent.putExtra("isParentMode", isParentMode);
+                startActivity(historyIntent);
                 return false;
             } else if (itemId == R.id.nav_home){
                 return true;
@@ -255,10 +277,12 @@ public class ChildHomeActivity extends AppCompatActivity implements PasswordDial
                 .child("Logs").child("pefLogs").push();
 
         PefLog logEntry = new PefLog(pefValue, System.currentTimeMillis());
-        pefLogRef.setValue(logEntry);
+        pefLogRef.setValue(logEntry).addOnSuccessListener(aVoid -> {
+            OverviewCalculator.updateDailyOverview(parentId, childId);
+        });
     }
 
-    private void updateZone(int currentPef) {
+    private void updateZone(int currentPef, String parentId, String childId, String childName) {
         if (personalBest == 0) {
             zoneTitle.setText(R.string.today_s_zone_not_set);
             zoneMessage.setText(R.string.please_set_your_personal_best_pef);
@@ -267,13 +291,17 @@ public class ChildHomeActivity extends AppCompatActivity implements PasswordDial
             return;
         }
 
-        double percentage = ((double) currentPef / personalBest) * 100;
+        double currentPercentage = ((double) currentPef / personalBest) * 100;
+        double previousPercentage = (previousPef == -1) ? 100 : ((double) previousPef / personalBest) * 100;
 
-        if (percentage >= 80) {
+        boolean isCurrentlyRed = currentPercentage < 50;
+        boolean wasPreviouslyRed = previousPercentage < 50;
+
+        if (currentPercentage >= 80) {
             zoneTitle.setText(R.string.today_s_zone_green);
             zoneMessage.setText(R.string.keep_up_your_routine);
             zoneButton.setCardBackgroundColor(Color.parseColor("#90C4A5"));
-        } else if (percentage >= 50) {
+        } else if (currentPercentage >= 50) {
             zoneTitle.setText(R.string.today_s_zone_yellow);
             zoneMessage.setText(R.string.caution_use_your_reliever_inhaler);
             zoneButton.setCardBackgroundColor(Color.parseColor("#FFC107")); // Yellow
@@ -281,6 +309,15 @@ public class ChildHomeActivity extends AppCompatActivity implements PasswordDial
             zoneTitle.setText(R.string.today_s_zone_red);
             zoneMessage.setText(R.string.danger_use_your_reliever_and_see_a_doctor);
             zoneButton.setCardBackgroundColor(Color.parseColor("#F44336")); // Red
+            
+            if (isCurrentlyRed && !wasPreviouslyRed) {
+                DatabaseReference alertsRef = FirebaseDatabase.getInstance().getReference("Users")
+                    .child("Parent").child(parentId)
+                    .child("Alerts").push();
+                String message = childName + "'s PEF of " + currentPef + " is in the red zone, indicating a medical emergency.";
+                Alert alert = new Alert("Red Zone", message, System.currentTimeMillis(), "High", childId);
+                alertsRef.setValue(alert);
+            }
         }
 
         updatePefDisplay(currentPef);

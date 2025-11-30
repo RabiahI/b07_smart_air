@@ -20,10 +20,15 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Date;
+import java.util.List;
+import java.util.Locale;
 
 public class ManageInventoryChild extends AppCompatActivity {
 
@@ -94,7 +99,10 @@ public class ManageInventoryChild extends AppCompatActivity {
                     if (med != null) {
                         med.id = medSnap.getKey();
                         medicineList.add(med);
+                        checkIfExpired(med);
                     }
+                 
+               
                 }
 
                 adapter.notifyDataSetChanged();
@@ -134,13 +142,21 @@ public class ManageInventoryChild extends AppCompatActivity {
                 return;
             }
 
+            boolean wasLow = medicine.amountLeft <= 20;
+            boolean isLow = newAmount <= 20;
+
+            if (isLow && !wasLow) {
+                sendLowStockAlert(medicine.name);
+            }
+
+            // save to db
             DatabaseReference ref = FirebaseDatabase.getInstance().getReference("Users")
                     .child("Parent").child(parentId)
                     .child("Children").child(childId)
-                    .child("Inventory").child(medicine.id)
-                    .child("amountLeft");
+                    .child("Inventory").child(medicine.id);
 
-            ref.setValue(newAmount)
+            ref.child("amountLeft").setValue(newAmount);
+            ref.child("lowFlag").setValue(isLow)
                     .addOnSuccessListener(a ->
                             Toast.makeText(this, "Updated!", Toast.LENGTH_SHORT).show()
                     )
@@ -180,5 +196,42 @@ public class ManageInventoryChild extends AppCompatActivity {
         } catch (Exception e) {
             Log.e("InventoryLog", "Error creating log entry: " + e.getMessage());
         }
+    }
+}
+    private void sendLowStockAlert(String medicineName) {
+        String message = medicineName + " is low in stock. Remaining puffs are 20 or less.";
+        Alert alert = new Alert("Low Stock", message, System.currentTimeMillis(), "Medium", childId);
+        DatabaseReference alertsRef = FirebaseDatabase.getInstance().getReference("Users")
+                .child("Parent").child(parentId).child("Alerts");
+        alertsRef.push().setValue(alert);
+    }
+
+    private void checkIfExpired(Medicine medicine) {
+        if (medicine.expiryAlertSent) {
+            return;
+        }
+
+        SimpleDateFormat sdf = new SimpleDateFormat("M/d/yyyy", Locale.US);
+        try {
+            Date expiryDate = sdf.parse(medicine.expiryDate);
+            if (new Date().after(expiryDate)) {
+                sendExpiryAlert(medicine);
+            }
+        } catch (ParseException e) {
+        }
+    }
+
+    private void sendExpiryAlert(Medicine medicine) {
+        String message = medicine.name + " has expired. Please replace it.";
+        Alert alert = new Alert("Medication Expired", message, System.currentTimeMillis(), "High", childId);
+        DatabaseReference alertsRef = FirebaseDatabase.getInstance().getReference("Users")
+                .child("Parent").child(parentId).child("Alerts");
+        alertsRef.push().setValue(alert);
+
+        DatabaseReference medRef = FirebaseDatabase.getInstance().getReference("Users")
+                .child("Parent").child(parentId)
+                .child("Children").child(childId)
+                .child("Inventory").child(medicine.id);
+        medRef.child("expiryAlertSent").setValue(true);
     }
 }

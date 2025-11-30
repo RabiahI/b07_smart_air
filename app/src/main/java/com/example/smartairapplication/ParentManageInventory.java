@@ -19,7 +19,6 @@ import androidx.core.view.WindowInsetsCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -27,15 +26,18 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 public class ParentManageInventory extends AppCompatActivity {
 
     private RecyclerView recycler;
     private FloatingActionButton btnAdd;
-    private BottomNavigationView bottomNav;
     private ImageView btnBack;
 
     private List<Medicine> list = new ArrayList<>();
@@ -54,7 +56,6 @@ public class ParentManageInventory extends AppCompatActivity {
 
         recycler = findViewById(R.id.recyclerInventory);
         btnAdd = findViewById(R.id.btnAddMedicine);
-        bottomNav = findViewById(R.id.bottomNav);
         btnBack = findViewById(R.id.btnBack);
 
         adapter = new ParentInventoryAdapter(list, new ParentInventoryAdapter.OnParentActionListener() {
@@ -82,11 +83,6 @@ public class ParentManageInventory extends AppCompatActivity {
             public void handleOnBackPressed() {
                 showExitConfirmation();
             }
-        });
-
-        // Navigation if needed later
-        bottomNav.setOnItemSelectedListener(item -> {
-            return false;
         });
 
         getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
@@ -125,6 +121,23 @@ public class ParentManageInventory extends AppCompatActivity {
                     if (m != null) {
                         m.id = ds.getKey();
                         list.add(m);
+
+                        if (!m.expiryAlertSent) {
+                            SimpleDateFormat sdf = new SimpleDateFormat("M/d/yyyy", Locale.US);
+                            try {
+                                Date expiryDate = sdf.parse(m.expiryDate);
+                                if (new Date().after(expiryDate)) {
+                                    String message = m.name + " has expired. Please replace it.";
+                                    Alert alert = new Alert("Medication Expired", message, System.currentTimeMillis(), "High", childId);
+                                    DatabaseReference alertsRef = FirebaseDatabase.getInstance().getReference("Users")
+                                            .child("Parent").child(parentId).child("Alerts");
+                                    alertsRef.push().setValue(alert);
+
+                                    ds.getRef().child("expiryAlertSent").setValue(true);
+                                }
+                            } catch (ParseException e) {
+                            }
+                        }
                     }
                 }
                 adapter.notifyDataSetChanged();
@@ -162,8 +175,17 @@ public class ParentManageInventory extends AppCompatActivity {
                     }
 
                     int amount = Integer.parseInt(a);
+                    boolean isLow = amount <= 20;
 
-                    Medicine med = new Medicine(n, p, e, amount, amount <= 20);
+                    if (isLow) {
+                        String message = n + " is low in stock. Remaining puffs are 20 or less.";
+                        Alert alert = new Alert("Low Stock", message, System.currentTimeMillis(), "Medium", childId);
+                        DatabaseReference alertsRef = FirebaseDatabase.getInstance().getReference("Users")
+                                .child("Parent").child(parentId).child("Alerts");
+                        alertsRef.push().setValue(alert);
+                    }
+
+                    Medicine med = new Medicine(n, p, e, amount, isLow);
 
                     DatabaseReference ref = FirebaseDatabase.getInstance().getReference("Users")
                             .child("Parent").child(parentId)
@@ -211,10 +233,20 @@ public class ParentManageInventory extends AppCompatActivity {
                     }
 
                     int amount = Integer.parseInt(a);
-                    boolean lowFlag = amount <= 20;
+                    boolean wasLow = med.lowFlag;
+                    boolean isLow = amount <= 20;
 
-                    Medicine updated = new Medicine(n, p, e, amount, lowFlag);
+                    if (isLow && !wasLow) {
+                        String message = n + " is low in stock. Remaining puffs are 20 or less.";
+                        Alert alert = new Alert("Low Stock", message, System.currentTimeMillis(), "Medium", childId);
+                        DatabaseReference alertsRef = FirebaseDatabase.getInstance().getReference("Users")
+                                .child("Parent").child(parentId).child("Alerts");
+                        alertsRef.push().setValue(alert);
+                    }
+
+                    Medicine updated = new Medicine(n, p, e, amount, isLow);
                     updated.id = med.id;
+                    updated.expiryAlertSent = med.expiryAlertSent;
 
                     DatabaseReference ref = FirebaseDatabase.getInstance().getReference("Users")
                             .child("Parent").child(parentId)

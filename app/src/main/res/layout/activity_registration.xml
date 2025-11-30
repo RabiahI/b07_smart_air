@@ -8,12 +8,14 @@
     android:gravity="center"
     android:layout_height="match_parent"
     android:padding="15dp"
+    android:background="@color/background"
     tools:context=".Registration">
 
     <TextView
         android:text="@string/registration"
         android:textSize="25sp"
         android:textStyle="bold"
+        android:textColor="@color/dark_blue_text"
         android:gravity="center"
         android:layout_marginBottom="20dp"
         android:layout_width="match_parent"
@@ -66,12 +68,14 @@
     <Button
         android:id="@+id/btn_register"
         android:text="@string/register"
+        android:backgroundTint="@color/dark_blue_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"/>
 
     <TextView
         android:textStyle="bold"
         android:textSize="20sp"
+        android:textColor="@color/dark_blue_text"
         android:gravity="center"
         android:layout_marginTop="20dp"
         android:id="@+id/loginNow"

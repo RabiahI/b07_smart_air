@@ -28,6 +28,7 @@
         <Button
             android:id="@+id/buttonCancel"
             android:layout_width="0dp"
+            android:backgroundTint="@color/dark_blue_text"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="Cancel" />
@@ -36,6 +37,7 @@
             android:id="@+id/buttonConfirm"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:backgroundTint="@color/dark_blue_text"
             android:layout_weight="1"
             android:text="Confirm" />
     </LinearLayout>

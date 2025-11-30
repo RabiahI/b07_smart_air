@@ -15,6 +15,18 @@
         android:theme="@style/Theme.Material3.DayNight.NoActionBar">
 
         <activity
+            android:name=".ChildPefHistory"
+            android:exported="false" />
+        <activity
+            android:name=".ChildDailyCheckInHistory"
+            android:exported="false" />
+        <activity
+            android:name=".ChildMedicineLogHistory"
+            android:exported="false" />
+        <activity
+            android:name=".ChildHistory"
+            android:exported="false" />
+        <activity
             android:name=".ParentManageInventory"
             android:exported="false" />
         <activity

@@ -1,12 +1,12 @@
 package com.example.smartairapplication;
 
 public class MedicineLog {
-    public String inhalerType;
-    public int puffCount;
-    public int sobBefore;
-    public int sobAfter;
-    public String postFeeling;
-    public long timestamp;
+    private String inhalerType;
+    private int puffCount;
+    private int sobBefore;
+    private int sobAfter;
+    private String postFeeling;
+    private long timestamp;
 
     public MedicineLog(){}
 
@@ -17,5 +17,29 @@ public class MedicineLog {
         this.sobAfter = sobAfter;
         this.postFeeling = postFeeling;
         this.timestamp = System.currentTimeMillis();
+    }
+
+    public String getInhalerType() {
+        return inhalerType;
+    }
+
+    public int getPuffCount() {
+        return puffCount;
+    }
+
+    public int getSobBefore() {
+        return sobBefore;
+    }
+
+    public int getSobAfter() {
+        return sobAfter;
+    }
+
+    public String getPostFeeling() {
+        return postFeeling;
+    }
+
+    public long getTimestamp() {
+        return timestamp;
     }
 }

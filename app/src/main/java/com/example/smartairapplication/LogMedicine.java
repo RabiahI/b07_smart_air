@@ -21,8 +21,11 @@ import androidx.cardview.widget.CardView;
 import androidx.core.content.ContextCompat;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.Arrays;
 import java.util.List;
@@ -228,6 +231,13 @@ public class LogMedicine extends AppCompatActivity {
                         })
                         .show();
                 return false;
+            } else if (itemId == R.id.nav_history){
+                Intent intent = new Intent(LogMedicine.this, ChildHistory.class);
+                intent.putExtra("childId", childId);
+                intent.putExtra("parentId", parentId);
+                intent.putExtra("isParentMode", isParentMode);
+                startActivity(intent);
+                finish();
             } else if (itemId == R.id.nav_log){
                 return true;
             }
@@ -368,10 +378,80 @@ public class LogMedicine extends AppCompatActivity {
         ref.child(logId).setValue(log)
                 .addOnSuccessListener(aVoid -> {
                     Toast.makeText(this, "Medicine log saved!", Toast.LENGTH_SHORT).show();
+                    OverviewCalculator.updateDailyOverview(parentId, childId);
+                    if ("Rescue".equals(inhalerType)) {
+                        checkForRapidRescueRepeats();
+                    }
+                    if ("Worse".equals(postFeeling)) {
+                        DatabaseReference childRef = FirebaseDatabase.getInstance().getReference("Users")
+                                .child("Parent").child(parentId)
+                                .child("Children").child(childId);
+
+                        childRef.child("name").addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(DataSnapshot snapshot) {
+                                String childName = snapshot.exists() ? snapshot.getValue(String.class) : "Your child";
+                                String message = childName + " is feeling worse after their dose.";
+                                Alert newAlert = new Alert("Worse After Dose", message, System.currentTimeMillis(), "high", childId);
+
+                                DatabaseReference parentAlertRef = FirebaseDatabase.getInstance().getReference("Users")
+                                        .child("Parent")
+                                        .child(parentId)
+                                        .child("Alerts");
+                                parentAlertRef.push().setValue(newAlert);
+                            }
+
+                            @Override
+                            public void onCancelled(DatabaseError error) {
+                                Toast.makeText(LogMedicine.this, "Failed to retrieve child's name for alert.", Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                    }
                     finish();
                 })
                 .addOnFailureListener(e ->
                         Toast.makeText(this, "Failed: " +e.getMessage(), Toast.LENGTH_SHORT).show()
                 );
+    }
+
+    private void checkForRapidRescueRepeats() {
+        DatabaseReference logsRef = FirebaseDatabase.getInstance().getReference("Users")
+                .child("Parent")
+                .child(parentId)
+                .child("Children")
+                .child(childId)
+                .child("Logs")
+                .child("medicineLogs");
+
+        long threeHoursAgo = System.currentTimeMillis() - (3 * 60 * 60 * 1000);
+
+        logsRef.orderByChild("timestamp").startAt(threeHoursAgo).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                int rescueCount = 0;
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    MedicineLog log = snapshot.getValue(MedicineLog.class);
+                    if (log != null && "Rescue".equals(log.getInhalerType())) {
+                        rescueCount++;
+                    }
+                }
+
+                if (rescueCount >= 3) {
+                    DatabaseReference parentAlertRef = FirebaseDatabase.getInstance().getReference("Users")
+                            .child("Parent")
+                            .child(parentId)
+                            .child("Alerts");
+                    
+                    String message = "Your child has used their rescue inhaler " + rescueCount + " times in the last 3 hours.";
+                    Alert newAlert = new Alert("Rapid Rescue Repeats", message, System.currentTimeMillis(), "high", childId);
+                    parentAlertRef.push().setValue(newAlert);
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Toast.makeText(LogMedicine.this, "Failed to check for rapid rescue repeats: " + databaseError.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 }

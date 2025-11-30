@@ -7,14 +7,14 @@
     android:orientation="vertical"
     android:gravity="center"
     android:padding="24dp"
-    android:background="#FAFAFA"
+    android:background="@color/background"
     tools:context=".ChildLoginActivity">
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Child Login"
-        android:textColor="#4CAF50"
+        android:textColor="@color/dark_blue_text"
         android:textSize="32sp"
         android:textStyle="bold"
         android:layout_marginBottom="40dp" />
@@ -57,7 +57,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Login"
-        android:backgroundTint="#4CAF50"
+        android:backgroundTint="@color/dark_blue_text"
         android:textColor="@android:color/white"
         android:padding="12dp"/>
 

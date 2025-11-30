@@ -5,6 +5,7 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/background"
     tools:context=".LogMedicine">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -70,6 +71,7 @@
         android:gravity="center"
         android:orientation="vertical"
         android:layout_marginTop="100dp"
+        android:backgroundTint="@color/background"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/childHeader">
 
@@ -559,6 +561,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:background="@color/white"
+        app:itemActiveIndicatorStyle="@null"
         app:menu="@menu/menu_child_bottom_nav"
         app:itemIconTint="@color/bottom_nav_selector"
         app:itemTextColor="@color/bottom_nav_selector"
