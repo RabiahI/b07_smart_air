@@ -9,10 +9,12 @@
     app:cardUseCompatPadding="true">
 
     <LinearLayout
+        android:id="@+id/zoneDistributionCardContainer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:padding="16dp">
+        android:padding="16dp"
+        android:background="@drawable/card_lightgray_round">
 
         <TextView
             android:id="@+id/txtZoneTitle"
@@ -34,7 +36,6 @@
             android:fontFamily="@font/inter"
             android:textColor="#6B7A90" />
 
-        <!-- Green -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -71,7 +72,6 @@
                 android:textColor="#2D7A3F" />
         </LinearLayout>
 
-        <!-- Yellow -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -108,7 +108,6 @@
                 android:textColor="#CC8A00" />
         </LinearLayout>
 
-        <!-- Red -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

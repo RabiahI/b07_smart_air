@@ -307,6 +307,19 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical" />
 
+            <Button
+                android:id="@+id/btnExportPdf"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Export PDF"
+                android:textColor="@color/white"
+                android:backgroundTint="@color/vivid_blue"
+                android:padding="14dp"
+                android:textSize="16sp"
+                android:fontFamily="@font/inter_bold"
+                android:visibility="gone"
+                android:layout_marginBottom="20dp"/>
+
         </LinearLayout>
     </ScrollView>
 </androidx.constraintlayout.widget.ConstraintLayout>

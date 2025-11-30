@@ -1,11 +1,17 @@
 package com.example.smartairapplication;
 
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
+import android.graphics.pdf.PdfDocument;
 import android.os.Bundle;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.DatePickerDialog;
+import android.os.Environment;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
@@ -35,6 +41,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.time.LocalDate;
@@ -54,7 +62,7 @@ public class ProviderReportActivity extends AppCompatActivity {
 
     private EditText inputFromDate, inputToDate;
     private Switch toggleSymptoms, toggleMedicine, togglePEF, toggleTriage;
-    private Button btnGeneratePreview;
+    private Button btnGeneratePreview, btnExportPdf;
     private LinearLayout previewContainer;
 
     private String parentId, childId;
@@ -83,6 +91,7 @@ public class ProviderReportActivity extends AppCompatActivity {
         togglePEF = findViewById(R.id.togglePEF);
         toggleTriage = findViewById(R.id.toggleTriage);
         btnGeneratePreview = findViewById(R.id.btnGeneratePreview);
+        btnExportPdf = findViewById(R.id.btnExportPdf);
         previewContainer = findViewById(R.id.previewContainer);
 
         btnBack = findViewById(R.id.btnBack);
@@ -92,6 +101,7 @@ public class ProviderReportActivity extends AppCompatActivity {
         inputToDate.setOnClickListener(v -> showDatePicker(inputToDate));
 
         btnGeneratePreview.setOnClickListener(v -> generatePreview());
+
 
     }
 
@@ -263,8 +273,6 @@ public class ProviderReportActivity extends AppCompatActivity {
             }
         }
 
-        // TODO: triage incidents are not summarized here yet – add a list later
-
         // compute aggregates & build cards
 
         List<LocalDate> allDays = new ArrayList<>();
@@ -295,6 +303,55 @@ public class ProviderReportActivity extends AppCompatActivity {
                 addTriageSummaryCard(severeLogs);
             });
         }
+
+        // after all cards generated - now show export button
+        btnExportPdf.setVisibility(View.VISIBLE);
+        btnExportPdf.setOnClickListener(v -> {
+
+            // Collect charts as bitmaps
+            List<Bitmap> chartBitmaps = new ArrayList<>();
+
+            if (toggleMedicine.isChecked()) {
+                View controllerCard = previewContainer.findViewById(R.id.chartControllerAdherence);
+                if (controllerCard instanceof PieChart) {
+                    chartBitmaps.add(((PieChart) controllerCard).getChartBitmap());
+                }
+
+                View rescueCard = previewContainer.findViewById(R.id.chartRescueFrequency);
+                if (rescueCard instanceof LineChart) {
+                    chartBitmaps.add(((LineChart) rescueCard).getChartBitmap());
+                }
+            }
+
+            if (toggleSymptoms.isChecked()) {
+                View symptomCard = previewContainer.findViewById(R.id.chartSymptomBurden);
+                if (symptomCard instanceof PieChart) {
+                    chartBitmaps.add(((PieChart) symptomCard).getChartBitmap());
+                }
+            }
+
+            if (togglePEF.isChecked()) {
+                View zoneCard = previewContainer.findViewById(R.id.progGreen);
+                if (zoneCard != null) {
+                    Bitmap bmp = createBitmapFromView(
+                            previewContainer.findViewById(R.id.zoneDistributionCardContainer)
+                    );
+                    chartBitmaps.add(bmp);
+                }
+            }
+
+            // Load severe triage logs again
+            loadSevereTriageIncidents(severeLogs -> {
+                generatePDFReport(
+                        chartBitmaps,
+                        severeLogs,
+                        inputFromDate.getText().toString(),
+                        inputToDate.getText().toString(),
+                        "Child"
+                );
+            });
+        });
+
 
     }
     private enum SymptomCategory {
@@ -633,4 +690,142 @@ public class ProviderReportActivity extends AppCompatActivity {
 
         previewContainer.addView(card);
     }
+
+
+    private void generatePDFReport(
+            List<Bitmap> chartBitmaps,
+            List<TriageLog> severeIncidents,
+            String fromDateStr,
+            String toDateStr,
+            String childName) {
+
+        PdfDocument pdf = new PdfDocument();
+
+        Paint textPaint = new Paint();
+        textPaint.setColor(Color.BLACK);
+        textPaint.setTextSize(16);
+
+        Paint titlePaint = new Paint();
+        titlePaint.setColor(Color.BLACK);
+        titlePaint.setTextSize(22);
+        titlePaint.setFakeBoldText(true);
+
+        int pageWidth = 595;   // A4 width in points
+        int pageHeight = 842;  // A4 height in points
+        int y = 50;
+
+        PdfDocument.PageInfo pageInfo =
+                new PdfDocument.PageInfo.Builder(pageWidth, pageHeight, 1).create();
+        PdfDocument.Page page = pdf.startPage(pageInfo);
+        Canvas canvas = page.getCanvas();
+
+        // header
+        canvas.drawText("Provider Report for " + childName, 30, y, titlePaint);
+        y += 30;
+        canvas.drawText("Date Range: " + fromDateStr + "  →  " + toDateStr, 30, y, textPaint);
+        y += 50;
+
+        // charts
+        for (Bitmap bmp : chartBitmaps) {
+            if (bmp == null) continue;
+
+            // scale image to fit PDF width
+            float scale = (float) (pageWidth - 60) / bmp.getWidth();
+            Bitmap scaled = Bitmap.createScaledBitmap(
+                    bmp,
+                    (int) ((float) bmp.getWidth() * scale),
+                    (int) ((float) bmp.getHeight() * scale),
+                    true
+            );
+
+            canvas.drawBitmap(scaled, 30, y, null);
+            y += scaled.getHeight() + 30;
+
+            // If we run out of space -> new page
+            if (y > pageHeight - 200) {
+                pdf.finishPage(page);
+                pageInfo = new PdfDocument.PageInfo.Builder(pageWidth, pageHeight, 1).create();
+                page = pdf.startPage(pageInfo);
+                canvas = page.getCanvas();
+                y = 50;
+            }
+        }
+
+        // triage incidents
+        canvas.drawText("Severe Triage Incidents", 30, y, titlePaint);
+        y += 30;
+
+        if (severeIncidents.isEmpty()) {
+            canvas.drawText("No severe incidents recorded.", 30, y, textPaint);
+            y += 20;
+        } else {
+            for (TriageLog log : severeIncidents) {
+
+                String dateStr = formatLongTimestamp(log.timeStampStarted);
+
+                canvas.drawText("• " + dateStr, 40, y, textPaint);
+                y += 20;
+
+                if (log.notes != null && !log.notes.isEmpty()) {
+                    canvas.drawText("  Notes: " + log.notes, 40, y, textPaint);
+                    y += 20;
+                }
+
+                if (log.redFlags != null) {
+                    String rf = "";
+                    if (log.redFlags.cantSpeak) rf += "Can't speak, ";
+                    if (log.redFlags.blueLips) rf += "Blue lips, ";
+                    if (log.redFlags.chestRestriction) rf += "Chest restriction";
+
+                    if (!rf.isEmpty()) {
+                        canvas.drawText("  Red flags: " + rf, 40, y, textPaint);
+                        y += 20;
+                    }
+                }
+
+                y += 10;
+
+                if (y > pageHeight - 200) {
+                    pdf.finishPage(page);
+                    pageInfo = new PdfDocument.PageInfo.Builder(pageWidth, pageHeight, 1).create();
+                    page = pdf.startPage(pageInfo);
+                    canvas = page.getCanvas();
+                    y = 50;
+                }
+            }
+        }
+
+        pdf.finishPage(page);
+
+        // save PDF
+        File pdfFile = new File(
+                Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS),
+                "Provider_Report.pdf"
+        );
+
+        try {
+            FileOutputStream fos = new FileOutputStream(pdfFile);
+            pdf.writeTo(fos);
+            fos.close();
+            pdf.close();
+
+            Toast.makeText(this, "PDF saved: " + pdfFile.getAbsolutePath(), Toast.LENGTH_LONG).show();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            Toast.makeText(this, "Failed to create PDF", Toast.LENGTH_SHORT).show();
+        }
+    }
+    private Bitmap createBitmapFromView(View view) {
+        view.measure(
+                View.MeasureSpec.makeMeasureSpec(view.getWidth(), View.MeasureSpec.EXACTLY),
+                View.MeasureSpec.makeMeasureSpec(view.getHeight(), View.MeasureSpec.EXACTLY)
+        );
+        Bitmap bmp = Bitmap.createBitmap(view.getWidth(), view.getHeight(), Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(bmp);
+        view.draw(canvas);
+        return bmp;
+    }
 }
+
+
