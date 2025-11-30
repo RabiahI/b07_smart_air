@@ -73,6 +73,8 @@ public class ParentHomeActivity extends AppCompatActivity {
     private LineChart zoneChart, rescueChart;
     private int chartDays = 7;
     private boolean isZoneChartVisible = true;
+    private ValueEventListener overviewEventListener;
+    private DatabaseReference overviewRef;
 
 
     @Override
@@ -101,7 +103,7 @@ public class ParentHomeActivity extends AppCompatActivity {
         bottomNav = findViewById(R.id.bottomNav);
         manageInventoryButton = findViewById(R.id.manageInventoryButton);
         providerReportButton = findViewById(R.id.providerReportButton);
-        
+
 
         zoneButton = findViewById(R.id.zone_button);
         zoneTitle = findViewById(R.id.zone_title);
@@ -156,11 +158,6 @@ public class ParentHomeActivity extends AppCompatActivity {
             startActivity(intent);
         });
 
-        alertsRecyclerView = findViewById(R.id.alertsRecyclerView);
-        alertsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        alertList = new ArrayList<>();
-        alertsAdapter = new AlertsAdapter(this, alertList);
-        alertsRecyclerView.setAdapter(alertsAdapter);
 
         alertsRef = FirebaseDatabase.getInstance().getReference("Users")
                 .child("Parent")
@@ -358,6 +355,10 @@ public class ParentHomeActivity extends AppCompatActivity {
     private void updateOverviewForChild(String childId) {
         if (childId == null) return;
 
+        if (overviewRef != null && overviewEventListener != null) {
+            overviewRef.removeEventListener(overviewEventListener);
+        }
+
         DatabaseReference medLogsRef = FirebaseDatabase.getInstance().getReference("Users")
                 .child("Parent").child(parentId).child("Children").child(childId)
                 .child("Logs").child("medicineLogs");
@@ -384,11 +385,11 @@ public class ParentHomeActivity extends AppCompatActivity {
         });
 
 
-        DatabaseReference overviewRef = FirebaseDatabase.getInstance().getReference("Users")
+        overviewRef = FirebaseDatabase.getInstance().getReference("Users")
                 .child("Parent").child(parentId).child("Children").child(childId)
                 .child("DailyOverviews");
 
-        overviewRef.addListenerForSingleValueEvent(new ValueEventListener() {
+        overviewEventListener = new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 int weeklyCount = 0;
@@ -413,7 +414,8 @@ public class ParentHomeActivity extends AppCompatActivity {
             public void onCancelled(@NonNull DatabaseError error) {
                 tvWeeklyRescueCount.setText("Weekly Rescue Count: Error");
             }
-        });
+        };
+        overviewRef.addValueEventListener(overviewEventListener);
     }
 
     private void setupRescueChart(List<DailyOverview> overviews) {
@@ -639,7 +641,7 @@ public class ParentHomeActivity extends AppCompatActivity {
 
         if (percentage >= 80) {
             zoneTitle.setText(R.string.today_s_zone_green);
-            zoneMessage.setText(""); 
+            zoneMessage.setText("");
             zoneButton.setCardBackgroundColor(Color.parseColor("#90C4A5"));
         } else if (percentage >= 50) {
             zoneTitle.setText(R.string.today_s_zone_yellow);
@@ -650,7 +652,7 @@ public class ParentHomeActivity extends AppCompatActivity {
             zoneMessage.setText("Danger: Child may need reliever and medical attention.");
             zoneButton.setCardBackgroundColor(Color.parseColor("#F44336")); // Red
         }
-        
+
         pefValue.setText("PEF: " + currentPef + " (PB: " + personalBest + ")");
     }
 
@@ -710,4 +712,11 @@ public class ParentHomeActivity extends AppCompatActivity {
         alertsPopup.showAsDropDown(anchor, xOff, yOff);
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (overviewRef != null && overviewEventListener != null) {
+            overviewRef.removeEventListener(overviewEventListener);
+        }
+    }
 }
