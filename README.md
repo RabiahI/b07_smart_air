@@ -1,6 +1,6 @@
 # 📱 SmartAir – Final Project  
 ### CSCB07: Software Design  
-### Group 31 – Winter 2025  
+### Group 31 – Fall 2025  
 #### Team Members:
 - Jason Tam
 - Jason Villablanca
