@@ -31,7 +31,7 @@ import java.util.concurrent.TimeUnit;
 public class ProviderHomeActivity extends AppCompatActivity {
 
     private View triageContainer, symptomsContainer, triggersContainer,
-            controllerAdherenceContainer, PEFContainer, RescueLogsContainer, triggersTagContainer;
+            controllerAdherenceContainer, PEFContainer, RescueLogsContainer, triggersTagContainer, chartSummaries;
     private View nightWakingSymptomContainer, wheezingSymptomContainer;
     private TextView triageDate, triageEscalated, triageResult, triagePEF;
     private TextView triggerExercise, triggerColdAir, triggerDust, triggerPet, triggerSmoke, triggerIllness, triggerStrongOdor;
@@ -60,6 +60,7 @@ public class ProviderHomeActivity extends AppCompatActivity {
         controllerAdherenceContainer = findViewById(R.id.controller_adherence_containers);
         PEFContainer = findViewById(R.id.pef_containers);
         RescueLogsContainer = findViewById(R.id.rescue_log_container);
+        chartSummaries = findViewById(R.id.view_rescue_data);
 
         // initialize triage
         triageDate = findViewById(R.id.triageDate);
@@ -182,13 +183,14 @@ public class ProviderHomeActivity extends AppCompatActivity {
                         && Boolean.TRUE.equals(snapshot.child("showPEF").getValue(Boolean.class));
                 boolean showRescueLogs = snapshot.child("showRescueLogs").getValue(Boolean.class) != null
                         && Boolean.TRUE.equals(snapshot.child("showRescueLogs").getValue(Boolean.class));
+                boolean showChartSummaries = snapshot.child("showChartSummaries").getValue(Boolean.class);
 
                 triageContainer.setVisibility(showTriage ? View.VISIBLE : View.GONE);
                 symptomsContainer.setVisibility(showSymptoms ? View.VISIBLE : View.GONE);
                 controllerAdherenceContainer.setVisibility(showController ? View.VISIBLE : View.GONE);
                 PEFContainer.setVisibility(showPEF ? View.VISIBLE : View.GONE);
                 RescueLogsContainer.setVisibility(showRescueLogs ? View.VISIBLE : View.GONE);
-
+                chartSummaries.setVisibility(showChartSummaries ? View.VISIBLE : View.GONE);
 
 
                 if (showTriage) {
@@ -209,6 +211,10 @@ public class ProviderHomeActivity extends AppCompatActivity {
 
                 if (showController) {
                     loadControllerAdherence(childId, parentId);
+                }
+
+                if (showChartSummaries) {
+
                 }
 
             }

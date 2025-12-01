@@ -4,6 +4,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -22,6 +23,7 @@ public class ManageDataSharingActivity extends AppCompatActivity {
 
     private SharedPreferences prefs;
     private String childId;
+    private TextView childNameText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,6 +32,9 @@ public class ManageDataSharingActivity extends AppCompatActivity {
 
         childId = getIntent().getStringExtra(EXTRA_CHILD_ID);
         String childName = getIntent().getStringExtra(EXTRA_CHILD_NAME);
+        childNameText = findViewById(R.id.childNameText);
+        childNameText.setText(childName);
+
 
         if (getSupportActionBar() != null) {
             getSupportActionBar().setTitle("Data Sharing for " + childName);

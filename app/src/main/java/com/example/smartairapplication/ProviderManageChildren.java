@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -34,12 +35,14 @@ public class ProviderManageChildren extends AppCompatActivity implements Childre
     private Child selectedChild;
     private Button submitAccessCodeButton;
     private Button deleteChildButton;
+    private TextView dobLabel, ageLabel;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_provider_manage_children);
+
 
         recyclerView = findViewById(R.id.childrenRecyclerView);
         logoutButton = findViewById(R.id.logout);
@@ -60,6 +63,7 @@ public class ProviderManageChildren extends AppCompatActivity implements Childre
         });
 
         BottomNavigationView bottomNav = findViewById(R.id.bottomNav);
+        bottomNav.setSelectedItemId(R.id.nav_home);
 
         // Set the selected item
         bottomNav.setSelectedItemId(R.id.nav_home);
