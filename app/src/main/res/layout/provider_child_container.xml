@@ -24,7 +24,6 @@
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:src="@android:drawable/ic_menu_close_clear_cancel"
-                android:tint="#B91C1C"
                 android:layout_alignParentTop="true"
                 android:layout_alignParentEnd="true"
                 android:layout_margin="4dp" />
@@ -54,24 +53,6 @@
                     android:layout_marginTop="12dp"
                     android:gravity="center">
 
-                    <TextView
-                        android:id="@+id/dobLabel"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="DOB:"
-                        android:textSize="14sp"
-                        android:textColor="#4B5563"
-                        android:gravity="center" />
-
-                    <TextView
-                        android:id="@+id/ageLabel"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="4dp"
-                        android:text="Age:"
-                        android:textSize="14sp"
-                        android:textColor="#4B5563"
-                        android:gravity="center" />
                 </LinearLayout>
 
                 <Button
