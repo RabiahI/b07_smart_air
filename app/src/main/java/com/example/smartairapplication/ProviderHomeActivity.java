@@ -2,14 +2,18 @@ package com.example.smartairapplication;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.smartairapplication.R;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -22,6 +26,7 @@ import java.util.HashSet;
 import java.util.Locale;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
+
 
 public class ProviderHomeActivity extends AppCompatActivity {
 
@@ -37,6 +42,7 @@ public class ProviderHomeActivity extends AppCompatActivity {
     private View viewAllPefButton, viewAllTriagesButton, viewAllSymptomsButton, viewAllRescueLogsButton;
     private String childId, parentId;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -45,6 +51,7 @@ public class ProviderHomeActivity extends AppCompatActivity {
         // Remove redundant local declarations (String childId, parentId)
         this.childId = getIntent().getStringExtra("childId");
         this.parentId = getIntent().getStringExtra("parentId");
+
 
         // find main containers
         triageContainer = findViewById(R.id.triage_container);
@@ -181,6 +188,7 @@ public class ProviderHomeActivity extends AppCompatActivity {
                 controllerAdherenceContainer.setVisibility(showController ? View.VISIBLE : View.GONE);
                 PEFContainer.setVisibility(showPEF ? View.VISIBLE : View.GONE);
                 RescueLogsContainer.setVisibility(showRescueLogs ? View.VISIBLE : View.GONE);
+
 
 
                 if (showTriage) {

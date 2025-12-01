@@ -86,6 +86,8 @@
         <activity
             android:name=".ProviderManageChildren"
             android:exported="false" />
+        <activity android:name=".ProviderSettingsActivity"
+            android:exported="false" />
         <activity
             android:name=".ProviderHomeActivity"
             android:exported="false" />
