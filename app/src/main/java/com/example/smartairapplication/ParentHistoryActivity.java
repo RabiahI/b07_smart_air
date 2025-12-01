@@ -411,15 +411,16 @@ public class ParentHistoryActivity extends AppCompatActivity {
             if (start != null && entryDate.isBefore(start)) continue;
             if (end != null && entryDate.isAfter(end)) continue;
 
-            //make sure window is between 3-6 months
             long days = ChronoUnit.DAYS.between(start, end) + 1;
-            if (days < 90 || days > 185) {
-                Toast.makeText(this, "Time window must be between 3-6 months",
-                        Toast.LENGTH_SHORT).show();
+            if (days < 90 || days > 185) { // 3–6 months
+                Toast.makeText(this, "Window must be between 3 and 6 months",
+                        Toast.LENGTH_LONG).show();
+
                 displayList.clear();
                 adapter.notifyDataSetChanged();
                 return;
             }
+
 
             // symptom filter (rebuild symptoms list for each entry)
             if (!filter.symptoms.isEmpty()) {
