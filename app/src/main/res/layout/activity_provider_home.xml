@@ -37,13 +37,9 @@
             <include
                 android:id="@+id/triage_container"
                 layout="@layout/provider_triage_container"
-                android:layout_marginBottom="1dp"/>
-                
-            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:padding="16dp">
+                android:layout_marginBottom="16dp"/>
 
             <include
                 android:id="@+id/symptoms_containers"
@@ -59,45 +55,12 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="16dp"/>
 
-
             <include
                 android:id="@+id/rescue_log_container"
                 layout="@layout/rescue_log_container"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="16dp"/>
-a
-                <include
-                    layout="@layout/zone_button" />
-
-                <include
-                    layout="@layout/provider_triage_container"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="16dp"/>
-
-                <include
-                    layout="@layout/symptoms_containers"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="16dp"/>
-
-                <include
-                    layout="@layout/triggers_containers"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="16dp"/>
-
-                <!-- Logout button at bottom of scrollable content -->
-                <Button
-                    android:id="@+id/logout"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_marginTop="24dp"
-                    android:text="Logout"/>
-
-            </LinearLayout>
         </LinearLayout>
     </ScrollView>
 

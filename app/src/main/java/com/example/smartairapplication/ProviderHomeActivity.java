@@ -26,7 +26,7 @@ import java.util.concurrent.TimeUnit;
 public class ProviderHomeActivity extends AppCompatActivity {
 
     private View triageContainer, symptomsContainer, triggersContainer,
-            controllerAdherenceContainer, PEFContainer, RescueLogsContainer;
+            controllerAdherenceContainer, PEFContainer, RescueLogsContainer, triggersTagContainer;
     private View nightWakingSymptomContainer, wheezingSymptomContainer;
     private TextView triageDate, triageEscalated, triageResult, triagePEF;
     private TextView triggerExercise, triggerColdAir, triggerDust, triggerPet, triggerSmoke, triggerIllness, triggerStrongOdor;
@@ -49,6 +49,7 @@ public class ProviderHomeActivity extends AppCompatActivity {
         // find main containers
         triageContainer = findViewById(R.id.triage_container);
         symptomsContainer = findViewById(R.id.symptoms_containers);
+        triggersTagContainer = findViewById(R.id.triggersTagContainer);
         controllerAdherenceContainer = findViewById(R.id.controller_adherence_containers);
         PEFContainer = findViewById(R.id.pef_containers);
         RescueLogsContainer = findViewById(R.id.rescue_log_container);
@@ -530,7 +531,6 @@ public class ProviderHomeActivity extends AppCompatActivity {
 
                             if (triggersSnapshot.exists() && triggersSnapshot.hasChildren()) {
                                 for (DataSnapshot triggerData : triggersSnapshot.getChildren()) {
-                                    // Assuming triggers are stored as a list of strings directly under "triggers"
                                     String triggerName = triggerData.getValue(String.class);
                                     if (triggerName != null) {
                                         setTriggerVisibilityByName(triggerName);
@@ -571,7 +571,7 @@ public class ProviderHomeActivity extends AppCompatActivity {
             case "illness":
                 if (triggerIllness != null) triggerIllness.setVisibility(View.VISIBLE);
                 return true;
-            case "strong odors": // Assuming this is the full string for "triggerStrongOdor"
+            case "strong odors":
                 if (triggerStrongOdor != null) triggerStrongOdor.setVisibility(View.VISIBLE);
                 return true;
             default:
