@@ -42,6 +42,7 @@ import java.io.OutputStream;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -409,6 +410,16 @@ public class ParentHistoryActivity extends AppCompatActivity {
 
             if (start != null && entryDate.isBefore(start)) continue;
             if (end != null && entryDate.isAfter(end)) continue;
+
+            //make sure window is between 3-6 months
+            long days = ChronoUnit.DAYS.between(start, end) + 1;
+            if (days < 90 || days > 185) {
+                Toast.makeText(this, "Time window must be between 3-6 months",
+                        Toast.LENGTH_SHORT).show();
+                displayList.clear();
+                adapter.notifyDataSetChanged();
+                return;
+            }
 
             // symptom filter (rebuild symptoms list for each entry)
             if (!filter.symptoms.isEmpty()) {
