@@ -183,6 +183,8 @@ public class ChildHomeActivity extends AppCompatActivity implements PasswordDial
             public void onClick(View v) {
                 Intent streaksIntent = new Intent(ChildHomeActivity.this, StreaksBadgesActivity.class);
                 streaksIntent.putExtra("childId", finalChildId);
+                streaksIntent.putExtra("parentId", finalParentId);
+                streaksIntent.putExtra("isParentMode", isParentMode);
                 startActivity(streaksIntent);
             }
         });

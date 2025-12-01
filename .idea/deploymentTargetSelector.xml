@@ -2,7 +2,7 @@
 <project version="4">
   <component name="deploymentTargetSelector">
     <selectionStates>
-      <SelectionState runConfigName="app">
+      <SelectionState runConfigName="Smart air">
         <option name="selectionMode" value="DROPDOWN" />
         <DialogSelection>
           <targets>
