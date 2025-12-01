@@ -4,6 +4,20 @@
     <selectionStates>
       <SelectionState runConfigName="Smart air">
         <option name="selectionMode" value="DROPDOWN" />
+        <DialogSelection>
+          <targets>
+            <Target type="DEFAULT_BOOT">
+              <handle>
+                <DeviceId pluginId="LocalEmulator" identifier="path=/Users/Sylvia/.android/avd/Medium_Phone.avd" />
+              </handle>
+            </Target>
+            <Target type="DEFAULT_BOOT">
+              <handle>
+                <DeviceId pluginId="LocalEmulator" identifier="path=/Users/Sylvia/.android/avd/Medium_Phone_API_36.1_2.avd" />
+              </handle>
+            </Target>
+          </targets>
+        </DialogSelection>
       </SelectionState>
     </selectionStates>
   </component>
