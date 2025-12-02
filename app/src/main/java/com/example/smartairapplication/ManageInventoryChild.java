@@ -85,9 +85,8 @@ public class ManageInventoryChild extends AppCompatActivity {
             @Override
             public void onDataChange(DataSnapshot snapshot) {
 
-                // create inventory node if missing
+                // handle inventory node if missing
                 if (!snapshot.exists()) {
-                    ref.setValue(new Object());
                     medicineList.clear();
                     adapter.notifyDataSetChanged();
                     return;
@@ -97,14 +96,11 @@ public class ManageInventoryChild extends AppCompatActivity {
                 for (DataSnapshot medSnap : snapshot.getChildren()) {
                     Medicine med = medSnap.getValue(Medicine.class);
                     if (med != null) {
-                        med.id = medSnap.getKey();
+                        med.setId(medSnap.getKey());
                         medicineList.add(med);
                         checkIfExpired(med);
                     }
-                 
-               
                 }
-
                 adapter.notifyDataSetChanged();
             }
 
@@ -142,18 +138,18 @@ public class ManageInventoryChild extends AppCompatActivity {
                 return;
             }
 
-            boolean wasLow = medicine.amountLeft <= 20;
+            boolean wasLow = medicine.getAmountLeft() <= 20;
             boolean isLow = newAmount <= 20;
 
             if (isLow && !wasLow) {
-                sendLowStockAlert(medicine.name);
+                sendLowStockAlert(medicine.getName());
             }
 
             // save to db
             DatabaseReference ref = FirebaseDatabase.getInstance().getReference("Users")
                     .child("Parent").child(parentId)
                     .child("Children").child(childId)
-                    .child("Inventory").child(medicine.id);
+                    .child("Inventory").child(medicine.getId());
 
             ref.child("amountLeft").setValue(newAmount);
             ref.child("lowFlag").setValue(isLow)
@@ -207,13 +203,13 @@ public class ManageInventoryChild extends AppCompatActivity {
     }
 
     private void checkIfExpired(Medicine medicine) {
-        if (medicine.expiryAlertSent) {
+        if (medicine.getExpiryAlertSent()) {
             return;
         }
 
         SimpleDateFormat sdf = new SimpleDateFormat("M/d/yyyy", Locale.US);
         try {
-            Date expiryDate = sdf.parse(medicine.expiryDate);
+            Date expiryDate = sdf.parse(medicine.getExpiryDate());
             if (new Date().after(expiryDate)) {
                 sendExpiryAlert(medicine);
             }
@@ -222,7 +218,7 @@ public class ManageInventoryChild extends AppCompatActivity {
     }
 
     private void sendExpiryAlert(Medicine medicine) {
-        String message = medicine.name + " has expired. Please replace it.";
+        String message = medicine.getName() + " has expired. Please replace it.";
         Alert alert = new Alert("Medication Expired", message, System.currentTimeMillis(), "High", childId);
         DatabaseReference alertsRef = FirebaseDatabase.getInstance().getReference("Users")
                 .child("Parent").child(parentId).child("Alerts");
@@ -231,7 +227,7 @@ public class ManageInventoryChild extends AppCompatActivity {
         DatabaseReference medRef = FirebaseDatabase.getInstance().getReference("Users")
                 .child("Parent").child(parentId)
                 .child("Children").child(childId)
-                .child("Inventory").child(medicine.id);
+                .child("Inventory").child(medicine.getId());
         medRef.child("expiryAlertSent").setValue(true);
     }
 }
