@@ -124,7 +124,7 @@ public class Registration extends AppCompatActivity {
                                         Intent homeIntent;
                                         switch (selectedRole) {
                                             case "Provider":
-                                                homeIntent = new Intent(Registration.this, ProviderHomeActivity.class);
+                                                homeIntent = new Intent(Registration.this, ProviderManageChildren.class);
                                                 break;
                                             default: // Parent
                                                 homeIntent = new Intent(Registration.this, ParentHomeActivity.class);

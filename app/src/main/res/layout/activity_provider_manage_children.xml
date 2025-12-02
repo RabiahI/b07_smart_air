@@ -66,6 +66,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="Submit Code"
+                        android:backgroundTint="@color/dark_blue_text"
                         android:textSize="13sp"
                         android:textStyle="bold"
                         android:textColor="#FFFFFF"
@@ -118,6 +119,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginTop="24dp"
+                android:visibility="gone"
                 android:text="Logout"/>
 
         </LinearLayout>

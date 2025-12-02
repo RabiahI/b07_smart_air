@@ -2,14 +2,18 @@ package com.example.smartairapplication;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.smartairapplication.R;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -23,10 +27,11 @@ import java.util.Locale;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
+
 public class ProviderHomeActivity extends AppCompatActivity {
 
     private View triageContainer, symptomsContainer, triggersContainer,
-            controllerAdherenceContainer, PEFContainer, RescueLogsContainer;
+            controllerAdherenceContainer, PEFContainer, RescueLogsContainer, triggersTagContainer;
     private View nightWakingSymptomContainer, wheezingSymptomContainer;
     private TextView triageDate, triageEscalated, triageResult, triagePEF;
     private TextView triggerExercise, triggerColdAir, triggerDust, triggerPet, triggerSmoke, triggerIllness, triggerStrongOdor;
@@ -37,6 +42,7 @@ public class ProviderHomeActivity extends AppCompatActivity {
     private View viewAllPefButton, viewAllTriagesButton, viewAllSymptomsButton, viewAllRescueLogsButton;
     private String childId, parentId;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -46,9 +52,11 @@ public class ProviderHomeActivity extends AppCompatActivity {
         this.childId = getIntent().getStringExtra("childId");
         this.parentId = getIntent().getStringExtra("parentId");
 
+
         // find main containers
         triageContainer = findViewById(R.id.triage_container);
         symptomsContainer = findViewById(R.id.symptoms_containers);
+        triggersTagContainer = findViewById(R.id.triggersTagContainer);
         controllerAdherenceContainer = findViewById(R.id.controller_adherence_containers);
         PEFContainer = findViewById(R.id.pef_containers);
         RescueLogsContainer = findViewById(R.id.rescue_log_container);
@@ -180,6 +188,7 @@ public class ProviderHomeActivity extends AppCompatActivity {
                 controllerAdherenceContainer.setVisibility(showController ? View.VISIBLE : View.GONE);
                 PEFContainer.setVisibility(showPEF ? View.VISIBLE : View.GONE);
                 RescueLogsContainer.setVisibility(showRescueLogs ? View.VISIBLE : View.GONE);
+
 
 
                 if (showTriage) {
@@ -530,7 +539,6 @@ public class ProviderHomeActivity extends AppCompatActivity {
 
                             if (triggersSnapshot.exists() && triggersSnapshot.hasChildren()) {
                                 for (DataSnapshot triggerData : triggersSnapshot.getChildren()) {
-                                    // Assuming triggers are stored as a list of strings directly under "triggers"
                                     String triggerName = triggerData.getValue(String.class);
                                     if (triggerName != null) {
                                         setTriggerVisibilityByName(triggerName);
@@ -571,7 +579,7 @@ public class ProviderHomeActivity extends AppCompatActivity {
             case "illness":
                 if (triggerIllness != null) triggerIllness.setVisibility(View.VISIBLE);
                 return true;
-            case "strong odors": // Assuming this is the full string for "triggerStrongOdor"
+            case "strong odors":
                 if (triggerStrongOdor != null) triggerStrongOdor.setVisibility(View.VISIBLE);
                 return true;
             default:
