@@ -37,10 +37,10 @@ public class ParentInventoryAdapter extends RecyclerView.Adapter<ParentInventory
     public void onBindViewHolder(@NonNull MedViewHolder holder, int position) {
         Medicine m = list.get(position);
 
-        holder.name.setText(m.name);
-        holder.purchase.setText("Purchased: " + m.purchaseDate);
-        holder.expiry.setText("Expires: " + m.expiryDate);
-        holder.amount.setText("Amount left: " + m.amountLeft + " puffs");
+        holder.name.setText(m.getName());
+        holder.purchase.setText("Purchased: " + m.getPurchaseDate());
+        holder.expiry.setText("Expires: " + m.getExpiryDate());
+        holder.amount.setText("Amount left: " + m.getAmountLeft() + " puffs");
 
         holder.btnEdit.setOnClickListener(v -> listener.onEdit(m));
         holder.btnDelete.setOnClickListener(v -> listener.onDelete(m));

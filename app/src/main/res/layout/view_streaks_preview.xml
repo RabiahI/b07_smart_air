@@ -38,6 +38,7 @@
                 android:src="@drawable/ic_flame" />
 
             <TextView
+                android:id="@+id/streaksPreviewController"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="12dp"
@@ -59,6 +60,7 @@
                 android:src="@drawable/ic_medal" />
 
             <TextView
+                android:id="@+id/streaksPreviewTechnique"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="12dp"
