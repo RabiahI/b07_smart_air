@@ -156,11 +156,8 @@ public class StreaksBadgesActivity extends AppCompatActivity {
 
                         if (Objects.equals(inhalerType, "Controller")) {
                             controllerTimes.add(timestamp);
-                        }
-                        else {
                             techniqueTimes.add(timestamp);
                         }
-
                     }
 
                     displayController();
