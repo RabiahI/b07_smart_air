@@ -44,7 +44,91 @@
                 </TextView>
 
                 <include layout="@layout/view_quick_actions"/>
-                <include layout="@layout/view_streaks_preview"/>
+                <androidx.cardview.widget.CardView
+                    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="16dp"
+                    card_view:cardBackgroundColor="#FFF9EB"
+                    card_view:cardCornerRadius="20dp"
+                    card_view:cardElevation="6dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:padding="18dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="12dp"
+                            android:fontFamily="@font/inter_bold"
+                            android:text="Streaks &amp; Badges"
+                            android:textColor="#a45e00"
+                            android:textSize="18sp"
+                            android:textStyle="bold" />
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center_vertical"
+                            android:paddingBottom="10dp">
+
+                            <ImageView
+                                android:layout_width="42dp"
+                                android:layout_height="42dp"
+                                android:background="@drawable/bg_icon_circle_orange"
+                                android:padding="7dp"
+                                android:src="@drawable/ic_flame" />
+
+                            <TextView
+                                android:id="@+id/streakValue"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="12dp"
+                                android:fontFamily="@font/inter"
+                                android:text="Controller Streak: Fetching Data..."
+                                android:textColor="#444444"
+                                android:textSize="15sp" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center_vertical"
+                            android:orientation="vertical">
+
+                            <ProgressBar
+                                android:id="@+id/badgeProgressBar"
+                                style="?android:attr/progressBarStyleHorizontal"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginBottom="4dp" />
+
+                            <TextView
+                                android:id="@+id/badgeProgressText"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="12dp"
+                                android:fontFamily="@font/inter"
+                                android:text="Badge Progress: Fetching data..."
+                                android:textColor="#444444"
+                                android:textSize="15sp" />
+                        </LinearLayout>
+
+                        <TextView
+                            android:id="@+id/streaks_button"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="16dp"
+                            android:text="View all >"
+                            android:textColor="#9810fa"
+                            android:textSize="15sp"
+                            android:textStyle="bold" />
+
+                    </LinearLayout>
+                </androidx.cardview.widget.CardView>
             </LinearLayout>
         </LinearLayout>
     </ScrollView>
