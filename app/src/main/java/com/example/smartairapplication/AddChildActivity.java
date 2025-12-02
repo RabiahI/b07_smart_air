@@ -25,10 +25,14 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.android.material.textfield.TextInputEditText;
+import com.google.firebase.functions.FirebaseFunctions;
 
 import java.time.LocalDate;
 import java.time.Period;
 import java.util.Calendar;
+import java.util.HashMap;
+import java.util.Map;
+
 public class AddChildActivity extends AppCompatActivity {
 
     private EditText editTextName, editTextDob, editTextAge, editTextNotes, editTextThreshold, editTextController;
@@ -148,6 +152,20 @@ public class AddChildActivity extends AppCompatActivity {
         dialog.show();
     }
 
+    private Map<String, Object> toMap(CreateChildRequest r, String parentId) {
+        Map<String, Object> map = new HashMap<>();
+        map.put("email", r.email);
+        map.put("password", r.password);
+        map.put("name", r.name);
+        map.put("dob", r.dob);
+        map.put("notes", r.notes);
+        map.put("age", r.age);
+        map.put("threshold", r.threshold);
+        map.put("controllerDays", r.controllerDays);
+        map.put("parentId", parentId);
+        return map;
+    }
+
     private void saveChildToFirebase(FirebaseAuth mAuth, String parentId){
         String name = editTextName.getText().toString().trim();
         String username = editTextUsername.getText().toString().trim();
@@ -189,28 +207,65 @@ public class AddChildActivity extends AppCompatActivity {
             return;
         }
 
+        Toast.makeText(this, "parentId = " + parentId, Toast.LENGTH_LONG).show();
+
+        try {
+            threshold = Integer.parseInt(thresholdStr);
+        } catch (NumberFormatException e) {
+            Toast.makeText(this, "Invalid threshold format", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        try {
+            controllersDays = Integer.parseInt(controllerDaysStr);
+        } catch (NumberFormatException e) {
+            Toast.makeText(this, "Invalid controller days format", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        if (threshold < 1) {
+            Toast.makeText(this, "Threshold days must be at least 1.", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        if (controllersDays < 1) {
+            Toast.makeText(this, "Controller days must be at least 1", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
         String finalParentId = parentId; // For use in lambda
-        mAuth.createUserWithEmailAndPassword(childEmail, password)
+        CreateChildRequest request = new CreateChildRequest(
+                childEmail,
+                password,
+                name,
+                dob,
+                notes,
+                age,
+                threshold,
+                controllersDays
+        );
+
+        FirebaseFunctions.getInstance()
+                .getHttpsCallable("createChildUser")
+                .call(toMap(request, finalParentId))
                 .addOnCompleteListener(task -> {
-                    if (task.isSuccessful()) {
-                        FirebaseUser firebaseUser = mAuth.getCurrentUser();
-                        if (firebaseUser != null) {
-                            String childId = firebaseUser.getUid();
-                            Child child = new Child(childEmail, childId, finalParentId, name, dob, notes, age, 0, 0, threshold, controllersDays);
-                            parentRef.child(childId).setValue(child).addOnCompleteListener(dbTask -> {
-                                if (dbTask.isSuccessful()){
-                                    Toast.makeText(AddChildActivity.this, "Child added successfully!", Toast.LENGTH_SHORT).show();
-                                    finish();
-                                } else{
-                                    firebaseUser.delete();
-                                    Toast.makeText(AddChildActivity.this, "Failed to add child to database.", Toast.LENGTH_SHORT).show();
-                                }
-                            });
-                        }
-                    } else {
-                        String errorMessage = task.getException() != null ? task.getException().getMessage() : "Authentication failed.";
-                        Toast.makeText(AddChildActivity.this, "Failed to create child account: " + errorMessage, Toast.LENGTH_LONG).show();
+                    if (!task.isSuccessful()) {
+                        Exception e = task.getException();
+                        String errorMessage = (e != null)
+                                ? e.getMessage()
+                                : "Unknown error.";
+
+                        Toast.makeText(AddChildActivity.this,
+                                "Failed to create child account: " + errorMessage,
+                                Toast.LENGTH_LONG).show();
+                        return;
                     }
+
+                    // Success — child created in Auth + Database
+                    Toast.makeText(AddChildActivity.this,
+                            "Child added successfully!",
+                            Toast.LENGTH_SHORT).show();
+                    finish();
                 });
     }
 
@@ -265,6 +320,30 @@ public class AddChildActivity extends AppCompatActivity {
 
         if (parentId == null) {
             Toast.makeText(this, "Parent ID is not available for update.", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        try {
+            threshold = Integer.parseInt(thresholdStr);
+        } catch (NumberFormatException e) {
+            Toast.makeText(this, "Invalid threshold format", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        try {
+            controllersDays = Integer.parseInt(controllerDaysStr);
+        } catch (NumberFormatException e) {
+            Toast.makeText(this, "Invalid controller days format", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        if (threshold < 1) {
+            Toast.makeText(this, "Threshold days must be at least 1.", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        if (controllersDays < 1) {
+            Toast.makeText(this, "Controller days must be at least 1", Toast.LENGTH_SHORT).show();
             return;
         }
 

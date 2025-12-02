@@ -41,6 +41,7 @@ dependencies {
     implementation(platform("com.google.firebase:firebase-bom:34.5.0"))
     implementation(libs.firebase.auth)
     implementation("com.google.firebase:firebase-analytics")
+    implementation("com.google.firebase:firebase-functions:20.4.0")
     implementation(libs.firebase.database)
     implementation(libs.cardview)
     implementation(libs.recyclerview)
