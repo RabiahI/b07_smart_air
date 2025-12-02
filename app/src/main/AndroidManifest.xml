@@ -15,31 +15,31 @@
         android:theme="@style/Theme.Material3.DayNight.NoActionBar">
 
         <activity
-            android:name=".ProviderReportActivity"
+            android:name=".parent_home.provider_report.ProviderReportActivity"
             android:exported="false" />
         <activity
-            android:name=".ChildPefHistory"
+            android:name=".child_home.history.ChildPefHistory"
             android:exported="false" />
         <activity
-            android:name=".ChildDailyCheckInHistory"
+            android:name=".child_home.history.ChildDailyCheckInHistory"
             android:exported="false" />
         <activity
-            android:name=".ChildMedicineLogHistory"
+            android:name=".child_home.history.ChildMedicineLogHistory"
             android:exported="false" />
         <activity
-            android:name=".ChildHistory"
+            android:name=".child_home.history.ChildHistory"
             android:exported="false" />
         <activity
-            android:name=".ParentManageInventory"
+            android:name=".parent_home.manage_inventory.ParentManageInventory"
             android:exported="false" />
         <activity
-            android:name=".ManageInventoryChild"
+            android:name=".child_home.manage_inventory.ManageInventoryChild"
             android:exported="false" />
         <activity
-            android:name=".DailyCheckIn"
+            android:name=".child_home.daily_check_in.DailyCheckIn"
             android:exported="false" />
         <activity
-            android:name=".RoleSelectionActivity"
+            android:name=".authentication.RoleSelectionActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -48,76 +48,76 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".TechniqueIntro"
+            android:name=".child_home.log_medicine.technique_helper.TechniqueIntro"
             android:exported="false" />
         <activity
-            android:name=".TechniqueHelper"
+            android:name=".child_home.log_medicine.technique_helper.TechniqueHelper"
             android:exported="false" />
         <activity
-            android:name=".LogMedicine"
+            android:name=".child_home.log_medicine.LogMedicine"
             android:exported="false" />
         <activity
-            android:name=".TriageActivity"
+            android:name=".child_home.triage.TriageActivity"
             android:exported="false" />
         <activity
-            android:name=".ManageAccessActivity"
+            android:name=".parent_home.manage_sharing.ManageAccessActivity"
             android:exported="false" />
         <activity
-            android:name=".OnboardingActivity"
+            android:name=".authentication.OnboardingActivity"
             android:exported="false" />
         <activity
-            android:name=".AddChildActivity"
+            android:name=".parent_home.manage_children.AddChildActivity"
             android:exported="false" />
         <activity
-            android:name=".ChildManagementActivity"
+            android:name=".parent_home.manage_children.ChildManagementActivity"
             android:exported="false" />
         <activity
-            android:name=".ParentHomeActivity"
+            android:name=".parent_home.ParentHomeActivity"
             android:exported="false" />
         <activity
-            android:name=".ParentAlertsActivity"
+            android:name=".parent_home.alerts.ParentAlertsActivity"
             android:exported="false" />
         <activity
-            android:name=".ParentHistoryActivity"
+            android:name=".parent_home.history_browser.ParentHistoryActivity"
             android:exported="false" />
         <activity
-            android:name=".ParentSettingsActivity"
+            android:name=".parent_home.ParentSettingsActivity"
             android:exported="false" />
         <activity
-            android:name=".ProviderManageChildren"
+            android:name=".provider_home.ProviderManageChildren"
             android:exported="false" />
-        <activity android:name=".ProviderSettingsActivity"
-            android:exported="false" />
-        <activity
-            android:name=".ProviderHomeActivity"
+        <activity android:name=".provider_home.ProviderSettingsActivity"
             android:exported="false" />
         <activity
-            android:name=".ChildHomeActivity"
+            android:name=".provider_home.ProviderHomeActivity"
             android:exported="false" />
         <activity
-            android:name=".Registration"
+            android:name=".child_home.ChildHomeActivity"
             android:exported="false" />
         <activity
-            android:name=".Login"
+            android:name=".authentication.Registration"
             android:exported="false" />
         <activity
-            android:name=".ChildLoginActivity"
+            android:name=".authentication.Login"
             android:exported="false" />
         <activity
-            android:name=".MainActivity"
+            android:name=".authentication.ChildLoginActivity"
+            android:exported="false" />
+        <activity
+            android:name=".authentication.MainActivity"
             android:exported="true" />
         <activity
-            android:name=".ManageDataSharingActivity"
+            android:name=".parent_home.manage_sharing.ManageDataSharingActivity"
             android:exported="false" />
-        <activity android:name=".TriageLogActivity"
+        <activity android:name=".provider_home.TriageLogActivity"
             android:exported="false"/>
-        <activity android:name=".PefLogActivity"
+        <activity android:name=".provider_home.PefLogActivity"
             android:exported="false"/>
-        <activity android:name=".SymptomsLogActivity"
+        <activity android:name=".provider_home.SymptomsLogActivity"
             android:exported="false"/>
-        <activity android:name=".RescueLogsActivity"
+        <activity android:name=".provider_home.RescueLogsActivity"
             android:exported="false"/>
-        <activity android:name=".StreaksBadgesActivity"
+        <activity android:name=".child_home.motivation.StreaksBadgesActivity"
             android:exported="false"/>
 
         <meta-data

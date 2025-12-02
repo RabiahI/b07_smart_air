@@ -6,7 +6,7 @@
     android:orientation="vertical"
     android:padding="16dp"
     android:background="@android:color/white"
-    tools:context=".RescueLogsActivity">
+    tools:context=".provider_home.RescueLogsActivity">
 
     <!-- Title Header -->
     <TextView

@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/background"
-    tools:context=".DailyCheckIn">
+    tools:context=".child_home.daily_check_in.DailyCheckIn">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/header"
