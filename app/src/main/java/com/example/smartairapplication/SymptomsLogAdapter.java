@@ -22,7 +22,6 @@ public class SymptomsLogAdapter extends RecyclerView.Adapter<SymptomsLogAdapter.
     @NonNull
     @Override
     public SymptomViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        // Inflate the item layout (you must create R.layout.item_symptom_log)
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_symptom_log, parent, false);
         return new SymptomViewHolder(view);
     }

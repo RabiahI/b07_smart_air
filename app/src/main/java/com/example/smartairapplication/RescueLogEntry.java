@@ -1,8 +1,5 @@
 package com.example.smartairapplication;
 
-/**
- * Data model for a single rescue inhaler log entry.
- */
 public class RescueLogEntry {
     private final Long timestamp;
     private final String sobBefore; // Shortness of Breath level before rescue

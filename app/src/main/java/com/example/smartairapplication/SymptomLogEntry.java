@@ -8,7 +8,6 @@ public class SymptomLogEntry {
     private String coughWheeze;
     private List<String> triggers; // List of triggers associated with this log
 
-    // Required empty constructor for Firebase
     public SymptomLogEntry() {
     }
 

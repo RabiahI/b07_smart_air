@@ -60,13 +60,6 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="16dp"/>
 
-        <include
-            android:id="@+id/view_rescue_data"
-            layout="@layout/view_rescue_data"
-            android:layout_width="370dp"
-            android:layout_height="450dp"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginBottom="30dp"/>
 
     </LinearLayout>
     </ScrollView>
