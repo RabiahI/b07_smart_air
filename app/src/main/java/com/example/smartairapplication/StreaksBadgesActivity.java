@@ -32,7 +32,7 @@ public class StreaksBadgesActivity extends AppCompatActivity {
     FirebaseUser currentUser;
     private DatabaseReference dataRef;
     private Button buttonHomepage;
-    private TextView controllerStreak, techniqueStreak, streaksPreviewController, streaksPreviewTechnique, thresholdDesc;
+    private TextView controllerStreak, techniqueStreak, thresholdDesc;
     private LinearLayout controllerLayout, techniqueLayout, thresholdLayout;
     private String childId, parentId;
     private ArrayList<Long> controllerTimes;
@@ -55,8 +55,6 @@ public class StreaksBadgesActivity extends AppCompatActivity {
         controllerLayout = findViewById(R.id.controller_layout);
         techniqueLayout = findViewById(R.id.technique_layout);
         thresholdLayout = findViewById(R.id.threshold_layout);
-        streaksPreviewController = findViewById(R.id.streaksPreviewController);
-        streaksPreviewTechnique = findViewById(R.id.streaksPreviewTechnique);
         thresholdDesc = findViewById(R.id.desc_threshold);
         controllerTimes = new ArrayList<>();
         techniqueTimes = new ArrayList<>();
@@ -214,7 +212,6 @@ public class StreaksBadgesActivity extends AppCompatActivity {
 
         streakDisplay = "Controller Streak: " + String.valueOf(streak) + " days";
         controllerStreak.setText(streakDisplay);
-        streaksPreviewController.setText(streakDisplay);
     }
 
     private void displayTechnique() {
@@ -248,7 +245,6 @@ public class StreaksBadgesActivity extends AppCompatActivity {
 
         streakDisplay = "Technique Streak: " + String.valueOf(streak) + " days";
         techniqueStreak.setText(streakDisplay);
-        streaksPreviewTechnique.setText(streakDisplay);
     }
 
     private void displayBadges() {
