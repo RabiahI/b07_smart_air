@@ -77,7 +77,7 @@
             android:text="Copy"
             android:textSize="14sp"
             android:paddingHorizontal="14dp"
-            android:backgroundTint="#4CAF50"
+            android:backgroundTint="@color/dark_blue_text"
             android:textColor="@android:color/white" />
     </LinearLayout>
 
@@ -89,7 +89,7 @@
         android:text="Generate Invite Code"
         android:textAllCaps="false"
         android:textSize="16sp"
-        android:backgroundTint="#43A047"
+        android:backgroundTint="@color/dark_blue_text"
         android:textColor="@android:color/white"
         android:layout_marginBottom="12dp"
         android:paddingVertical="8dp" />

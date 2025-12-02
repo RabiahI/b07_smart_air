@@ -20,14 +20,19 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 import androidx.core.content.ContextCompat;
 
+import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.Arrays;
 import java.util.List;
 
 public class LogMedicine extends AppCompatActivity {
     private String childId, parentId;
+    private boolean isParentMode;
 
     private boolean techniqueCompleted = false;
     private boolean highQualityTechnique = false;
@@ -54,6 +59,7 @@ public class LogMedicine extends AppCompatActivity {
     private LinearLayout puffCard, afterButtons, medicineTypeLayout;
     private TextView txtBeforeSOB, txtAfterSOB, numOfPuffsText, txtPostCheck;
     private ScrollView questions;
+    private BottomNavigationView bottomNav;
 
 
 
@@ -65,9 +71,11 @@ public class LogMedicine extends AppCompatActivity {
 
         childId = getIntent().getStringExtra("childId");
         parentId = getIntent().getStringExtra("parentId");
+        isParentMode = getIntent().getBooleanExtra("isParentMode", false);
 
         //link xml elements
         btnReturn = findViewById(R.id.btnReturn);
+        bottomNav = findViewById(R.id.bottomNav);
 
         medicineTypeLayout = findViewById(R.id.medicineTypeLayout);
         btnRescue = findViewById(R.id.btnRescue);
@@ -199,6 +207,42 @@ public class LogMedicine extends AppCompatActivity {
                 showExitConfirmation();
             }
         });
+        bottomNav.setSelectedItemId(R.id.nav_log);
+        bottomNav.setOnItemSelectedListener(item -> {
+            int itemId = item.getItemId();
+            if (itemId == R.id.nav_home) {
+                showExitConfirmation();
+                return false;
+            } else if (itemId == R.id.nav_settings) {
+                new AlertDialog.Builder(this)
+                        .setTitle("Go to Settings?")
+                        .setMessage("If you leave now, any unsaved changes will be lost.")
+                        .setPositiveButton("Leave", (dialog, which) -> {
+                            Intent settingsIntent = new Intent(LogMedicine.this, ChildSettingsActivity.class);
+                            settingsIntent.putExtra("childId", childId);
+                            settingsIntent.putExtra("parentId", parentId);
+                            settingsIntent.putExtra("isParentMode", isParentMode);
+                            startActivity(settingsIntent);
+                            finish();
+                        })
+                        .setNegativeButton("Stay", (dialog, which) -> {
+                            dialog.dismiss();
+                            bottomNav.setSelectedItemId(R.id.nav_log);
+                        })
+                        .show();
+                return false;
+            } else if (itemId == R.id.nav_history){
+                Intent intent = new Intent(LogMedicine.this, ChildHistory.class);
+                intent.putExtra("childId", childId);
+                intent.putExtra("parentId", parentId);
+                intent.putExtra("isParentMode", isParentMode);
+                startActivity(intent);
+                finish();
+            } else if (itemId == R.id.nav_log){
+                return true;
+            }
+            return false;
+        });
 
     }
 
@@ -268,6 +312,7 @@ public class LogMedicine extends AppCompatActivity {
                 })
                 .setNegativeButton("Stay", (dialog, which) -> {
                     dialog.dismiss();
+                    bottomNav.setSelectedItemId(R.id.nav_log);
                 })
                 .show();
     }
@@ -333,10 +378,80 @@ public class LogMedicine extends AppCompatActivity {
         ref.child(logId).setValue(log)
                 .addOnSuccessListener(aVoid -> {
                     Toast.makeText(this, "Medicine log saved!", Toast.LENGTH_SHORT).show();
+                    OverviewCalculator.updateDailyOverview(parentId, childId);
+                    if ("Rescue".equals(inhalerType)) {
+                        checkForRapidRescueRepeats();
+                    }
+                    if ("Worse".equals(postFeeling)) {
+                        DatabaseReference childRef = FirebaseDatabase.getInstance().getReference("Users")
+                                .child("Parent").child(parentId)
+                                .child("Children").child(childId);
+
+                        childRef.child("name").addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(DataSnapshot snapshot) {
+                                String childName = snapshot.exists() ? snapshot.getValue(String.class) : "Your child";
+                                String message = childName + " is feeling worse after their dose.";
+                                Alert newAlert = new Alert("Worse After Dose", message, System.currentTimeMillis(), "high", childId);
+
+                                DatabaseReference parentAlertRef = FirebaseDatabase.getInstance().getReference("Users")
+                                        .child("Parent")
+                                        .child(parentId)
+                                        .child("Alerts");
+                                parentAlertRef.push().setValue(newAlert);
+                            }
+
+                            @Override
+                            public void onCancelled(DatabaseError error) {
+                                Toast.makeText(LogMedicine.this, "Failed to retrieve child's name for alert.", Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                    }
                     finish();
                 })
                 .addOnFailureListener(e ->
                         Toast.makeText(this, "Failed: " +e.getMessage(), Toast.LENGTH_SHORT).show()
                 );
+    }
+
+    private void checkForRapidRescueRepeats() {
+        DatabaseReference logsRef = FirebaseDatabase.getInstance().getReference("Users")
+                .child("Parent")
+                .child(parentId)
+                .child("Children")
+                .child(childId)
+                .child("Logs")
+                .child("medicineLogs");
+
+        long threeHoursAgo = System.currentTimeMillis() - (3 * 60 * 60 * 1000);
+
+        logsRef.orderByChild("timestamp").startAt(threeHoursAgo).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                int rescueCount = 0;
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    MedicineLog log = snapshot.getValue(MedicineLog.class);
+                    if (log != null && "Rescue".equals(log.getInhalerType())) {
+                        rescueCount++;
+                    }
+                }
+
+                if (rescueCount >= 3) {
+                    DatabaseReference parentAlertRef = FirebaseDatabase.getInstance().getReference("Users")
+                            .child("Parent")
+                            .child(parentId)
+                            .child("Alerts");
+                    
+                    String message = "Your child has used their rescue inhaler " + rescueCount + " times in the last 3 hours.";
+                    Alert newAlert = new Alert("Rapid Rescue Repeats", message, System.currentTimeMillis(), "high", childId);
+                    parentAlertRef.push().setValue(newAlert);
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Toast.makeText(LogMedicine.this, "Failed to check for rapid rescue repeats: " + databaseError.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 }

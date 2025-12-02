@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="12dp"
+    app:cardCornerRadius="12dp"
+    app:cardElevation="4dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp"
+        android:background="#FFFFFF">
+
+        <!-- Date/Time of Measurement -->
+        <!-- ID MUST MATCH: @+id/symptom_log_date -->
+        <TextView
+            android:id="@+id/symptom_log_date"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            android:paddingBottom="8dp"
+            tools:text="Logged: 25 May 2025, 10:30 AM" />
+
+        <!-- Symptom Details (Night Waking and Wheezing/Cough) -->
+        <!-- ID MUST MATCH: @+id/symptom_details -->
+        <TextView
+            android:id="@+id/symptom_details"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="16sp"
+            tools:text="🌙 Night Waking reported.\n💨 Wheezing/Cough: Moderate" />
+
+        <!-- Triggers List (Comma-separated list of reported triggers) -->
+        <!-- ID MUST MATCH: @+id/trigger_list -->
+        <TextView
+            android:id="@+id/trigger_list"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="14sp"
+            android:layout_marginTop="8dp"
+            tools:text="💥 Triggers: Dust, Pet, Exercise" />
+
+    </LinearLayout>
+
+</androidx.cardview.widget.CardView>

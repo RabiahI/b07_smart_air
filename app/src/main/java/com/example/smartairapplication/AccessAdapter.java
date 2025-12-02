@@ -23,6 +23,7 @@ public class AccessAdapter extends RecyclerView.Adapter<AccessAdapter.ViewHolder
     public interface OnInviteClickListener {
         void onInviteClick(int position);
         void onRevokeClick(int position);
+        void onManageDataSharingClick(int position);
 
     }
     public AccessAdapter(Context context, List<Child> childList, OnInviteClickListener listener) {
@@ -42,6 +43,7 @@ public class AccessAdapter extends RecyclerView.Adapter<AccessAdapter.ViewHolder
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Child child = childList.get(position);
         holder.textViewChildName.setText(child.getName());
+
 
         String status = child.getAccessStatus();
 
@@ -79,6 +81,12 @@ public class AccessAdapter extends RecyclerView.Adapter<AccessAdapter.ViewHolder
 
         holder.buttonInviteProvider.setOnClickListener(v -> listener.onInviteClick(position));
         holder.buttonRevokeAccess.setOnClickListener(v -> listener.onRevokeClick(position));
+        holder.buttonManageDataSharing.setOnClickListener(v -> {
+            if (listener != null) {
+                listener.onManageDataSharingClick(position);
+            }
+        });
+
     }
 
     @Override
@@ -91,7 +99,7 @@ public class AccessAdapter extends RecyclerView.Adapter<AccessAdapter.ViewHolder
         ImageView iconAccessStatus;
         ImageButton buttonToggleCodeVisibility;
         LinearLayout layoutInviteCode;
-        Button buttonInviteProvider, buttonRevokeAccess;
+        Button buttonInviteProvider, buttonRevokeAccess, buttonManageDataSharing;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -103,7 +111,7 @@ public class AccessAdapter extends RecyclerView.Adapter<AccessAdapter.ViewHolder
             buttonToggleCodeVisibility = itemView.findViewById(R.id.buttonToggleCodeVisibility);
             buttonInviteProvider = itemView.findViewById(R.id.buttonInviteProvider);
             buttonRevokeAccess = itemView.findViewById(R.id.buttonRevokeAccess);
-
+            buttonManageDataSharing = itemView.findViewById(R.id.buttonManageDataSharing);
         }
     }
 

@@ -3,6 +3,7 @@ package com.example.smartairapplication;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.InputType;
 import android.view.LayoutInflater;
@@ -155,6 +156,21 @@ public class ManageAccessActivity extends AppCompatActivity implements AccessAda
                 })
                 .setNegativeButton("Cancel", null).show();
     }
+
+    @Override
+    public void onManageDataSharingClick(int position) {
+        Child selectedChild = childList.get(position);
+        showManageDataSharingDialog(selectedChild);
+    }
+
+    private void showManageDataSharingDialog(Child child) {
+        Intent intent = new Intent(this, ManageDataSharingActivity.class);
+        intent.putExtra(ManageDataSharingActivity.EXTRA_CHILD_ID, child.getChildId());
+        intent.putExtra(ManageDataSharingActivity.EXTRA_CHILD_NAME, child.getName());
+
+        startActivity(intent);
+    }
+
 
     private void showInviteProviderDialog(Child child){
         AlertDialog.Builder builder = new AlertDialog.Builder(this);

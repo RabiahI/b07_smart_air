@@ -4,7 +4,19 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:gravity="center"
+    android:background="@color/background"
     android:padding="16dp">
+
+    <TextView
+        android:id="@+id/tvAppTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="64dp"
+        android:fontFamily="@font/baloo"
+        android:text="SMART AIR"
+        android:textColor="@color/dark_blue_text"
+        android:textSize="32sp"
+        android:textStyle="bold" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -12,18 +24,21 @@
         android:text="How are you joining?"
         android:textSize="24sp"
         android:textStyle="bold"
+        android:textColor="@color/dark_blue_text"
         android:layout_marginBottom="32dp"/>
 
     <Button
         android:id="@+id/buttonAdult"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="I'm an Adult" />
+        android:backgroundTint="@color/dark_blue_text"
+        android:text="I'm a Parent or Provider" />
 
     <Button
         android:id="@+id/buttonChild"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:backgroundTint="@color/dark_blue_text"
         android:text="I'm a Child"
         android:layout_marginTop="16dp"/>
 

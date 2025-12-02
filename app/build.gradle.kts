@@ -41,10 +41,14 @@ dependencies {
     implementation(platform("com.google.firebase:firebase-bom:34.5.0"))
     implementation(libs.firebase.auth)
     implementation("com.google.firebase:firebase-analytics")
+    implementation("com.google.firebase:firebase-functions:20.4.0")
     implementation(libs.firebase.database)
     implementation(libs.cardview)
     implementation(libs.recyclerview)
+    implementation(libs.firebase.firestore)
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)
+    implementation("com.google.android.flexbox:flexbox:3.0.0")
+    implementation("com.github.PhilJay:MPAndroidChart:v3.1.0") //MPAndroidChart for charts
 }

@@ -20,30 +20,34 @@
 
     <string name="provider_welcome">
         Welcome, Provider! \n\n
-
         As a provider, you can view the summary reports for children, but only when a parent shares their data with you. \n\n
-        Please wait for a parent to share more information about the child with you. \n\n
-
-        # info about how to view summaries + reports
+        You will not be able to modify or edit any of the data shared with you. \n\n
+        Please wait for a parent to share an access code with you, and then submit it to see more information about the child.
     </string>
     <string name="child_welcome">
         Welcome Child! \n\n
         As a child you can log your medicines and symptoms, practice inhaler techniques, and track your asthma in a fun, safe way! \n\n
 
-         Your data is private. Only your parent can share your information with your healthcare provider. \n\n
+        If you’re experiencing an asthma attack, you can use the <br>Rescue</br> feature to track your symptoms and see how serious your attack is. Parents will receive an alert automatically.\n\n
 
-        # add more info about functionality once theyre implemented cuz idk \n\n
+        The <br>Controller</br> feature lets you check in daily to track your symptoms and medicine use, helping you stay on top of your asthma care.\n\n
+
+        By default, only your parent can see your information. They can view summaries, check your logs, and choose what to share with your healthcare provider.\n\n
 
     </string>
     <string name="parent_welcome">
-        Welcome Parent! \n\n
-        You can link your children, view their health data, get alerts, and share a controlled summary with your healthcare provider. \n\n
-        You may link a child and provide general information or notes about them in the homepage.\n\n
-
-        You can log incidents for your child by... \n\n
-
-        # add more info later \n
+    Welcome, Parent!\n\n
+    This app helps you support your child’s asthma care in a safe, easy way.\n\n
+    - <b>See your child’s logs:</b> You can view summaries of their symptoms, medicine use, and Rescue events.\n
+    - <b>Manage data sharing:</b> By default, your child’s data is private. You decide what to share with your healthcare provider. You can toggle sharing on or off at any time.\n
+    - <b>Stay informed:</b> You’ll receive alerts when your child logs a Rescue, so you know if they need help.\n\n
+    <b>How it works:</b>\n
+    - <b>Rescue:</b> If your child is having an asthma attack, they can log their symptoms and see how serious it is. You’ll get an alert automatically.\n
+    - <b>Controller:</b> Your child can check in daily to track symptoms and medicine use. You can view their logs to support their care.\n\n
+    Your child’s privacy is protected, and you control what information is shared with healthcare providers.
     </string>
+
+
     <string name="confirm_password">Confirm Password</string>
     <string name="back_to_parent">Back to Parent</string>
     <string name="today_s_zone_green">Today\'s Zone: Green!</string>

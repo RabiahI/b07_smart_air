@@ -5,6 +5,7 @@ import android.os.CountDownTimer;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -59,7 +60,8 @@ public class TriageActivity extends AppCompatActivity {
         editTextPef = findViewById(R.id.edit_text_pef);
         editTextRescueAttempts = findViewById(R.id.edit_text_rescue_attempts);
         submitInputsButton = findViewById(R.id.submit_inputs_button);
-
+        ImageView btnReturn = findViewById(R.id.btnReturn);
+        btnReturn.setOnClickListener(v -> finish());
 
         questions = new ArrayList<>();
         questions.add("Is the person unable to speak in full sentences?");
@@ -249,27 +251,37 @@ public class TriageActivity extends AppCompatActivity {
                 childName = (childName != null && !childName.isEmpty()) ? childName : "Your child";
 
                 String alertMessage;
+                String severity;
+                String type = "Triage Event";
+
                 switch (triageResult) {
                     case "Severe":
                         alertMessage = childName + " is experiencing a severe asthma event.";
+                        severity = "high";
                         break;
                     case "Mild/Moderate":
                         alertMessage = childName + " has started a triage for a mild/moderate asthma event.";
+                        severity = "medium";
                         break;
                     case "Escalation":
                         alertMessage = childName + "'s symptoms have not improved after 10 minutes.";
+                        severity = "high";
                         break;
                     default:
                         alertMessage = childName + " requires assistance.";
+                        severity = "low";
                         break;
                 }
+                
+                long timestamp = System.currentTimeMillis();
+                Alert newAlert = new Alert(type, alertMessage, timestamp, severity, childId);
 
                 DatabaseReference parentAlertRef = FirebaseDatabase.getInstance()
                         .getReference("Users")
                         .child("Parent")
                         .child(parentId)
                         .child("Alerts");
-                parentAlertRef.push().setValue(alertMessage);
+                parentAlertRef.push().setValue(newAlert);
                 Toast.makeText(TriageActivity.this, "Parent has been alerted.", Toast.LENGTH_SHORT).show();
 
                 if ("Escalation".equals(triageResult) && logEntryId != null) {

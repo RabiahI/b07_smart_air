@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="8dp"
+    app:cardCornerRadius="8dp"
+    app:cardElevation="2dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp">
+
+        <!-- Date/Time of the Log -->
+        <TextView
+            android:id="@+id/rescueLogDate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="[Date &amp; Time]"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:layout_marginBottom="8dp" />
+
+        <!-- Feeling After Dose -->
+        <TextView
+            android:id="@+id/rescueLogFeeling"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="[Feeling: Better/Worse/Same]"
+            android:textSize="14sp"
+            android:textColor="@android:color/black"
+            android:layout_marginBottom="4dp" />
+
+        <!-- Puffs Taken -->
+        <TextView
+            android:id="@+id/rescueLogPuffs"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="[Puffs Taken: 2]"
+            android:textSize="14sp"
+            android:textColor="@android:color/darker_gray"
+            android:layout_marginBottom="8dp" />
+
+        <!-- Shortness of Breath (SOB) Levels Container -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <!-- SOB Before -->
+            <TextView
+                android:id="@+id/rescueLogSobBefore"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="SOB Before: [Level]"
+                android:textSize="12sp"
+                android:textColor="@android:color/black"
+                android:background="#FFECEC"
+                android:padding="4dp"
+                android:layout_marginEnd="4dp" />
+
+            <!-- SOB After -->
+            <TextView
+                android:id="@+id/rescueLogSobAfter"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="SOB After: [Level]"
+                android:textSize="12sp"
+                android:textColor="@android:color/black"
+                android:background="#E8FFE8"
+                android:padding="4dp"
+                android:layout_marginStart="4dp" />
+        </LinearLayout>
+
+    </LinearLayout>
+</androidx.cardview.widget.CardView>

@@ -42,7 +42,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="12dp"
                 android:fontFamily="@font/inter"
-                android:text="Controller Streak: 3 days"
+                android:text="Controller Streak: Fetching Data..."
                 android:textColor="#444444"
                 android:textSize="15sp" />
         </LinearLayout>
@@ -63,13 +63,13 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="12dp"
                 android:fontFamily="@font/inter"
-                android:text="Technique Progress: 4/10 sessions"
+                android:text="Technique Progress: Fetching Data..."
                 android:textColor="#444444"
                 android:textSize="15sp" />
         </LinearLayout>
 
         <TextView
-            android:id="@+id/viewStreaks"
+            android:id="@+id/streaks_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"

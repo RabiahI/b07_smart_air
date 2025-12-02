@@ -1,0 +1,35 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="8dp"
+    android:background="@drawable/bg_white_bubble"
+    android:layout_marginBottom="8dp">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/triageItemDate"
+        android:text="Nov 29, 2025"
+        android:textStyle="bold"
+        android:textSize="14sp"
+        android:textColor="#2D2D2D"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/triageItemResult"
+        android:text="Result: Severe"
+        android:textColor="#FF4747"
+        android:textSize="13sp"
+        android:layout_marginTop="2dp"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/triageItemNotes"
+        android:text="Notes go here"
+        android:textColor="#464646"
+        android:textSize="13sp"
+        android:layout_marginTop="2dp"/>
+</LinearLayout>

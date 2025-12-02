@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="12dp"
+    app:cardCornerRadius="12dp"
+    app:cardElevation="4dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="16dp"
+        android:background="#FFFFFF">
+
+        <!-- Date/Time of Measurement -->
+        <!-- ID MUST MATCH: @+id/pef_log_date -->
+        <TextView
+            android:id="@+id/pef_log_date"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            tools:text="🗓️ 25 May 2025, 10:30 AM" />
+
+        <!-- PEF Value -->
+        <!-- ID MUST MATCH: @+id/pef_log_value -->
+        <TextView
+            android:id="@+id/pef_log_value"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="18sp"
+            android:textStyle="italic"
+            tools:text="PEF: 450 L/min" />
+
+    </LinearLayout>
+
+</androidx.cardview.widget.CardView>

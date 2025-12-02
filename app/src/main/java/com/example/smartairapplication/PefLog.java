@@ -1,14 +1,21 @@
 package com.example.smartairapplication;
 
 public class PefLog {
-    public int value;
-    public long timestamp;
+    private int pefValue;
+    private long timestamp;
 
     public PefLog() {
     }
 
     public PefLog(int value, long timestamp) {
-        this.value = value;
+        this.pefValue = value;
         this.timestamp = timestamp;
+    }
+    public int getPefValue() {
+        return pefValue;
+    }
+
+    public long getTimestamp() {
+        return timestamp;
     }
 }

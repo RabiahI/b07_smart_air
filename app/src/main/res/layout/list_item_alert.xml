@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/bg_white_bubble"
+    android:padding="12dp"
+    android:layout_marginBottom="8dp">
+
+    <TextView
+        android:id="@+id/severityIcon"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:background="@drawable/bg_severity_icon"
+        android:gravity="center"
+        android:padding="8dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        tools:drawableTop="@drawable/ic_circlewarning"
+        tools:drawableTint="@android:color/white"/>
+
+    <TextView
+        android:id="@+id/alertType"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="12dp"
+        android:textStyle="bold"
+        android:textColor="@color/dark_blue_text"
+        app:layout_constraintStart_toEndOf="@id/severityIcon"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/alertTimestamp"
+        tools:text="High PEF Reading" />
+
+    <TextView
+        android:id="@+id/alertMessage"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="12dp"
+        android:layout_marginTop="2dp"
+        app:layout_constraintStart_toEndOf="@id/severityIcon"
+        app:layout_constraintTop_toBottomOf="@id/alertType"
+        app:layout_constraintEnd_toStartOf="@+id/severityBubble"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginEnd="8dp"
+        tools:text="Child's PEF reading was in the red zone." />
+
+    <TextView
+        android:id="@+id/alertTimestamp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:textColor="@color/material_dynamic_neutral60"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/alertType"
+        app:layout_constraintBottom_toBottomOf="@id/alertType"
+        tools:text="5m ago" />
+        
+    <TextView
+        android:id="@+id/severityBubble"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bg_severity_bubble"
+        android:textColor="@android:color/white"
+        android:paddingStart="8dp"
+        android:paddingEnd="8dp"
+        android:paddingTop="4dp"
+        android:paddingBottom="4dp"
+        android:textSize="12sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/alertMessage"
+        app:layout_constraintBottom_toBottomOf="@id/alertMessage"
+        tools:text="High"
+        tools:backgroundTint="#F44336"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
