@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/background"
-    tools:context=".TriageActivity">
+    tools:context=".child_home.triage.TriageActivity">
 
     <!-- 🔹 HEADER LIKE activity_log_medicine -->
     <androidx.constraintlayout.widget.ConstraintLayout

@@ -5,7 +5,7 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ProviderReportActivity">
+    tools:context=".parent_home.provider_report.ProviderReportActivity">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/header"

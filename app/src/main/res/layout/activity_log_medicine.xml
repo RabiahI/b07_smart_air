@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/background"
-    tools:context=".LogMedicine">
+    tools:context=".child_home.log_medicine.LogMedicine">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/childHeader"
