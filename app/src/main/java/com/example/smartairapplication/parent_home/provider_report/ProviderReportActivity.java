@@ -257,7 +257,7 @@ public class ProviderReportActivity extends AppCompatActivity {
 
             for (DataSnapshot child : pefSnap.getChildren()) {
                 Long ts = child.child("timestamp").getValue(Long.class);
-                Long valueL = child.child("value").getValue(Long.class);
+                Long valueL = child.child("pefValue").getValue(Long.class);
                 if (ts == null || valueL == null) continue;
 
                 LocalDate day = Instant.ofEpochMilli(ts)
