@@ -119,15 +119,15 @@ public class ParentManageInventory extends AppCompatActivity {
                 for (DataSnapshot ds : snapshot.getChildren()) {
                     Medicine m = ds.getValue(Medicine.class);
                     if (m != null) {
-                        m.id = ds.getKey();
+                        m.setId(ds.getKey());
                         list.add(m);
 
-                        if (!m.expiryAlertSent) {
+                        if (!m.getExpiryAlertSent()) {
                             SimpleDateFormat sdf = new SimpleDateFormat("M/d/yyyy", Locale.US);
                             try {
-                                Date expiryDate = sdf.parse(m.expiryDate);
+                                Date expiryDate = sdf.parse(m.getExpiryDate());
                                 if (new Date().after(expiryDate)) {
-                                    String message = m.name + " has expired. Please replace it.";
+                                    String message = m.getName() + " has expired. Please replace it.";
                                     Alert alert = new Alert("Medication Expired", message, System.currentTimeMillis(), "High", childId);
                                     DatabaseReference alertsRef = FirebaseDatabase.getInstance().getReference("Users")
                                             .child("Parent").child(parentId).child("Alerts");
@@ -193,7 +193,8 @@ public class ParentManageInventory extends AppCompatActivity {
                             .child("Inventory");
 
                     String id = ref.push().getKey();
-                    med.id = id;
+                    med.setId(id);
+                    assert id != null;
                     ref.child(id).setValue(med);
                 })
                 .setNegativeButton("Cancel", null)
@@ -209,10 +210,10 @@ public class ParentManageInventory extends AppCompatActivity {
         EditText inputExpiry = dialogView.findViewById(R.id.inputExpiry);
         EditText inputAmount = dialogView.findViewById(R.id.inputAmount);
 
-        inputName.setText(med.name);
-        inputPurchase.setText(med.purchaseDate);
-        inputExpiry.setText(med.expiryDate);
-        inputAmount.setText(String.valueOf(med.amountLeft));
+        inputName.setText(med.getName());
+        inputPurchase.setText(med.getPurchaseDate());
+        inputExpiry.setText(med.getExpiryDate());
+        inputAmount.setText(String.valueOf(med.getAmountLeft()));
 
         inputPurchase.setOnClickListener(v -> showDatePicker(inputPurchase));
         inputExpiry.setOnClickListener(v -> showDatePicker(inputExpiry));
@@ -233,7 +234,7 @@ public class ParentManageInventory extends AppCompatActivity {
                     }
 
                     int amount = Integer.parseInt(a);
-                    boolean wasLow = med.lowFlag;
+                    boolean wasLow = med.getLowFlag();
                     boolean isLow = amount <= 20;
 
                     if (isLow && !wasLow) {
@@ -245,13 +246,13 @@ public class ParentManageInventory extends AppCompatActivity {
                     }
 
                     Medicine updated = new Medicine(n, p, e, amount, isLow);
-                    updated.id = med.id;
-                    updated.expiryAlertSent = med.expiryAlertSent;
+                    updated.setId(med.getId());
+                    updated.setExpiryAlertSent(med.getExpiryAlertSent());
 
                     DatabaseReference ref = FirebaseDatabase.getInstance().getReference("Users")
                             .child("Parent").child(parentId)
                             .child("Children").child(childId)
-                            .child("Inventory").child(med.id);
+                            .child("Inventory").child(med.getId());
 
                     ref.setValue(updated);
                 })
@@ -268,7 +269,7 @@ public class ParentManageInventory extends AppCompatActivity {
                     DatabaseReference ref = FirebaseDatabase.getInstance().getReference("Users")
                             .child("Parent").child(parentId)
                             .child("Children").child(childId)
-                            .child("Inventory").child(med.id);
+                            .child("Inventory").child(med.getId());
 
                     ref.removeValue();
 
