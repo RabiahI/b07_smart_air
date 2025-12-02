@@ -75,9 +75,9 @@
             android:layout_width="350dp"
             android:layout_height="wrap_content"
             android:layout_marginBottom="16dp"
-            android:foreground="?attr/selectableItemBackground"
             app:cardCornerRadius="20dp"
-            app:cardElevation="4dp"
+            app:strokeColor="#A269FF"
+            app:strokeWidth="2dp"
             android:backgroundTint="#F3E9FF">
 
             <LinearLayout
@@ -129,7 +129,8 @@
             android:layout_marginBottom="16dp"
             android:foreground="?attr/selectableItemBackground"
             app:cardCornerRadius="20dp"
-            app:cardElevation="4dp"
+            app:strokeColor="#96C9FF"
+            app:strokeWidth="2dp"
             android:backgroundTint="#E3F4FF">
 
             <LinearLayout
@@ -180,7 +181,8 @@
             android:layout_height="wrap_content"
             android:foreground="?attr/selectableItemBackground"
             app:cardCornerRadius="20dp"
-            app:cardElevation="4dp"
+            app:strokeColor="#00CD78"
+            app:strokeWidth="2dp"
             android:backgroundTint="#E5FFE9">
 
             <LinearLayout

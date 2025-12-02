@@ -5,8 +5,9 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="10dp"
-    app:cardCornerRadius="12dp"
-    app:cardElevation="4dp">
+    app:cardCornerRadius="20dp"
+    app:strokeColor="@color/vivid_blue"
+    app:strokeWidth="2dp">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -32,7 +33,7 @@
                 android:layout_marginStart="4dp"
                 android:layout_marginTop="4dp"
                 android:text="Nov 10, 2025"
-                android:textColor="@color/dark_blue_text"
+                android:textColor="#3336a2"
                 android:textSize="16sp"
                 android:textStyle="bold" />
 
@@ -43,7 +44,10 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="6dp"
-            android:text="Symptoms:" />
+            android:fontFamily="@font/inter"
+            android:text="Symptoms:"
+            android:textColor="#3336a2"
+            android:textStyle="bold" />
 
         <com.google.android.flexbox.FlexboxLayout
             android:id="@+id/containerSymptoms"
@@ -60,7 +64,10 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="6dp"
-            android:text="Triggers:" />
+            android:fontFamily="@font/inter"
+            android:text="Triggers:"
+            android:textColor="#3336a2"
+            android:textStyle="bold" />
 
         <com.google.android.flexbox.FlexboxLayout
             android:id="@+id/containerTriggers"
@@ -78,8 +85,8 @@
             android:layout_marginTop="12dp"
             android:background="@drawable/bg_rounded_icon_white"
             android:padding="12dp"
-            android:text="Felt better after rest"
-            android:textColor="@color/dark_blue_text"
+            android:text="Notes: Felt better after rest"
+            android:textColor="#88898A"
             android:textSize="14sp" />
 
     </LinearLayout>
