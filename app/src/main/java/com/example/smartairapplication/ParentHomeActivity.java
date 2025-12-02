@@ -75,6 +75,8 @@ public class ParentHomeActivity extends AppCompatActivity {
     private boolean isZoneChartVisible = true;
     private ValueEventListener overviewEventListener;
     private DatabaseReference overviewRef;
+    private ValueEventListener medLogsEventListener;
+    private DatabaseReference medLogsRef;
 
 
     @Override
@@ -358,12 +360,15 @@ public class ParentHomeActivity extends AppCompatActivity {
         if (overviewRef != null && overviewEventListener != null) {
             overviewRef.removeEventListener(overviewEventListener);
         }
+        if (medLogsRef != null && medLogsEventListener != null) {
+            medLogsRef.removeEventListener(medLogsEventListener);
+        }
 
-        DatabaseReference medLogsRef = FirebaseDatabase.getInstance().getReference("Users")
+        medLogsRef = FirebaseDatabase.getInstance().getReference("Users")
                 .child("Parent").child(parentId).child("Children").child(childId)
                 .child("Logs").child("medicineLogs");
 
-        medLogsRef.orderByChild("timestamp").limitToLast(1).addListenerForSingleValueEvent(new ValueEventListener() {
+        medLogsEventListener = new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if (snapshot.exists()) {
@@ -382,7 +387,8 @@ public class ParentHomeActivity extends AppCompatActivity {
             public void onCancelled(@NonNull DatabaseError error) {
                 tvLastRescue.setText("Last Rescue: Error");
             }
-        });
+        };
+        medLogsRef.orderByChild("timestamp").limitToLast(1).addValueEventListener(medLogsEventListener);
 
 
         overviewRef = FirebaseDatabase.getInstance().getReference("Users")
@@ -717,6 +723,9 @@ public class ParentHomeActivity extends AppCompatActivity {
         super.onDestroy();
         if (overviewRef != null && overviewEventListener != null) {
             overviewRef.removeEventListener(overviewEventListener);
+        }
+        if (medLogsRef != null && medLogsEventListener != null) {
+            medLogsRef.removeEventListener(medLogsEventListener);
         }
     }
 }
