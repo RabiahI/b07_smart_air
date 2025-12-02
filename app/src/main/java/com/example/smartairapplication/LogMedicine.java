@@ -380,6 +380,7 @@ public class LogMedicine extends AppCompatActivity {
                     Toast.makeText(this, "Medicine log saved!", Toast.LENGTH_SHORT).show();
                     OverviewCalculator.updateDailyOverview(parentId, childId);
                     if ("Rescue".equals(inhalerType)) {
+                        OverviewCalculator.updateDailyOverview(parentId, childId);
                         checkForRapidRescueRepeats();
                     }
                     if ("Worse".equals(postFeeling)) {
