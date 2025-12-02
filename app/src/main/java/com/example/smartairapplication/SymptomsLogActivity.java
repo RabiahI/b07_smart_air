@@ -22,14 +22,13 @@ public class SymptomsLogActivity extends AppCompatActivity {
 
     private RecyclerView recyclerView;
     private SymptomsLogAdapter adapter;
-    private List<SymptomLogEntry> symptomLogList; // <-- FIX: Properly defined here
+    private List<SymptomLogEntry> symptomLogList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_symptoms_log);
 
-        // Set up the back button in the action bar (if available)
         if (getSupportActionBar() != null) {
             getSupportActionBar().setTitle("Symptoms & Triggers Log");
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -38,7 +37,6 @@ public class SymptomsLogActivity extends AppCompatActivity {
         String childId = getIntent().getStringExtra("childId");
         String parentId = getIntent().getStringExtra("parentId");
 
-        // Initialize RecyclerView
         recyclerView = findViewById(R.id.symptoms_log_recycler_view);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 

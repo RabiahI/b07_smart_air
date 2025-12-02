@@ -30,15 +30,12 @@ public class TriageLogActivity extends AppCompatActivity {
     // IMPORTANT: You must create the TriageLogEntry and TriageLogAdapter classes
     private TriageLogAdapter adapter;
     private List<TriageLogEntry> logList = new ArrayList<>();
-    // private TextView textEmpty; // Uncomment if you add a TextView for empty state
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        // Ensure you create the layout file: res/layout/activity_triage_log.xml
         setContentView(R.layout.activity_triage_log);
 
-        // Get IDs passed from ProviderHomeActivity
         childId = getIntent().getStringExtra("childId");
         parentId = getIntent().getStringExtra("parentId");
 
@@ -48,16 +45,12 @@ public class TriageLogActivity extends AppCompatActivity {
             return;
         }
 
-        // Initialize RecyclerView and its components
-        // Ensure the ID below matches your activity_triage_log.xml
         recyclerView = findViewById(R.id.triageLogsRecyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        // Initialize adapter with the list
         adapter = new TriageLogAdapter(logList);
         recyclerView.setAdapter(adapter);
 
-        // textEmpty = findViewById(R.id.textEmptyTriageLogs); // Uncomment this line if used
 
         loadAllTriageLogs();
     }
@@ -72,8 +65,6 @@ public class TriageLogActivity extends AppCompatActivity {
                 .child("Logs")
                 .child("triageLogs");
 
-        // KEY DIFFERENCE: Using orderByChild() or orderByKey() without limitToLast()
-        // retrieves ALL logs under the node.
         logsRef.orderByKey()
                 .addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
@@ -82,24 +73,19 @@ public class TriageLogActivity extends AppCompatActivity {
 
                         if (snapshot.exists() && snapshot.hasChildren()) {
                             for (DataSnapshot logSnap : snapshot.getChildren()) {
-                                // Deserialize the log entry into your POJO class
+
                                 TriageLogEntry entry = logSnap.getValue(TriageLogEntry.class);
                                 if (entry != null) {
-                                    // Assuming TriageLogEntry has a logId field
-                                    // entry.logId = logSnap.getKey();
                                     logList.add(entry);
                                 }
                             }
 
-                            // Reverse the list to show newest logs at the top
                             Collections.reverse(logList);
 
                             adapter.notifyDataSetChanged();
-                            // if (textEmpty != null) textEmpty.setVisibility(View.GONE);
 
                         } else {
                             adapter.notifyDataSetChanged();
-                            // if (textEmpty != null) textEmpty.setVisibility(View.VISIBLE);
                             Toast.makeText(TriageLogActivity.this, "No triage logs found.", Toast.LENGTH_SHORT).show();
                         }
                     }

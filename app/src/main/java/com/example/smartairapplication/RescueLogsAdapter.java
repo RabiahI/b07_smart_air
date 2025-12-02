@@ -11,10 +11,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
-/**
- * RecyclerView Adapter for displaying a list of RescueLogEntry items.
- * Assumes a layout file named 'item_rescue_log.xml' with appropriate TextView IDs.
- */
 public class RescueLogsAdapter extends RecyclerView.Adapter<RescueLogsAdapter.LogViewHolder> {
 
     private final List<RescueLogEntry> logList;

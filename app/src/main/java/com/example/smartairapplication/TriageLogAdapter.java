@@ -23,7 +23,6 @@ public class TriageLogAdapter extends RecyclerView.Adapter<TriageLogAdapter.Tria
     @NonNull
     @Override
     public TriageViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        // Inflate the item layout
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_triage_log, parent, false);
         return new TriageViewHolder(view);
     }
