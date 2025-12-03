@@ -2,6 +2,8 @@ package com.example.smartairapplication.parent_home.manage_sharing;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 import android.widget.Button;
 import android.widget.TextView;
@@ -20,7 +22,7 @@ public class ManageDataSharingActivity extends AppCompatActivity {
     public static final String EXTRA_CHILD_NAME = "extra_child_name";
 
     private SwitchCompat switchRescueLogs, switchControllerAdherence, switchSymptoms,
-            switchTriggers, switchPEF, switchTriageIncidents, switchChartSummaries;
+            switchTriggers, switchPEF, switchTriageIncidents;
 
     private SharedPreferences prefs;
     private String childId;
@@ -48,7 +50,6 @@ public class ManageDataSharingActivity extends AppCompatActivity {
         switchTriggers = findViewById(R.id.switchTriggers);
         switchPEF = findViewById(R.id.switchPEF);
         switchTriageIncidents = findViewById(R.id.switchTriageIncidents);
-        switchChartSummaries = findViewById(R.id.switchChartSummaries);
 
         prefs = getSharedPreferences("data_sharing_prefs", MODE_PRIVATE);
 
@@ -59,7 +60,6 @@ public class ManageDataSharingActivity extends AppCompatActivity {
         switchTriggers.setChecked(load("showTriggers"));
         switchPEF.setChecked(load("showPEF"));
         switchTriageIncidents.setChecked(load("showTriage"));
-        switchChartSummaries.setChecked(load("showChartSummaries"));
 
         // attach listeners to save both locally and in Firebase
         setupListener(switchRescueLogs, "showRescueLogs");
@@ -68,7 +68,6 @@ public class ManageDataSharingActivity extends AppCompatActivity {
         setupListener(switchTriggers, "showTriggers");
         setupListener(switchPEF, "showPEF");
         setupListener(switchTriageIncidents, "showTriage");
-        setupListener(switchChartSummaries, "showChartSummaries");
 
         // share all button
         Button shareAllButton = findViewById(R.id.shareAllButton);
@@ -121,12 +120,28 @@ public class ManageDataSharingActivity extends AppCompatActivity {
 
     // toggle all switches at once
     private void setAllSwitches(boolean state) {
-        switchRescueLogs.setChecked(state);
-        switchControllerAdherence.setChecked(state);
-        switchSymptoms.setChecked(state);
-        switchTriggers.setChecked(state);
-        switchPEF.setChecked(state);
-        switchTriageIncidents.setChecked(state);
-        switchChartSummaries.setChecked(state);
+        // Toggle all but the last switch immediately
+        if (switchRescueLogs.isChecked() != state) {
+            switchRescueLogs.performClick();
+        }
+        if (switchControllerAdherence.isChecked() != state) {
+            switchControllerAdherence.performClick();
+        }
+        if (switchSymptoms.isChecked() != state) {
+            switchSymptoms.performClick();
+        }
+        if (switchTriggers.isChecked() != state) {
+            switchTriggers.performClick();
+        }
+        if (switchPEF.isChecked() != state) {
+            switchPEF.performClick();
+        }
+
+        // Toggle the last switch after a short delay
+        new Handler(Looper.getMainLooper()).postDelayed(() -> {
+            if (switchTriageIncidents.isChecked() != state) {
+                switchTriageIncidents.performClick();
+            }
+        }, 100);
     }
 }

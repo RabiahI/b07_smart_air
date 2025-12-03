@@ -38,6 +38,8 @@ public class ProviderHomeActivity extends AppCompatActivity {
     private ProgressBar adherenceProgressBar;
     private View viewAllPefButton, viewAllTriagesButton, viewAllSymptomsButton, viewAllRescueLogsButton;
     private String childId, parentId;
+    private DatabaseReference dataSharingRef;
+    private ValueEventListener dataSharingListener;
 
 
     @Override
@@ -158,13 +160,13 @@ public class ProviderHomeActivity extends AppCompatActivity {
     }
 
     private void loadDataSharingSettings(String childId, String parentId) {
-        DatabaseReference ref = FirebaseDatabase.getInstance()
+        dataSharingRef = FirebaseDatabase.getInstance()
                 .getReference("Users")
                 .child("Child")
                 .child(childId)
                 .child("DataSharing");
 
-        ref.addListenerForSingleValueEvent(new ValueEventListener() {
+        dataSharingListener = new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 boolean showTriage = snapshot.child("showTriage").getValue(Boolean.class) != null
@@ -215,7 +217,8 @@ public class ProviderHomeActivity extends AppCompatActivity {
                         "Failed to load settings: " + error.getMessage(),
                         Toast.LENGTH_SHORT).show();
             }
-        });
+        };
+        dataSharingRef.addValueEventListener(dataSharingListener);
     }
 
     private void loadControllerAdherence(String childId, String parentId) {
@@ -344,8 +347,8 @@ public class ProviderHomeActivity extends AppCompatActivity {
 
                                 Long timestamp = log.child("timestamp").getValue(Long.class);
 
-                                String pef = log.child("value").getValue(Object.class) != null
-                                        ? String.valueOf(log.child("value").getValue(Object.class))
+                                String pef = log.child("pefValue").getValue(Object.class) != null
+                                        ? String.valueOf(log.child("pefValue").getValue(Object.class))
                                         : null;
 
                                 String dateString = "N/A";
@@ -640,5 +643,13 @@ public class ProviderHomeActivity extends AppCompatActivity {
                                 Toast.LENGTH_SHORT).show();
                     }
                 });
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (dataSharingRef != null && dataSharingListener != null) {
+            dataSharingRef.removeEventListener(dataSharingListener);
+        }
     }
 }

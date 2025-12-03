@@ -64,6 +64,7 @@
     <string name="current_streak">Controller Streak:</string>
     <string name="motivational_msg">Keep it up!</string>
     <string name="technique_streak">Technique Streak:</string>
+    <string name="technique_sessions">Technique Sessions:</string>
     <string name="badge_desc">filler for description of badge</string>
     <string name="back_to_homepage">Back To Homepage</string>
     <string name="controllerWeek">Have at least one perfect controller week!</string>

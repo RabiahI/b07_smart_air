@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.text.InputType;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -40,6 +41,13 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.util.ArrayList;
+import java.util.Locale;
+import java.util.Objects;
+
 public class ChildHomeActivity extends AppCompatActivity implements PasswordDialogFragment.PasswordDialogListener {
 
     private FirebaseAuth mAuth;
@@ -56,7 +64,8 @@ public class ChildHomeActivity extends AppCompatActivity implements PasswordDial
     private boolean isParentMode;
     private TextView textWelcome;
     private ImageView btnProfile;
-    private TextView streaksButton;
+    private TextView streaksButton, streakValue, badgeProgressText;
+    private ProgressBar badgeProgressBar;
 
 
     @Override
@@ -83,6 +92,10 @@ public class ChildHomeActivity extends AppCompatActivity implements PasswordDial
 
         textWelcome = findViewById(R.id.tvWelcome);
         btnProfile = findViewById(R.id.btnProfile);
+
+        streakValue = findViewById(R.id.streakValue);
+        badgeProgressBar = findViewById(R.id.badgeProgressBar);
+        badgeProgressText = findViewById(R.id.badgeProgressText);
 
         // Show onboarding on first login
         if (OnboardingActivity.isFirstLogin()) {
@@ -132,6 +145,7 @@ public class ChildHomeActivity extends AppCompatActivity implements PasswordDial
                 .child("Children")
                 .child(finalChildId);
 
+        loadStreaksData(finalParentId, finalChildId);
         getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
             @Override
             public void handleOnBackPressed() {
@@ -241,6 +255,79 @@ public class ChildHomeActivity extends AppCompatActivity implements PasswordDial
             return false;
         });
     }
+
+    private void loadStreaksData(String parentId, String childId) {
+        DatabaseReference logsRef = FirebaseDatabase.getInstance().getReference("Users")
+                .child("Parent").child(parentId)
+                .child("Children").child(childId)
+                .child("Logs").child("medicineLogs");
+
+        logsRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+
+                if (!snapshot.exists()) {
+                    updateStreaksUI(0);
+                    return;
+                }
+
+                ArrayList<Long> controllerTimes = new ArrayList<>();
+                for (DataSnapshot childSnapShot: snapshot.getChildren()) {
+                    String inhalerType = childSnapShot.child("inhalerType").getValue(String.class);
+                    Long timestamp = childSnapShot.child("timestamp").getValue(Long.class);
+
+                    if (Objects.equals(inhalerType, "Controller")) {
+                        controllerTimes.add(timestamp);
+                    }
+                }
+
+                ArrayList<LocalDate> dates = new ArrayList<>();
+                ArrayList<LocalDate> uniqueDates = new ArrayList<>();
+                int streak = 0;
+
+                if (controllerTimes.isEmpty()) {
+                    updateStreaksUI(0);
+                    return;
+                }
+                controllerTimes.sort(null);
+
+                for (Long time: controllerTimes) {
+                    dates.add(Instant.ofEpochMilli(time).atZone(ZoneId.systemDefault()).toLocalDate());
+                }
+
+                for (LocalDate d: dates) {
+                    if (!uniqueDates.contains(d)) {
+                        uniqueDates.add(d);
+                    }
+                }
+
+                if (!uniqueDates.isEmpty()) {
+                    LocalDate startDate = uniqueDates.get(uniqueDates.size() - 1);
+                    while (uniqueDates.contains(startDate)) {
+                        startDate = startDate.minusDays(1);
+                        streak++;
+                    }
+                }
+
+                updateStreaksUI(streak);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Toast.makeText(ChildHomeActivity.this, "Failed to load streaks.", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void updateStreaksUI(int streak) {
+        streakValue.setText(String.format(Locale.getDefault(), "%d Day Streak", streak));
+
+        int progress = (streak % 7);
+        int daysToNextBadge = 7 - progress;
+        badgeProgressBar.setProgress(progress * 100 / 7);
+        badgeProgressText.setText(String.format(Locale.getDefault(), "%d days to next badge", daysToNextBadge));
+    }
+
 
     private void promptForPasswordAndExit() {
         if (currentParentEmail != null) {
