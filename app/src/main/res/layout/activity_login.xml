@@ -9,7 +9,7 @@
     android:gravity="center"
     android:layout_height="match_parent"
     android:padding="15dp"
-    tools:context=".authentication.Login">
+    tools:context=".Login">
 
     <TextView
         android:text="@string/login"

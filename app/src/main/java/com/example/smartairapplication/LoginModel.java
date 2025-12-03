@@ -1,4 +1,4 @@
-package com.example.smartairapplication.authentication;
+package com.example.smartairapplication;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;

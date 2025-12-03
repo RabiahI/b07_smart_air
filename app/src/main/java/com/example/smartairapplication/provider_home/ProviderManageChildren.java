@@ -15,7 +15,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.smartairapplication.R;
-import com.example.smartairapplication.authentication.Login;
+import com.example.smartairapplication.Login;
 import com.example.smartairapplication.authentication.OnboardingDialogFragment;
 import com.example.smartairapplication.models.Child;
 import com.google.android.material.bottomnavigation.BottomNavigationView;

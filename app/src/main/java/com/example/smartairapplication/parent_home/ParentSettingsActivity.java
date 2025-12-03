@@ -9,7 +9,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.smartairapplication.parent_home.alerts.ParentAlertsActivity;
 import com.example.smartairapplication.parent_home.history_browser.ParentHistoryActivity;
 import com.example.smartairapplication.R;
-import com.example.smartairapplication.authentication.Login;
+import com.example.smartairapplication.Login;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;

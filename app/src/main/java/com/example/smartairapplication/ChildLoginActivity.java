@@ -1,4 +1,4 @@
-package com.example.smartairapplication.authentication;
+package com.example.smartairapplication;
 
 import android.content.Context;
 import android.content.Intent;
@@ -11,8 +11,8 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.smartairapplication.authentication.RoleSelectionActivity;
 import com.example.smartairapplication.child_home.ChildHomeActivity;
-import com.example.smartairapplication.R;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.auth.FirebaseAuth;
 

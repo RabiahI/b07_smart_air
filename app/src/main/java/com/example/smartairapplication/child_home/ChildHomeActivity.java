@@ -24,7 +24,7 @@ import com.example.smartairapplication.parent_home.overview.OverviewCalculator;
 import com.example.smartairapplication.R;
 import com.example.smartairapplication.child_home.motivation.StreaksBadgesActivity;
 import com.example.smartairapplication.child_home.triage.TriageActivity;
-import com.example.smartairapplication.authentication.Login;
+import com.example.smartairapplication.Login;
 import com.example.smartairapplication.authentication.OnboardingActivity;
 import com.example.smartairapplication.authentication.OnboardingDialogFragment;
 import com.example.smartairapplication.authentication.PasswordDialogFragment;

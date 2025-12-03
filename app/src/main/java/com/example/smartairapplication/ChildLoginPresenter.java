@@ -1,6 +1,4 @@
-package com.example.smartairapplication.authentication;
-
-import android.text.TextUtils;
+package com.example.smartairapplication;
 
 import com.google.firebase.auth.FirebaseUser;
 

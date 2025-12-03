@@ -14,7 +14,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.smartairapplication.R;
-import com.example.smartairapplication.authentication.Login;
+import com.example.smartairapplication.Login;
 import com.example.smartairapplication.authentication.PasswordDialogFragment;
 import com.example.smartairapplication.authentication.RoleSelectionActivity;
 import com.example.smartairapplication.child_home.history.ChildHistory;

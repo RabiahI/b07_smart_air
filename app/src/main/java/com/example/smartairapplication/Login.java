@@ -1,4 +1,4 @@
-package com.example.smartairapplication.authentication;
+package com.example.smartairapplication;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -12,7 +12,8 @@ import android.widget.Toast;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.smartairapplication.R;
+import com.example.smartairapplication.authentication.Registration;
+import com.example.smartairapplication.authentication.UserRoleManager;
 import com.google.android.material.textfield.TextInputEditText;
 
 public class Login extends AppCompatActivity {

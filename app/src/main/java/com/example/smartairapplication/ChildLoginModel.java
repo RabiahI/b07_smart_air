@@ -1,4 +1,4 @@
-package com.example.smartairapplication.authentication;
+package com.example.smartairapplication;
 
 import androidx.annotation.NonNull;
 

@@ -98,10 +98,10 @@
             android:name=".authentication.Registration"
             android:exported="false" />
         <activity
-            android:name=".authentication.Login"
+            android:name=".Login"
             android:exported="false" />
         <activity
-            android:name=".authentication.ChildLoginActivity"
+            android:name=".ChildLoginActivity"
             android:exported="false" />
         <activity
             android:name=".authentication.MainActivity"

@@ -14,6 +14,8 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.smartairapplication.ChildLoginActivity;
+import com.example.smartairapplication.Login;
 import com.example.smartairapplication.models.InvitationLookup;
 import com.example.smartairapplication.R;
 import com.google.firebase.auth.FirebaseAuth;
