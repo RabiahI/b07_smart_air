@@ -64,9 +64,9 @@ public class ChildDailyCheckInHistory extends AppCompatActivity {
                 for (DataSnapshot snap : snapshot.getChildren()){
                     HistoryEntry entry = snap.getValue(HistoryEntry.class);
                     if (entry != null){
-                        entry.id = snap.getKey();
-                        if (entry.triggers == null){
-                            entry.triggers = new ArrayList<>();
+                        entry.setId(snap.getKey());
+                        if (entry.getTriggers() == null){
+                            entry.setTriggers(new ArrayList<>());
                         }
                         historyList.add(entry);
                     }
@@ -74,8 +74,8 @@ public class ChildDailyCheckInHistory extends AppCompatActivity {
 
                 //sort from newest to oldest
                 historyList.sort((a, b) -> {
-                    String ta = a.timestamp != null ? a.timestamp : "";
-                    String tb = b.timestamp != null ? b.timestamp : "";
+                    String ta = a.getTimestamp() != null ? a.getTimestamp() : "";
+                    String tb = b.getTimestamp() != null ? b.getTimestamp() : "";
                     return tb.compareTo(ta); // descending
                 });
                 adapter.notifyDataSetChanged();

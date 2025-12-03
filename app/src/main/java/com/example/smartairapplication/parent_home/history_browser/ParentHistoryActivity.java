@@ -147,15 +147,15 @@ public class ParentHistoryActivity extends AppCompatActivity {
 
                 //format symptoms
                 List<String> symptoms = new ArrayList<>();
-                if (entry.nightWaking) symptoms.add("Night Waking");
-                if (entry.activityLimits) symptoms.add("Activity Limits");
-                if (!Objects.equals(entry.coughWheeze, "none")) symptoms.add("Cough/Wheeze");
+                if (entry.getNightWaking()) symptoms.add("Night Waking");
+                if (entry.getActivityLimits()) symptoms.add("Activity Limits");
+                if (!Objects.equals(entry.getCoughWheeze(), "none")) symptoms.add("Cough/Wheeze");
 
                 String sym = TextUtils.join(" | ", symptoms);
-                String trig = entry.triggers != null ? TextUtils.join(" | ", entry.triggers) : "";
-                String notes = entry.notes != null ? entry.notes.replace(",", ";") : "";
+                String trig = entry.getTriggers() != null ? TextUtils.join(" | ", entry.getTriggers()) : "";
+                String notes = entry.getNotes() != null ? entry.getNotes().replace(",", ";") : "";
 
-                sb.append(formatDate(entry.timestamp)).append(",");
+                sb.append(formatDate(entry.getTimestamp())).append(",");
                 sb.append(sym).append(",");
                 sb.append(trig).append(",");
                 sb.append(notes).append("\n");
@@ -202,24 +202,24 @@ public class ParentHistoryActivity extends AppCompatActivity {
                     canvas = page.getCanvas();
                     y = 40;
                 }
-                canvas.drawText("Date: " + formatDate(entry.timestamp), 20, y, paint);
+                canvas.drawText("Date: " + formatDate(entry.getTimestamp()), 20, y, paint);
                 y+= 18;
 
                 //symptoms
                 List<String> symptoms = new ArrayList<>();
-                if (entry.nightWaking) symptoms.add("Night Waking");
-                if (entry.activityLimits) symptoms.add("Activity Limits");
-                if (!Objects.equals(entry.coughWheeze, "none")) symptoms.add("Cough/Wheeze");
+                if (entry.getNightWaking()) symptoms.add("Night Waking");
+                if (entry.getActivityLimits()) symptoms.add("Activity Limits");
+                if (!Objects.equals(entry.getCoughWheeze(), "none")) symptoms.add("Cough/Wheeze");
 
                 canvas.drawText("Symptoms: " + TextUtils.join(", ", symptoms), 20, y, paint);
                 y += 18;
 
                 //triggers
-                canvas.drawText("Triggers: " + TextUtils.join(", ", entry.triggers), 20, y, paint);
+                canvas.drawText("Triggers: " + TextUtils.join(", ", entry.getTriggers()), 20, y, paint);
                 y += 18;
 
                 //notes
-                canvas.drawText("Notes: " + (entry.notes == null ? "" : entry.notes), 20, y, paint);
+                canvas.drawText("Notes: " + (entry.getNotes() == null ? "" : entry.getNotes()), 20, y, paint);
                 y+= 28;
             }
 
@@ -287,9 +287,9 @@ public class ParentHistoryActivity extends AppCompatActivity {
                 for (DataSnapshot snap : snapshot.getChildren()){
                     HistoryEntry entry = snap.getValue(HistoryEntry.class);
                     if (entry != null){
-                        entry.id = snap.getKey();
-                        if (entry.triggers == null){
-                            entry.triggers = new ArrayList<>();
+                        entry.setId(snap.getKey());
+                        if (entry.getTriggers() == null){
+                            entry.setTriggers(new ArrayList<>());
                         }
                         historyList.add(entry);
                     }
@@ -300,8 +300,8 @@ public class ParentHistoryActivity extends AppCompatActivity {
 
                 //sort from newest to oldest
                 displayList.sort((a, b) -> {
-                    String ta = a.timestamp != null ? a.timestamp : "";
-                    String tb = b.timestamp != null ? b.timestamp : "";
+                    String ta = a.getTimestamp() != null ? a.getTimestamp() : "";
+                    String tb = b.getTimestamp() != null ? b.getTimestamp() : "";
                     return tb.compareTo(ta); // descending
                 });
                 adapter.notifyDataSetChanged();
@@ -375,8 +375,8 @@ public class ParentHistoryActivity extends AppCompatActivity {
             displayList.addAll(historyList);
 
             displayList.sort((a, b) -> {
-                String ta = a.timestamp != null ? a.timestamp : "";
-                String tb = b.timestamp != null ? b.timestamp : "";
+                String ta = a.getTimestamp() != null ? a.getTimestamp() : "";
+                String tb = b.getTimestamp() != null ? b.getTimestamp() : "";
                 return tb.compareTo(ta);
             });
 
@@ -396,12 +396,12 @@ public class ParentHistoryActivity extends AppCompatActivity {
             // date filter
             LocalDate entryDate;
 
-            if (entry.timestamp == null || entry.timestamp.length() < 10){
+            if (entry.getTimestamp() == null || entry.getTimestamp().length() < 10){
                 continue; //skip bad or missing timestamps
             }
 
             try {
-                String dateOnly = entry.timestamp.substring(0, 10);
+                String dateOnly = entry.getTimestamp().substring(0, 10);
                 entryDate = LocalDate.parse(dateOnly);
             } catch (Exception e) {
                 continue; //malformed date string, skip entry
@@ -431,9 +431,9 @@ public class ParentHistoryActivity extends AppCompatActivity {
 
                 List<String> entrySymptoms = new ArrayList<>();
 
-                if (entry.nightWaking) entrySymptoms.add("night waking");
-                if (entry.activityLimits) entrySymptoms.add("activity limits");
-                if (!Objects.equals(entry.coughWheeze, "none"))
+                if (entry.getNightWaking()) entrySymptoms.add("night waking");
+                if (entry.getActivityLimits()) entrySymptoms.add("activity limits");
+                if (!Objects.equals(entry.getCoughWheeze(), "none"))
                     entrySymptoms.add("cough/wheeze");
 
                 // does this entry match ALL selected symptoms?
@@ -453,8 +453,8 @@ public class ParentHistoryActivity extends AppCompatActivity {
             if (!filter.triggers.isEmpty()) {
 
                 List<String> entryTriggers = new ArrayList<>();
-                if (entry.triggers != null){
-                    for (String t : entry.triggers){
+                if (entry.getTriggers() != null){
+                    for (String t : entry.getTriggers()){
                         if (t != null){
                             entryTriggers.add(t.toLowerCase().trim());
                         }
@@ -472,8 +472,8 @@ public class ParentHistoryActivity extends AppCompatActivity {
             displayList.add(entry); //passed all filters
         }
         displayList.sort((a, b) -> {
-            String ta = a.timestamp != null ? a.timestamp : "";
-            String tb = b.timestamp != null ? b.timestamp : "";
+            String ta = a.getTimestamp() != null ? a.getTimestamp() : "";
+            String tb = b.getTimestamp() != null ? b.getTimestamp() : "";
             return tb.compareTo(ta);
         });
         adapter.notifyDataSetChanged();

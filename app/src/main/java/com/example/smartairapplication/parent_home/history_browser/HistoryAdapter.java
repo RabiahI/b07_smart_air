@@ -43,27 +43,27 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.HistoryV
         List<String> symptoms = new ArrayList<>();
 
         //make symptom list
-        if (entry.nightWaking){
+        if (entry.getNightWaking()){
             symptoms.add("Night Waking");
         }
-        if (entry.activityLimits){
+        if (entry.getActivityLimits()){
             symptoms.add("Activity Limits");
         }
-        if (!Objects.equals(entry.coughWheeze, "none")){
+        if (!Objects.equals(entry.getCoughWheeze(), "none")){
             symptoms.add("Cough/Wheeze");
         }
 
         // date
-        holder.txtDate.setText(formatDate(entry.timestamp));
+        holder.txtDate.setText(formatDate(entry.getTimestamp()));
 
         // notes
-        holder.txtNotes.setText(entry.notes != null ? entry.notes : "(No notes)");
+        holder.txtNotes.setText(entry.getNotes() != null ? entry.getNotes() : "(No notes)");
 
         // symptoms chips
         addChips(symptoms, holder.containerSymptoms, true);
 
         // trigger chips
-        addChips(entry.triggers, holder.containerTriggers, false);
+        addChips(entry.getTriggers(), holder.containerTriggers, false);
     }
 
     @Override
