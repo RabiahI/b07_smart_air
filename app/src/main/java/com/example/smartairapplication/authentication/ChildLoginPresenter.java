@@ -16,6 +16,14 @@ public class ChildLoginPresenter {
         this.parentId = parentId;
     }
 
+    // constructor for testing
+    public ChildLoginPresenter(ChildLoginActivity view, String parentId, ChildLoginModel model) {
+        this.view = view;
+        this.model = model;
+        this.parentId = parentId;
+    }
+
+
     public void checkCurrentUser() {
         FirebaseUser currentUser = model.getCurrentUser();
         if (currentUser != null) {
@@ -48,11 +56,11 @@ public class ChildLoginPresenter {
     }
 
     public void login(String username, String password) {
-        if (TextUtils.isEmpty(username)) {
+        if (username == null || username.trim().isEmpty()) {
             view.showMessage("Enter username");
             return;
         }
-        if (TextUtils.isEmpty(password)) {
+        if (password == null || password.trim().isEmpty()) {
             view.showMessage("Enter password");
             return;
         }

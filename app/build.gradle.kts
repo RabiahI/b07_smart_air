@@ -51,4 +51,8 @@ dependencies {
     androidTestImplementation(libs.espresso.core)
     implementation("com.google.android.flexbox:flexbox:3.0.0")
     implementation("com.github.PhilJay:MPAndroidChart:v3.1.0") //MPAndroidChart for charts
+
+    testImplementation("junit:junit:4.13.2") // mockito
+    testImplementation("org.mockito:mockito-core:5.11.0")
+
 }
