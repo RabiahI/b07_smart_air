@@ -7,6 +7,7 @@ import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnitRunner;
 
 
@@ -126,4 +127,66 @@ public class LoginPresenterTest {
         verify(view).hideLoading();
         verify(view).showMessage("Failed to send reset email.");
     }
+
+    @Test
+    public void login_success_navigatesBasedOnRole(){
+        when(model.getCurrentUser()).thenReturn(firebaseUser);
+        when(firebaseUser.getUid()).thenReturn("ABC123");
+
+        presenter.login("test@gmail.com", "password");
+
+        verify(view).showLoading();
+        verify(model).signIn(anyString(), anyString(), signInCallbackCaptor.capture());
+
+        LoginModel.SignInCallback callback = signInCallbackCaptor.getValue();
+        callback.onSuccess();
+
+        verify(view).hideLoading();
+        verify(view).navigateBasedOnRole("ABC123");
+    }
+
+    @Test
+    public void login_success_butNullUser_showsMessage(){
+        when(model.getCurrentUser()).thenReturn(null);
+
+        presenter.login("test@gmail.com", "password");
+
+        verify(view).showLoading();
+        verify(model).signIn(anyString(), anyString(), signInCallbackCaptor.capture());
+
+        LoginModel.SignInCallback callback = signInCallbackCaptor.getValue();
+        callback.onSuccess();
+
+        verify(view).hideLoading();
+        verify(view).showMessage("Login succeeded, but user is unavailable.");
+    }
+
+    @Test
+    public void login_invalidCredentials_showsError() {
+        presenter.login("test@gmail.com", "password");
+
+        verify(view).showLoading();
+        verify(model).signIn(anyString(), anyString(), signInCallbackCaptor.capture());
+
+        LoginModel.SignInCallback callback = signInCallbackCaptor.getValue();
+        callback.onInvalidCredentials();
+
+        verify(view).hideLoading();
+        verify(view).showMessage("Invalid email or password.");
+    }
+
+    @Test
+    public void login_genericFailure_showsFailureMessage() {
+        presenter.login("test@gmail.com", "password");
+
+        verify(view).showLoading();
+        verify(model).signIn(anyString(), anyString(), signInCallbackCaptor.capture());
+
+        LoginModel.SignInCallback callback = signInCallbackCaptor.getValue();
+        callback.onGenericFailure();
+
+        verify(view).hideLoading();
+        verify(view).showMessage("Login failed. Please try again later.");
+    }
+
 }
