@@ -1,6 +1,5 @@
 package com.example.smartairapplication.child_home.motivation;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -12,7 +11,6 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.smartairapplication.R;
-import com.example.smartairapplication.child_home.ChildHomeActivity;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -38,6 +36,7 @@ public class StreaksBadgesActivity extends AppCompatActivity {
     private String childId, parentId;
     private ArrayList<Long> controllerTimes;
     private ArrayList<Long> techniqueTimes;
+    private ArrayList<Long> rescueTimes;
     private int bestStreakController;
     private int rescueThreshold;
     private boolean isParentMode;
@@ -59,6 +58,7 @@ public class StreaksBadgesActivity extends AppCompatActivity {
         thresholdDesc = findViewById(R.id.desc_threshold);
         controllerTimes = new ArrayList<>();
         techniqueTimes = new ArrayList<>();
+        rescueTimes = new ArrayList<>();
         bestStreakController = 0;
 
         controllerLayout.setVisibility(View.GONE);
@@ -88,11 +88,7 @@ public class StreaksBadgesActivity extends AppCompatActivity {
         buttonHomepage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(StreaksBadgesActivity.this, ChildHomeActivity.class);
-                intent.putExtra("childId", childId);
-                intent.putExtra("parentId", parentId);
-                intent.putExtra("isParentMode", isParentMode);
-                startActivity(intent);
+                finish();
             }
         });
 
@@ -141,11 +137,12 @@ public class StreaksBadgesActivity extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot snapshot) {
 
                 controllerTimes.clear();
+                rescueTimes.clear();
                 techniqueTimes.clear();
 
                 if (!snapshot.exists()) {
                     String controllerMsg = "Controller Streak: No log information found";
-                    String techniqueMsg = "Technique Streak: No log information found";
+                    String techniqueMsg = "Technique Sessions: No log information found";
                     controllerStreak.setText(controllerMsg);
                     techniqueStreak.setText(techniqueMsg);
                     return;
@@ -155,9 +152,13 @@ public class StreaksBadgesActivity extends AppCompatActivity {
                         String inhalerType = childSnapShot.child("inhalerType").getValue(String.class);
                         Long timestamp = childSnapShot.child("timestamp").getValue(Long.class);
 
-                        if (Objects.equals(inhalerType, "Controller")) {
-                            controllerTimes.add(timestamp);
-                            techniqueTimes.add(timestamp);
+                        if (timestamp != null) {
+                            if (Objects.equals(inhalerType, "Controller")) {
+                                controllerTimes.add(timestamp);
+                                techniqueTimes.add(timestamp);
+                            } else if (Objects.equals(inhalerType, "Rescue")) {
+                                rescueTimes.add(timestamp);
+                            }
                         }
                     }
 
@@ -180,7 +181,6 @@ public class StreaksBadgesActivity extends AppCompatActivity {
 
         ArrayList<LocalDate> dates = new ArrayList<>();
         ArrayList<LocalDate> uniqueDates = new ArrayList<>();
-        LocalDate today = LocalDate.now();
         int streak = 0;
         String streakDisplay;
 
@@ -200,9 +200,12 @@ public class StreaksBadgesActivity extends AppCompatActivity {
                 uniqueDates.add(d);
             }
         }
-        while (uniqueDates.contains(today)) {
-            today = today.minusDays(1);
-            streak++;
+        if (!uniqueDates.isEmpty()) {
+            LocalDate startDate = uniqueDates.get(uniqueDates.size() - 1);
+            while (uniqueDates.contains(startDate)) {
+                startDate = startDate.minusDays(1);
+                streak++;
+            }
         }
         if (streak > bestStreakController) {
             bestStreakController = streak;
@@ -213,36 +216,9 @@ public class StreaksBadgesActivity extends AppCompatActivity {
     }
 
     private void displayTechnique() {
-
-        ArrayList<LocalDate> dates = new ArrayList<>();
-        ArrayList<LocalDate> uniqueDates = new ArrayList<>();
-        LocalDate today = LocalDate.now();
-        int streak = 0;
-        String streakDisplay;
-
-        if (techniqueTimes.isEmpty()) {
-            String streakZero = "Technique Streak: 0 days";
-            techniqueStreak.setText(streakZero);
-            return;
-        }
-        techniqueTimes.sort(null);
-
-        for (Long time: techniqueTimes) {
-            dates.add(Instant.ofEpochMilli(time).atZone(ZoneId.systemDefault()).toLocalDate());
-        }
-
-        for (LocalDate d: dates) {
-            if (!uniqueDates.contains(d)) {
-                uniqueDates.add(d);
-            }
-        }
-        while (uniqueDates.contains(today)) {
-            today = today.minusDays(1);
-            streak++;
-        }
-
-        streakDisplay = "Technique Streak: " + String.valueOf(streak) + " days";
-        techniqueStreak.setText(streakDisplay);
+        int sessions = techniqueTimes.size();
+        String sessionsDisplay = "Technique Sessions: " + sessions;
+        techniqueStreak.setText(sessionsDisplay);
     }
 
     private void displayBadges() {
@@ -267,17 +243,15 @@ public class StreaksBadgesActivity extends AppCompatActivity {
     }
 
     private int rescuesThisMonth() {
-        ArrayList<LocalDate> dates = new ArrayList<>();
-        ArrayList<Month> Months = new ArrayList<>();
         LocalDate today = LocalDate.now();
         Month currentMonth = today.getMonth();
         int count = 0;
 
-        if (techniqueTimes.isEmpty()) {
+        if (rescueTimes.isEmpty()) {
             return count;
         }
 
-        for (Long time: techniqueTimes) {
+        for (Long time: rescueTimes) {
             Month temp = Instant.ofEpochMilli(time).atZone(ZoneId.systemDefault()).toLocalDate().getMonth();
             if (temp == currentMonth) {
                 count++;
@@ -288,17 +262,7 @@ public class StreaksBadgesActivity extends AppCompatActivity {
     }
 
     private int countTechnique() {
-
-        int total = 0;
-
-        if (techniqueTimes.isEmpty()) return 0;
-        else {
-            for (Long time : techniqueTimes) {
-                total++;
-            }
-        }
-
-        return total;
+        return techniqueTimes.size();
     }
 
 }
