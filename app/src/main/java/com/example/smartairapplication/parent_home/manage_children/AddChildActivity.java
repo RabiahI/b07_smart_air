@@ -97,7 +97,8 @@ public class AddChildActivity extends AppCompatActivity {
             latestPef = intent.getIntExtra("latestPef", 0);
             threshold = intent.getIntExtra("threshold", 0);
             controllersDays = intent.getIntExtra("controllerDays", 0);
-
+            editTextThreshold.setText(String.valueOf(threshold));
+            editTextController.setText(String.valueOf(controllersDays));
             buttonSaveChild.setText("Update Child");
 
             buttonSaveChild.setOnClickListener(v -> updateChildInFirebase(childId, finalParentId));
@@ -347,46 +348,30 @@ public class AddChildActivity extends AppCompatActivity {
             return;
         }
 
+        Map<String, Object> updates = new HashMap<>();
+        updates.put("name", name);
+        updates.put("dob", dob);
+        updates.put("age", age);
+        updates.put("notes", notes);
+        updates.put("threshold", threshold);
+        updates.put("controllerDays", controllersDays);
 
         FirebaseDatabase.getInstance().getReference("Users")
                 .child("Parent")
                 .child(parentId)
                 .child("Children")
                 .child(childId)
-                .addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot snapshot) {
-                        if (snapshot.exists()) {
-                            Child existingChild = snapshot.getValue(Child.class);
-                            if (existingChild != null) {
-                                existingChild.setName(name);
-                                existingChild.setDob(dob);
-                                existingChild.setAge(age);
-                                existingChild.setNotes(notes);
-                                existingChild.setPersonalBest(personalBest);
-                                existingChild.setLatestPef(latestPef);
-                                existingChild.setThreshold(threshold);
-                                existingChild.setControllerDays(controllersDays);
-
-                                parentRef.child(childId).setValue(existingChild)
-                                        .addOnCompleteListener(task -> {
-                                            if (task.isSuccessful()) {
-                                                Toast.makeText(AddChildActivity.this, "Child updated successfully!", Toast.LENGTH_SHORT).show();
-                                                finish();
-                                            } else {
-                                                Toast.makeText(AddChildActivity.this, "Failed to update child.", Toast.LENGTH_SHORT).show();
-                                            }
-                                        });
-                            }
-                        } else {
-                            Toast.makeText(AddChildActivity.this, "Child data not found for update.", Toast.LENGTH_SHORT).show();
-                        }
+                .updateChildren(updates)
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        Toast.makeText(AddChildActivity.this, "Child updated successfully!", Toast.LENGTH_SHORT).show();
+                        finish();
+                    } else {
+                        Toast.makeText(AddChildActivity.this, "Failed to update child.", Toast.LENGTH_SHORT).show();
                     }
-
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError error) {
-                        Toast.makeText(AddChildActivity.this, "Database error during child update: " + error.getMessage(), Toast.LENGTH_SHORT).show();
-                    }
-                });
+                })
+                .addOnFailureListener(e ->
+                        Toast.makeText(AddChildActivity.this, "Database error during child update: " + e.getMessage(), Toast.LENGTH_SHORT).show()
+                );
     }
 }
