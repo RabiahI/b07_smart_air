@@ -32,12 +32,12 @@ public class LoginPresenter {
 
     public void login(String email, String password) {
 
-        if (TextUtils.isEmpty(email)) {
+        if (email == null || email.trim().isEmpty()) {
             view.showMessage("Please enter your email");
             return;
         }
 
-        if (TextUtils.isEmpty(password)) {
+        if (password == null || password.trim().isEmpty()) {
             view.showMessage("Please enter your password");
             return;
         }
