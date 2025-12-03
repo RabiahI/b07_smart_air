@@ -72,7 +72,7 @@ public class LoginPresenter {
 
     public void resetPassword(String email) {
 
-        if (TextUtils.isEmpty(email)) {
+        if (email == null || email.trim().isEmpty()) {
             view.showMessage("Please enter your email");
             return;
         }
