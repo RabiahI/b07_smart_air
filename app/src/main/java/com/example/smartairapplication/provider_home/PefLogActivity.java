@@ -78,8 +78,8 @@ public class PefLogActivity extends AppCompatActivity {
                     for (DataSnapshot logSnapshot : snapshot.getChildren()) {
                         Long timestamp = logSnapshot.child("timestamp").getValue(Long.class);
                         // Ensure we handle different potential data types for 'value'
-                        String value = logSnapshot.child("value").getValue(Object.class) != null
-                                ? String.valueOf(logSnapshot.child("value").getValue(Object.class))
+                        String value = logSnapshot.child("pefValue").getValue(Object.class) != null
+                                ? String.valueOf(logSnapshot.child("pefValue").getValue(Object.class))
                                 : "N/A";
 
                         if (timestamp != null) {

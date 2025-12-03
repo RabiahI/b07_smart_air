@@ -347,8 +347,8 @@ public class ProviderHomeActivity extends AppCompatActivity {
 
                                 Long timestamp = log.child("timestamp").getValue(Long.class);
 
-                                String pef = log.child("value").getValue(Object.class) != null
-                                        ? String.valueOf(log.child("value").getValue(Object.class))
+                                String pef = log.child("pefValue").getValue(Object.class) != null
+                                        ? String.valueOf(log.child("pefValue").getValue(Object.class))
                                         : null;
 
                                 String dateString = "N/A";
